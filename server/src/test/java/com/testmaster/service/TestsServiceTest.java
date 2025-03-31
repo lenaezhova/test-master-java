@@ -1,20 +1,18 @@
-package service;
+package com.testmaster.service;
 
-import model.Tests.TestStatus;
-import model.Tests.Tests;
-import org.junit.jupiter.api.BeforeEach;
+import com.testmaster.model.Tests.TestStatus;
+import com.testmaster.model.Tests.Tests;
+import com.testmaster.service.Tests1Service;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 class TestsServiceTest {
     @Test
     void testGetAllTests() {
-        TestsService testsService = new TestsService();
+        Tests1Service testsService = new Tests1Service();
         List<Tests> tests = testsService.getTests();
 
         assertNotNull(tests);
@@ -23,7 +21,7 @@ class TestsServiceTest {
 
     @Test
     void testAddTest() {
-        TestsService testsService = new TestsService();
+        Tests1Service testsService = new Tests1Service();
 
         testsService.add(new Tests(null, null, "title7", TestStatus.CLOSED, "description7"));
 
@@ -33,7 +31,7 @@ class TestsServiceTest {
 
     @Test
     void testDeleteTest() {
-        TestsService testsService = new TestsService();
+        Tests1Service testsService = new Tests1Service();
 
         testsService.delete(6L);
 

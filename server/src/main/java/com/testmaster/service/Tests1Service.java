@@ -1,8 +1,8 @@
-package service;
+package com.testmaster.service;
 
 import lombok.Getter;
-import model.Tests.TestStatus;
-import model.Tests.Tests;
+import com.testmaster.model.Tests.TestStatus;
+import com.testmaster.model.Tests.Tests;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import java.util.List;
 
 @Getter
 @Service
-public class TestsService {
+public class Tests1Service {
     private final List<Tests> tests = new ArrayList<>();
     private long id = 1;
 
