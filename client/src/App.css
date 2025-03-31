@@ -1,0 +1,146 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  height: 100%;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.7;
+  overflow-x: hidden;
+  width: 100% !important;
+}
+
+.auth {
+  height: 100vh;
+}
+
+.backGroundColorBlack{
+  background: black;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  transition: transform cubic-bezier(1, 0.04, 0.07, 1.02) .6s;
+}
+
+.container {
+  width: 100%;
+  max-width: 1230px;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin: auto;
+  margin-top: 0;
+}
+
+.backGroundColorGrey{
+  background: gray;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 25px;
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.clearButton {
+  background: rgba(0, 0, 0, 0);
+  border: none;
+  cursor: pointer;
+}
+
+.title {
+  font-size: 32px;
+  width: 100%;
+  overflow-wrap: break-word;
+}
+
+.drawer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 75px;
+
+  :global(.ant-drawer-header) {
+    border-bottom: 0;
+  }
+
+  :global(.ant-drawer-header-title) {
+    justify-content: flex-end;
+  }
+}
+
+.drawerWrapper {
+  padding-top: 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+
+  .btns {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+  }
+}
+
+.testBackground {
+  border: 1px solid rgba(0, 0, 0, 0.07);
+  box-shadow: 0 1px 1px 0px rgba(0, 0, 0, 0.16);
+  border-radius: 15px;
+  padding: 15px;
+}
+
+.statusClose {
+  color: red;
+}
+
+.statusOpen {
+  color: rgb(0, 11, 174);
+}
+
+/* styling button */
+#toggle-edit-btn {
+  background-color: #4267b2;
+  border: 1px solid #4267b2;
+  border-radius: 0.3rem;
+  color: #fff;
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  margin: 2rem auto;
+}
+
+#toggle-edit-btn:focus,
+#toggle-edit-btn:hover {
+  cursor: pointer;
+}
+
+/* styling app content container */
+.app-content {
+  margin: 1rem auto;
+  width: 80%;
+  padding: 5%;
+  background-color: #f4f5f9;
+}
+
+/* styling alert text when edit mode is enabled */
+.edit-mode-alert {
+  text-decoration: underline;
+  color: #c80000;
+}
+
+/* styling text parsed */
+.text-container > *,
+.editor-container > * {
+  text-align: left;
+}
