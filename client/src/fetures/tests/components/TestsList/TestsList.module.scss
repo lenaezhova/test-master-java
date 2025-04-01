@@ -1,0 +1,40 @@
+.testWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.test {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+
+  .testContent {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    .title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      span {
+        font-weight: 600;
+      }
+
+      font-size: 18px;
+    }
+
+    .description {
+      display: flex;
+      flex-direction: column;
+      font-size: 14px;
+
+      p {
+        font-size: 16px;
+      }
+    }
+  }
+}

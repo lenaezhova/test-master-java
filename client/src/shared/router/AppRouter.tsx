@@ -1,6 +1,6 @@
 import {FC} from 'react';
 import {Routes, Route, Navigate} from 'react-router-dom'
-import {privateRoutes, publicRoutes, RouteNames} from "../router";
+import {privateRoutes, publicRoutes, RouteNames} from "./index";
 const AppRouter : FC = () => {
     const isAuth = false;
 

@@ -2,10 +2,9 @@ package com.testmaster.controller;
 
 import lombok.RequiredArgsConstructor;
 import com.testmaster.model.Tests.Tests;
+import org.hibernate.mapping.List;
 import org.springframework.web.bind.annotation.*;
 import com.testmaster.service.TestsService;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor

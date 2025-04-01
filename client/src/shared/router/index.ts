@@ -1,4 +1,4 @@
-import Tests from "../pages/Tests/Tests";
+import Tests from "../../pages/Tests/Tests";
 import {ComponentType} from "react";
 
 export interface IRoute {

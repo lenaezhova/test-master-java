@@ -12,6 +12,9 @@ build:
 docker-up:
 	docker compose up -d
 
+docker-ps:
+	docker ps
+
 # Остановить контейнеры
 docker-down:
 	docker compose down

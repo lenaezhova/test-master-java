@@ -1,8 +1,3 @@
-export interface ITestsCreateModelRequest {
-    title: string
-    description: string
-}
-
 export enum ITestStatus {
     CLOSED = 'CLOSED',
     OPEN = 'OPEN'
@@ -14,4 +9,13 @@ export interface ITest {
     status: ITestStatus;
     title: string
     description: string
+}
+
+export interface ITestsCreateModelRequest {
+    title: string
+    description: string
+}
+
+export interface ITestsDeleteModelRequest {
+    id: number;
 }
