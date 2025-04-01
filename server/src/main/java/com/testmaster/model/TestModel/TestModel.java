@@ -1,21 +1,24 @@
-package com.testmaster.model.Tests;
+package com.testmaster.model.TestModel;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.testmaster.model.TestModel.UserModel;
 
 @Entity
-@Table(name = "tests")
+@Table(name = "test")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Tests {
+public class TestModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long ownerId;
+    @ManyToOne
+    @JoinColumn(name = "owner_id")
+    private UserModel owner;
 
     private String title;
 

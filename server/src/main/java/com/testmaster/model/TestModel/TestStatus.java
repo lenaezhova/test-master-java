@@ -1,4 +1,4 @@
-package com.testmaster.model.Tests;
+package com.testmaster.model.TestModel;
 
 public enum TestStatus {
     OPEN,
