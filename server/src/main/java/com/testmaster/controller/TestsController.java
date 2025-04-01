@@ -19,9 +19,19 @@ public class TestsController {
         return testsService.getAll();
     }
 
+    @GetMapping("/{id}")
+    public Tests one(@PathVariable Long id) {
+        return testsService.getOne(id);
+    }
+
     @PostMapping
     public Tests create(@RequestBody Tests test) {
         return testsService.addTest(test.getTitle(), test.getDescription());
+    }
+
+    @PutMapping("/{id}")
+    public Tests create(@PathVariable Long id, @RequestBody Tests test) {
+        return testsService.updateTest(id, test);
     }
 
     @DeleteMapping("/{id}")

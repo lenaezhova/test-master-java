@@ -1,4 +1,8 @@
 .testAction {
   display: flex;
-  gap: 5px;
+  align-items: center;
+
+  button {
+    font-size: 16px;
+  }
 }

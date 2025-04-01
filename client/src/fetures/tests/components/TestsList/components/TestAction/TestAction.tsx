@@ -1,8 +1,9 @@
 import React from 'react';
 import s from './TestAction.module.scss';
-import {Button} from 'antd';
-import {DeleteOutlined} from '@ant-design/icons';
+import {Button, Popconfirm} from 'antd';
+import {DeleteOutlined, EditOutlined} from '@ant-design/icons';
 import {useCreateTest, useDeleteTest} from "../../../../../../api/tests/query";
+import TestsManageModalBtn from "../../../TestsManageModalBtn/TestsManageModalBtn";
 
 interface TestActionProps {
   id?: number;
@@ -21,12 +22,27 @@ const TestAction = ({id}: TestActionProps) => {
 
   return (
     <div className={s.testAction}>
-      <Button
-        loading={isLoading}
-        icon={<DeleteOutlined/>}
+      <Popconfirm
+        title="Удалить тест"
+        description="Вы уверены, что хотите удалить тест?"
+        onConfirm={handleDeleteTest}
+        okText="Да"
+        cancelText="Нет"
+        okButtonProps={{
+          loading: isLoading
+        }}
+      >
+        <Button
+          icon={<DeleteOutlined />}
+          type={'text'}
+          danger
+          loading={isLoading}
+        />
+      </Popconfirm>
+      <TestsManageModalBtn
+        id={id}
+        icon={<EditOutlined />}
         type={'text'}
-        danger
-        onClick={handleDeleteTest}
       />
     </div>
   );

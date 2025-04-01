@@ -3,4 +3,10 @@
   margin-top: 32px;
   flex-direction: column;
   gap: 20px;
+
+  .titleBlock {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 }

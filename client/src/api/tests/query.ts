@@ -1,20 +1,23 @@
-import {QueryKey, useMutation, useQuery, useQueryClient} from "react-query";
-import {createNewTest, deleteTest, getTests} from "./index";
+import {QueryKey, useMutation, useQuery, useQueryClient, UseQueryOptions} from "react-query";
+import {createNewTest, deleteTest, getTest, getTests, updateTest} from "./index";
 import {BIG_STALE_TIME} from "../../utils/const";
 import {message} from "antd";
 
-export const getTestsQueryKey = (): QueryKey => ['tests'];
+export const getTestQueryKey = (id?: number): QueryKey => `test-${id}`;
+export const getTestsQueryKey = (id?: number): QueryKey => ['tests', id];
+
+const useTest = (id: number, options?: any) => {
+  const queryKey = getTestQueryKey(id);
+
+  return useQuery(queryKey, () => getTest({id}), options)
+}
 
 const useTests = () => {
   const queryKey = getTestsQueryKey();
-  const queryClient = useQueryClient();
 
-  return {
-    invalidate: () => queryClient.invalidateQueries({queryKey}),
-    ...useQuery(queryKey, getTests, {
-      staleTime: BIG_STALE_TIME,
-    })
-  };
+  return useQuery(queryKey, getTests, {
+    staleTime: BIG_STALE_TIME,
+  })
 }
 
 const useCreateTest = () => {
@@ -32,6 +35,26 @@ const useCreateTest = () => {
       },
       onError: () => {
         message.error('Произошла ошибка при создании теста')
+      }
+    }
+  )
+}
+
+const useUpdateTest = () => {
+  const queryKey = getTestsQueryKey();
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    updateTest,
+    {
+      onSuccess: () => {
+        message.success('Тест успешно обновлен')
+      },
+      onSettled: async () => {
+        await queryClient.invalidateQueries({queryKey})
+      },
+      onError: () => {
+        message.error('Произошла ошибка при обновлении теста')
       }
     }
   )
@@ -59,6 +82,8 @@ const useDeleteTest = () => {
 
 export {
   useTests,
+  useTest,
   useCreateTest,
+  useUpdateTest,
   useDeleteTest
 }

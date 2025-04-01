@@ -16,6 +16,10 @@ export interface ITestsCreateModelRequest {
     description: string
 }
 
+export interface ITestsUpdateModelRequest extends ITestsCreateModelRequest {
+    id: number;
+}
+
 export interface ITestsDeleteModelRequest {
     id: number;
 }

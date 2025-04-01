@@ -18,9 +18,25 @@ public class TestsService {
         return testsRepository.findAll();
     }
 
+    public Tests getOne(Long id) {
+        return testsRepository.findById(id).orElse(null);
+    }
+
     public Tests addTest(String title, String description) {
         Tests test = new Tests(null, null, title, TestStatus.CLOSED, description);
         return testsRepository.save(test);
+    }
+
+    public Tests updateTest(Long id, Tests test) {
+        return testsRepository.findById(id)
+                .map(existing -> {
+                    existing.setTitle(test.getTitle());
+                    existing.setDescription(test.getDescription());
+                    existing.setStatus(test.getStatus());
+                    existing.setOwnerId(test.getOwnerId());
+                    return testsRepository.save(existing);
+                })
+                .orElse(null); // можно заменить на выброс исключения
     }
 
     public void deleteTest(Long id) {
