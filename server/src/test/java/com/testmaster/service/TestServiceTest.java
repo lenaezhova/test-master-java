@@ -22,7 +22,7 @@ class TestServiceTest {
     void testAddTest() {
         Test1Service testsService = new Test1Service();
 
-        testsService.add(new TestModel(null, null, "title7", TestStatus.CLOSED, "description7"));
+        testsService.add(new TestModel("title7", "description7"));
 
         List<TestModel> tests = testsService.getTests();
         assertEquals(7, tests.size());

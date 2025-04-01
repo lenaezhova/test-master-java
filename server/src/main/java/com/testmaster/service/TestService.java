@@ -1,8 +1,7 @@
 package com.testmaster.service;
 
-import com.testmaster.mapper.TestModelMapper;
+import com.testmaster.mapper.test.TestMapper;
 import lombok.RequiredArgsConstructor;
-import com.testmaster.model.TestModel.TestStatus;
 import com.testmaster.model.TestModel.TestModel;
 import org.springframework.stereotype.Service;
 import com.testmaster.repository.TestRepository;
@@ -12,7 +11,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class TestService {
-    private final TestModelMapper testModelMapper;
+    private final TestMapper testMapper;
 
     private final TestRepository testRepository;
 
@@ -25,14 +24,14 @@ public class TestService {
     }
 
     public TestModel addTest(String title, String description) {
-        TestModel test = new TestModel(null, null, title, TestStatus.CLOSED, description);
+        TestModel test = new TestModel(title, description);
         return testRepository.save(test);
     }
 
     public TestModel updateTest(Long id, TestModel test) {
         return testRepository.findById(id)
                 .map(existing -> {
-                    testModelMapper.update(existing, test);
+                    testMapper.update(existing, test);
                     return testRepository.save(existing);
                 })
                 .orElse(null);

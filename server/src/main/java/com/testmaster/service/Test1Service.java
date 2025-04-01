@@ -15,12 +15,12 @@ public class Test1Service {
     private long id = 1;
 
     {
-        tests.add(new TestModel(id++, null, "title1", TestStatus.CLOSED, "description1"));
-        tests.add(new TestModel(id++, null, "title2", TestStatus.CLOSED, "description2"));
-        tests.add(new TestModel(id++, null, "title3", TestStatus.CLOSED, "description3"));
-        tests.add(new TestModel(id++, null, "title4", TestStatus.CLOSED, "description4"));
-        tests.add(new TestModel(id++, null, "title5", TestStatus.CLOSED, "description5"));
-        tests.add(new TestModel(id++, null, "title6", TestStatus.CLOSED, "description6"));
+        tests.add(new TestModel("title1", "description1"));
+        tests.add(new TestModel("title2", "description2"));
+        tests.add(new TestModel("title3", "description3"));
+        tests.add(new TestModel("title4", "description4"));
+        tests.add(new TestModel("title5", "description5"));
+        tests.add(new TestModel("title6", "description6"));
     }
 
     public void add(TestModel test) {
