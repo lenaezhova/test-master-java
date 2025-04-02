@@ -7,7 +7,6 @@ on:
 jobs:
   backend:
     name: Build & Test Backend
-    working-directory: server
     runs-on: ubuntu-latest
 
     steps:
@@ -36,7 +35,6 @@ jobs:
 
   frontend:
     name: Build & Test Frontend
-#    working-directory: client
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
