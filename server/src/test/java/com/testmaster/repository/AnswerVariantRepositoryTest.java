@@ -2,8 +2,10 @@ package com.testmaster.repository;
 
 import com.testmaster.model.AnswerVariantModel;
 import com.testmaster.model.TestModel.TestModel;
+import com.testmaster.model.TestModel.TestStatus;
 import com.testmaster.model.TypeQuestionModel;
 import com.testmaster.model.QuestionModel;
+import com.testmaster.model.UserModel.UserModel;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -25,8 +27,22 @@ public class AnswerVariantRepositoryTest {
 
     @Test
     public void testSaveAnswerVariantModel() {
+        UserModel user = new UserModel(
+                false,
+                "Пётр Петров",
+                "petr@example.com",
+                "securepass",
+                "activation-key",
+                false,
+                LocalDateTime.now(),
+                LocalDateTime.now()
+        );
+        entityManager.persist(user);
+
         TestModel test = new TestModel(
+                user,
                 "Тест по математике",
+                TestStatus.CLOSED,
                 "Описание"
         );
         entityManager.persist(test);
@@ -60,10 +76,25 @@ public class AnswerVariantRepositoryTest {
 
     @Test
     public void testSaveAndFindAnswerVariantModel() {
+        UserModel user = new UserModel(
+                false,
+                "Пётр Петров",
+                "petr@example.com",
+                "securepass",
+                "activation-key",
+                false,
+                LocalDateTime.now(),
+                LocalDateTime.now()
+        );
+        entityManager.persist(user);
+
         TestModel test = new TestModel(
+                user,
                 "Тест по биологии",
+                TestStatus.CLOSED,
                 "Описание"
         );
+
         entityManager.persist(test);
 
         TypeQuestionModel type = new TypeQuestionModel(

@@ -4,6 +4,7 @@ import com.testmaster.model.GroupModel.GroupModel;
 import com.testmaster.model.GroupModel.GroupsTestModel;
 import com.testmaster.model.TestModel.TestGroupsId;
 import com.testmaster.model.TestModel.TestModel;
+import com.testmaster.model.TestModel.TestStatus;
 import com.testmaster.model.UserModel.UserModel;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
@@ -40,7 +41,9 @@ public class GroupsTestRepositoryTest {
         entityManager.persist(user);
 
         TestModel test = new TestModel(
+                user,
                 "Тест A",
+                TestStatus.CLOSED,
                 "Описание"
         );
         entityManager.persist(test);
@@ -85,7 +88,9 @@ public class GroupsTestRepositoryTest {
         entityManager.persist(user);
 
         TestModel test = new TestModel(
+                user,
                 "Тест B",
+                TestStatus.CLOSED,
                 "Описание"
         );
         entityManager.persist(test);

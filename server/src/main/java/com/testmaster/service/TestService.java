@@ -24,7 +24,9 @@ public class TestService {
     }
 
     public TestModel addTest(String title, String description) {
-        TestModel test = new TestModel(title, description);
+        TestModel test = new TestModel();
+        test.setTitle(title);
+        test.setDescription(description);
         return testRepository.save(test);
     }
 

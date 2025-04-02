@@ -2,6 +2,7 @@ package com.testmaster.repository;
 
 import com.testmaster.model.*;
         import com.testmaster.model.TestModel.TestModel;
+import com.testmaster.model.TestModel.TestStatus;
 import com.testmaster.model.UserModel.UserModel;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
@@ -38,10 +39,11 @@ public class UserAnswerRepositoryTest {
         entityManager.persist(user);
 
         TestModel test = new TestModel(
+                user,
                 "Тест по географии",
+                TestStatus.CLOSED,
                 "Описание"
         );
-        test.setOwner(user);
         entityManager.persist(test);
 
         TypeQuestionModel type = new TypeQuestionModel(
@@ -89,10 +91,11 @@ public class UserAnswerRepositoryTest {
         entityManager.persist(user);
 
         TestModel test = new TestModel(
+                user,
                 "Тест по истории",
+                TestStatus.CLOSED,
                 "Описание"
         );
-        test.setOwner(user);
         entityManager.persist(test);
 
         TypeQuestionModel type = new TypeQuestionModel(

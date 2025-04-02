@@ -36,7 +36,12 @@ public class TestRepositoryTest {
         );
         entityManager.persist(user);
 
-        TestModel test = new TestModel("Название теста", "Описание теста");
+        TestModel test = new TestModel(
+                user,
+                "Название теста",
+                TestStatus.CLOSED,
+                "Описание теста"
+        );
         test.setOwner(user);
         test.setStatus(TestStatus.CLOSED);
 
@@ -62,7 +67,12 @@ public class TestRepositoryTest {
 
         entityManager.persist(user);
 
-        TestModel test = new TestModel("Название теста", "Описание теста");
+        TestModel test = new TestModel(
+                user,
+                "Название теста",
+                TestStatus.CLOSED,
+                "Описание теста"
+        );
         test.setOwner(user);
         test.setStatus(TestStatus.OPEN);
 

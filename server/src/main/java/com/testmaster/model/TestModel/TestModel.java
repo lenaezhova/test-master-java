@@ -2,6 +2,7 @@ package com.testmaster.model.TestModel;
 
 import com.testmaster.model.BaseEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -11,6 +12,7 @@ import com.testmaster.model.UserModel.UserModel;
 @Entity
 @Table(name = "tests")
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
 public class TestModel extends BaseEntity {
     @ManyToOne
@@ -25,9 +27,4 @@ public class TestModel extends BaseEntity {
     private TestStatus status = TestStatus.CLOSED;
 
     private String description;
-
-    public TestModel(String title, String description) {
-        this.title = title;
-        this.description = description;
-    }
 }

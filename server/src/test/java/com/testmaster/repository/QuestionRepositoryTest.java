@@ -1,8 +1,10 @@
 package com.testmaster.repository;
 
 import com.testmaster.model.TestModel.TestModel;
+import com.testmaster.model.TestModel.TestStatus;
 import com.testmaster.model.TypeQuestionModel;
 import com.testmaster.model.QuestionModel;
+import com.testmaster.model.UserModel.UserModel;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -24,8 +26,22 @@ public class QuestionRepositoryTest {
 
     @Test
     public void testSaveQuestionModel() {
+        UserModel user = new UserModel(
+                false,
+                "Пётр Петров",
+                "petr@example.com",
+                "securepass",
+                "activation-key",
+                false,
+                LocalDateTime.now(),
+                LocalDateTime.now()
+        );
+        entityManager.persist(user);
+
         TestModel test = new TestModel(
+                user,
                 "Тест по истории",
+                TestStatus.CLOSED,
                 "Описание"
         );
         entityManager.persist(test);
@@ -51,8 +67,22 @@ public class QuestionRepositoryTest {
 
     @Test
     public void testFindQuestionModel() {
+        UserModel user = new UserModel(
+                false,
+                "Пётр Петров",
+                "petr@example.com",
+                "securepass",
+                "activation-key",
+                false,
+                LocalDateTime.now(),
+                LocalDateTime.now()
+        );
+        entityManager.persist(user);
+
         TestModel test = new TestModel(
+                user,
                 "Тест по географии",
+                TestStatus.CLOSED,
                 "Описание"
         );
         entityManager.persist(test);
