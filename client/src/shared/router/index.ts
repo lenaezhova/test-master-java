@@ -11,10 +11,10 @@ export enum RouteNames {
 }
 
 export const publicRoutes : IRoute[] = [
-    {
-        path: RouteNames.TESTS,
-        component: Tests
-    }
+  {
+    path: RouteNames.TESTS,
+    component: Tests
+  }
 ]
 
 export const privateRoutes : IRoute[] = []
