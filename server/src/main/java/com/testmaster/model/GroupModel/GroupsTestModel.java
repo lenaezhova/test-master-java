@@ -2,9 +2,6 @@ package com.testmaster.model.GroupModel;
 
 import com.testmaster.model.TestModel.TestGroupsId;
 import com.testmaster.model.TestModel.TestModel;
-import com.testmaster.model.UserModel.UserGroupsId;
-import com.testmaster.model.UserModel.UserModel;
-import com.testmaster.model.GroupModel.GroupModel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

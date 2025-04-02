@@ -1,8 +1,10 @@
-.PHONY: run build docker-up docker-down restart-db
-
 # Запустить Spring Boot приложение
 run:
 	./mvnw spring-boot:run
+
+# Собрать jar-файл
+run-test:
+	./mvnw test
 
 # Собрать jar-файл
 build:
