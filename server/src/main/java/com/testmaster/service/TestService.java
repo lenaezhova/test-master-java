@@ -27,7 +27,7 @@ public class TestService {
         TestModel test = new TestModel();
         test.setTitle(title);
 
-        
+
         test.setDescription(description);
         return testRepository.save(test);
     }
