@@ -5,34 +5,34 @@ on:
     branches: [ main, master ]
 
 jobs:
-#  backend:
-#    name: Build & Test Backend
-#    working-directory: server
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#      - name: Checkout repo
-#        uses: actions/checkout@v3
-#
-#      - name: Set up Java
-#        uses: actions/setup-java@v3
-#        with:
-#          java-version: '21'
-#          distribution: 'temurin'
-#
-#      - name: Cache Maven packages
-#        uses: actions/cache@v3
-#        with:
-#          path: ~/.m2
-#          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-#          restore-keys: |
-#            ${{ runner.os }}-maven-
-#
-#      - name: Build
-#        run: mvn clean install -DskipTests
-#
-#      - name: Tests
-#        run: mvn test
+  backend:
+    name: Build & Test Backend
+    working-directory: server
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Build
+        run: ./mvnw clean install -DskipTests
+
+      - name: Tests
+        run: ./mvnw test
 
   frontend:
     name: Build & Test Frontend
@@ -51,10 +51,10 @@ jobs:
         working-directory: client
         run: npm ci
 
-      - name: Lint
+      - name: Build
         working-directory: client
         run: npm run build
 
-      - name: Run frontend tests
+      - name: Tests
         working-directory: client
         run: npm test --watchAll=false
