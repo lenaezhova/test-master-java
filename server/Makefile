@@ -5,7 +5,7 @@ run:
 	./mvnw spring-boot:run
 
 run-test:
-	./mvnw test
+	source .env && ./mvnw test
 
 build:
 	./mvnw clean package

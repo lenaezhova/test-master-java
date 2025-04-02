@@ -30,7 +30,8 @@ public class UserAnswerModel extends BaseEntity {
     private UserModel user;
 
     @Column(nullable = false)
-    private String value;
+    @JoinColumn(name = "user_value")
+    private String userValue;
 
     @Column(name = "is_correct")
     private Boolean isCorrect = false;
