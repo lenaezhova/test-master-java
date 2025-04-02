@@ -36,7 +36,7 @@ public class UserAnswerModel extends BaseEntity {
     private Boolean isCorrect = false;
 
     @Column(name = "count_points")
-    private Number countPoints = 0;
+    private Integer countPoints = 0;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

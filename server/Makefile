@@ -1,3 +1,6 @@
+include .env
+export
+
 run:
 	./mvnw spring-boot:run
 
@@ -18,3 +21,13 @@ docker-down:
 
 restart-db:
 	docker compose restart db
+
+liquibase-update:
+	source .env && ./mvnw liquibase:update
+
+liquibase-clear-checksums:
+	source .env && ./mvnw liquibase:clearCheckSums
+
+liquibase-drop-all:
+	source .env && ./mvnw liquibase:dropAll
+

@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="1" author="elena">
+        <createTable tableName="users">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="deleted" type="BOOLEAN" defaultValueBoolean="false"/>
+
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+
+            <column name="password" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="update_at" type="TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+
+    <changeSet id="2" author="elena">
+        <createTable tableName="tests">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="owner_id" type="BIGINT">
+                <constraints nullable="true" foreignKeyName="fk_tests_owner" referencedTableName="users" referencedColumnNames="id"/>
+            </column>
+
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="status" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="description" type="TEXT"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3" author="elena">
+        <createTable tableName="roles">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="4" author="elena">
+        <createTable tableName="type_questions">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="5" author="elena">
+        <createTable tableName="questions">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="test_id" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="type_id" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="questions"
+                baseColumnNames="test_id"
+                constraintName="fk_questions_test"
+                referencedTableName="tests"
+                referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint
+                baseTableName="questions"
+                baseColumnNames="type_id"
+                constraintName="fk_questions_type"
+                referencedTableName="type_questions"
+                referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="6" author="elena">
+        <createTable tableName="groups">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="owner_id" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="title" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="groups"
+                baseColumnNames="owner_id"
+                constraintName="fk_groups_owner"
+                referencedTableName="users"
+                referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="7" author="elena">
+        <createTable tableName="users_roles">
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="role_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey tableName="users_roles" columnNames="user_id, role_id" constraintName="pk_users_roles"/>
+
+        <addForeignKeyConstraint
+                baseTableName="users_roles"
+                baseColumnNames="user_id"
+                constraintName="fk_users_roles_user"
+                referencedTableName="users"
+                referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint
+                baseTableName="users_roles"
+                baseColumnNames="role_id"
+                constraintName="fk_users_roles_role"
+                referencedTableName="roles"
+                referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="8" author="elena">
+        <createTable tableName="tests_groups">
+            <column name="test_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="group_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey tableName="tests_groups"
+                       columnNames="test_id, group_id"
+                       constraintName="pk_tests_groups"/>
+
+        <addForeignKeyConstraint
+                baseTableName="tests_groups"
+                baseColumnNames="test_id"
+                constraintName="fk_tests_groups_test"
+                referencedTableName="tests"
+                referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint
+                baseTableName="tests_groups"
+                baseColumnNames="group_id"
+                constraintName="fk_tests_groups_group"
+                referencedTableName="groups"
+                referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="9" author="elena">
+        <createTable tableName="users_groups">
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="group_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey tableName="users_groups"
+                       columnNames="user_id, group_id"
+                       constraintName="pk_users_groups"/>
+
+        <addForeignKeyConstraint
+                baseTableName="users_groups"
+                baseColumnNames="user_id"
+                constraintName="fk_users_groups_user"
+                referencedTableName="users"
+                referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint
+                baseTableName="users_groups"
+                baseColumnNames="group_id"
+                constraintName="fk_users_groups_group"
+                referencedTableName="groups"
+                referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="10" author="elena">
+        <createTable tableName="answer_variants">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="question_id" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="text" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="is_correct" type="BOOLEAN"/>
+
+            <column name="count_points" type="INTEGER"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="answer_variants"
+                baseColumnNames="question_id"
+                constraintName="fk_answer_variants_question"
+                referencedTableName="questions"
+                referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="11" author="elena">
+        <createTable tableName="tokens">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="refresh_token" type="VARCHAR(512)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="tokens"
+                baseColumnNames="user_id"
+                constraintName="fk_tokens_user"
+                referencedTableName="users"
+                referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="12" author="elena">
+        <createTable tableName="user_answers">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="question_id" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="test_id" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="value" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="is_correct" type="BOOLEAN" defaultValueBoolean="false"/>
+            <column name="count_points" type="INTEGER" defaultValueNumeric="0"/>
+            <column name="created_at" type="TIMESTAMP"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="user_answers"
+                baseColumnNames="question_id"
+                constraintName="fk_user_answers_question"
+                referencedTableName="questions"
+                referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint
+                baseTableName="user_answers"
+                baseColumnNames="test_id"
+                constraintName="fk_user_answers_test"
+                referencedTableName="tests"
+                referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint
+                baseTableName="user_answers"
+                baseColumnNames="user_id"
+                constraintName="fk_user_answers_user"
+                referencedTableName="users"
+                referencedColumnNames="id"/>
+    </changeSet>
+
+
+</databaseChangeLog>

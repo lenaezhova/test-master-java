@@ -93,6 +93,12 @@
     </dependency>
 
     <dependency>
+      <groupId>io.github.cdimascio</groupId>
+      <artifactId>java-dotenv</artifactId>
+      <version>5.2.2</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
       <scope>runtime</scope>
@@ -101,6 +107,25 @@
 
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.liquibase</groupId>
+        <artifactId>liquibase-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>none</phase>
+            <goals>
+              <goal>update</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <url>${env.DB_URL}</url>
+          <username>${env.DB_USERNAME}</username>
+          <password>${env.DB_PASSWORD}</password>
+          <changeLogFile>src/main/resources/db/changelog/db.changelog-master.xml</changeLogFile>
+          <driver>org.postgresql.Driver</driver>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>

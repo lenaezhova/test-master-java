@@ -1,13 +1,10 @@
 package com.testmaster.model;
 
-import com.testmaster.model.BaseEntity;
-import com.testmaster.model.QuestionModel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import com.testmaster.model.UserModel.UserModel;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -27,5 +24,5 @@ public class AnswerVariantModel extends BaseEntity {
     private Boolean isCorrect;
 
     @Column(name = "count_points")
-    private Number countPoints;
+    private Integer countPoints;
 }
