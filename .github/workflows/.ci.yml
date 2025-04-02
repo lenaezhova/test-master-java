@@ -7,7 +7,7 @@ on:
 jobs:
   backend:
     name: Build & Test Backend
-#    working-directory: server
+    working-directory: server
     runs-on: ubuntu-latest
 
     steps:
