@@ -7,6 +7,7 @@ on:
 jobs:
   backend:
     name: Build & Test Backend
+    working-directory: server
     runs-on: ubuntu-latest
 
     steps:
@@ -34,7 +35,8 @@ jobs:
         run: mvn test
 
   frontend:
-    name: Build & Lint Frontend
+    name: Build & Test Frontend
+    working-directory: client
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -51,8 +53,8 @@ jobs:
 
       - name: Lint
         working-directory: client
-        run: npm build
+        run: npm run build
 
       - name: Run frontend tests
         working-directory: client
-        run: npm test -- --watchAll=false
+        run: npm test --watchAll=false
