@@ -1,9 +1,9 @@
 version: '3.8'
 
 services:
-  db:
+  test-master-db:
     image: postgres:15
-    container_name: my_postgres
+    container_name: test-master-postgres
     restart: always
     environment:
       POSTGRES_USER: postgres
@@ -14,9 +14,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  pgadmin:
+  test-master-admin:
     image: dpage/pgadmin4
-    container_name: my_pgadmin
+    container_name: test-master-postgres-admin
     restart: always
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
@@ -24,7 +24,22 @@ services:
     ports:
       - "5050:80"
     depends_on:
-      - db
+      - test-master-db
+
+  test-master-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: test-master-backend
+    env_file:
+      - .env
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_DATASOURCE_URL: jdbc:postgresql://test-master-db:5432/test-master-db
+    ports:
+      - "8080:8080"
+    depends_on:
+      - test-master-db
 
 volumes:
   postgres_data:

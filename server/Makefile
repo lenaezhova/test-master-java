@@ -10,6 +10,14 @@ run-test:
 build:
 	./mvnw clean package
 
+docker-restart:
+	docker compose down
+	docker compose build
+	docker compose up -d
+
+docker-build:
+	docker compose build
+
 docker-up:
 	docker compose up -d
 
@@ -18,9 +26,6 @@ docker-ps:
 
 docker-down:
 	docker compose down
-
-restart-db:
-	docker compose restart db
 
 liquibase-update:
 	source .env && ./mvnw liquibase:update
