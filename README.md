@@ -6,3 +6,6 @@ https://test-master-java.vercel.app/
 
 ## BACKEND
 https://test-master-java-back.onrender.com
+
+## DB
+NEON
