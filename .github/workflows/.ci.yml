@@ -33,6 +33,10 @@ jobs:
       - name: Tests
         run: mvn -f server test
 
+      - name: Deploy to Render
+        if: success()
+        run: curl -X GET "${{ secrets.RENDER_DEPLOY_HOOK }}"
+
   frontend:
     name: Build & Test Frontend
     runs-on: ubuntu-latest
@@ -56,3 +60,7 @@ jobs:
 #      - name: Tests
 #        working-directory: client
 #        run: npm test --watchAll=false
+
+      - name: Deploy to Vercel
+        if: success()
+        run: curl -X GET "${{ secrets.VERCEL_DEPLOY_HOOK }}"
