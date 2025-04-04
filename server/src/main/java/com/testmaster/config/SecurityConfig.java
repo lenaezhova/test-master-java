@@ -1,11 +1,8 @@
 package com.testmaster.config;
 
-import com.testmaster.config.handling.CustomAccessDeniedHandler;
-import com.testmaster.config.handling.CustomAuthenticationEntryPoint;
 import com.testmaster.service.AuthService.auth.JwtAuthenticationFilter;
 import com.testmaster.service.AuthService.user.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -27,8 +24,6 @@ import java.util.List;
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
-    private CustomAccessDeniedHandler customAccessDeniedHandler;
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final CustomUserDetailsService userDetailsService;
 
