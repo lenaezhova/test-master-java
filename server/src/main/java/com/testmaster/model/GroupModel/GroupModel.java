@@ -1,7 +1,7 @@
 package com.testmaster.model.GroupModel;
 
 import com.testmaster.model.BaseEntity;
-import com.testmaster.model.UserModel.UserModel;
+import com.testmaster.model.UserModel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

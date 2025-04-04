@@ -1,8 +1,8 @@
 package com.testmaster.service;
 
-import com.testmaster.mapper.test.TestMapper;
+import com.testmaster.mapper.TestMapper;
 import lombok.RequiredArgsConstructor;
-import com.testmaster.model.TestModel.TestModel;
+import com.testmaster.model.TestModel;
 import org.springframework.stereotype.Service;
 import com.testmaster.repository.TestRepository;
 

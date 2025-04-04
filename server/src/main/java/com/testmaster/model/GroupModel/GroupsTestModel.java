@@ -1,7 +1,7 @@
 package com.testmaster.model.GroupModel;
 
-import com.testmaster.model.TestModel.TestGroupsId;
-import com.testmaster.model.TestModel.TestModel;
+import api.domain.test.TestGroupsId;
+import com.testmaster.model.TestModel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

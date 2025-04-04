@@ -1,15 +1,17 @@
 package com.testmaster.repository.GroupRepository;
 
+import api.domain.user.UserRoles;
 import com.testmaster.model.GroupModel.GroupModel;
 import com.testmaster.model.GroupModel.GroupsUserModel;
-import com.testmaster.model.UserModel.UserGroupsId;
-import com.testmaster.model.UserModel.UserModel;
+import api.domain.user.UserGroupsId;
+import com.testmaster.model.UserModel;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -32,6 +34,7 @@ public class GroupsUserRepositoryTest {
                 "password123",
                 "activation-code",
                 false,
+                List.of(UserRoles.USER),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -69,6 +72,7 @@ public class GroupsUserRepositoryTest {
                 "securepass",
                 "activation-key",
                 false,
+                List.of(UserRoles.USER),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );

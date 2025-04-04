@@ -1,7 +1,6 @@
 package com.testmaster.dto;
 
-import com.testmaster.model.TestModel.TestModel;
-import com.testmaster.model.TestModel.TestStatus;
+import api.domain.test.TestStatus;
 import lombok.*;
 
 @Data

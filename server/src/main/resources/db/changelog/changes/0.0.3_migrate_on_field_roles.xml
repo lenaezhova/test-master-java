@@ -1,0 +1,20 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="1-drop-user-roles" author="elena">
+        <dropTable tableName="users_roles"/>
+    </changeSet>
+
+    <changeSet id="2-drop-roles-table" author="elena">
+        <dropTable tableName="roles"/>
+    </changeSet>
+
+    <changeSet id="3-add-role-to-users" author="elena">
+        <sql>
+            ALTER TABLE users ADD roles TEXT ARRAY DEFAULT ARRAY['USER'] NOT NULL;
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
