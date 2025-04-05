@@ -3,6 +3,9 @@ import {ConfigProvider, Layout} from 'antd';
 import './App.css';
 import {QueryClient, QueryClientProvider} from 'react-query';
 import Navbar from './shared/ui/Navbar';
+import {Provider} from "mobx-react";
+import {stores} from "./stores/stores";
+
 export const App = () => {
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -14,18 +17,19 @@ export const App = () => {
   });
 
   return (
-    <ConfigProvider>
-      <QueryClientProvider client={queryClient}>
-        <Layout>
-          <Navbar/>
-          <Layout.Content>
-            <div className="page">
-              <AppRouter/>
-            </div>
-          </Layout.Content>
-        </Layout>
-      </QueryClientProvider>
-    </ConfigProvider>
-
+    <Provider {...stores}>
+      <ConfigProvider>
+        <QueryClientProvider client={queryClient}>
+          <Layout>
+            <Navbar/>
+            <Layout.Content>
+              <div className="page">
+                <AppRouter/>
+              </div>
+            </Layout.Content>
+          </Layout>
+        </QueryClientProvider>
+      </ConfigProvider>
+    </Provider>
   );
 };

@@ -1,8 +1,10 @@
 import {FC} from 'react';
 import {Routes, Route, Navigate} from 'react-router-dom'
 import {privateRoutes, publicRoutes, RouteNames} from "./index";
-const AppRouter : FC = () => {
-  const isAuth = false;
+import {AllBaseStores, injectBase} from "../../stores/stores";
+import {observer} from "mobx-react";
+const AppRouter : FC = injectBase(['$user'])(observer((props:AllBaseStores) => {
+  const { $user } = props;
 
   const getRenderRoutes = (routes) => (
     <Routes>
@@ -18,8 +20,8 @@ const AppRouter : FC = () => {
   )
 
   return (
-    isAuth ? getRenderRoutes(privateRoutes) : getRenderRoutes(publicRoutes)
+    $user.isAuth ? getRenderRoutes(privateRoutes) : getRenderRoutes(publicRoutes)
   );
-};
+}));
 
 export default AppRouter;
