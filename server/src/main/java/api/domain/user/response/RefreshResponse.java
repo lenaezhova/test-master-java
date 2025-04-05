@@ -1,4 +1,6 @@
 package api.domain.user.response;
 
-public record RefreshResponse(String jwt) {
+import api.domain.user.JwtTokenPair;
+
+public record RefreshResponse(JwtTokenPair data) {
 }

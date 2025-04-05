@@ -7,26 +7,13 @@ export interface IRoute {
     component: ComponentType;
 }
 
+export interface IRoutesModel {
+    redirect: string;
+    routes: IRoute[]
+}
+
 export enum RouteNames {
     LOGIN = '/login',
     REGISTRATION = '/registration',
     TESTS = '/',
 }
-
-export const publicRoutes : IRoute[] = [
-  {
-    path: RouteNames.LOGIN,
-    component: Login
-  },
-  {
-    path: RouteNames.REGISTRATION,
-    component: Login
-  }
-]
-
-export const privateRoutes : IRoute[] = [
-  {
-    path: RouteNames.TESTS,
-    component: Tests
-  },
-]

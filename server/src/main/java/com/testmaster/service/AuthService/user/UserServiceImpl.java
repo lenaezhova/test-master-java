@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public TokenModel refresh(RefreshRequest refreshRequest) {
+    public JwtTokenPair refresh(RefreshRequest refreshRequest) {
         String refreshToken = refreshRequest.refreshToken();
         if (!hasText(refreshToken)) {
             throw new AuthException("User is not authorized!");
@@ -102,9 +102,9 @@ public class UserServiceImpl implements UserService {
 
         JwtTokenPair jwtTokenPair = userAuthService.generateTokens(user);
 
-        TokenModel tokenModel = userAuthService.saveToken(user, jwtTokenPair.refreshToken());
+        userAuthService.saveToken(user, jwtTokenPair.refreshToken());
 
-        return tokenModel;
+        return jwtTokenPair;
     }
 
     @Override

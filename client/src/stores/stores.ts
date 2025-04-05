@@ -1,5 +1,5 @@
 import {inject, observer} from "mobx-react";
-import {UserStore} from "./UserStore";
+import {UserStore} from "./UserStore/UserStore";
 
 const stores = {
   $user: new UserStore(),

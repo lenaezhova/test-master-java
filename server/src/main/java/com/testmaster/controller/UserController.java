@@ -47,9 +47,10 @@ public class UserController implements UserApi {
 
     @Override
     public ResponseEntity<Object> refresh(RefreshRequest request, HttpServletResponse response) {
-        TokenModel tokenModel = userService.refresh(request);
+        JwtTokenPair jwtTokenPair = userService.refresh(request);
 
-        Cookie refreshCookie = new Cookie("refreshToken", tokenModel.getRefreshToken());
+        String refreshToken = jwtTokenPair.refreshToken();
+        Cookie refreshCookie = new Cookie("refreshToken", refreshToken);
         refreshCookie.setHttpOnly(true);
         refreshCookie.setMaxAge(30 * 24 * 60 * 60);
         refreshCookie.setPath("/");
@@ -58,6 +59,6 @@ public class UserController implements UserApi {
         return ResponseEntity
                 .ok()
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .body(new RefreshResponse(tokenModel.getRefreshToken()));
+                .body(new RefreshResponse(jwtTokenPair));
     }
 }

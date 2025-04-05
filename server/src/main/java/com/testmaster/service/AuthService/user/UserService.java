@@ -11,7 +11,7 @@ public interface UserService {
 
     JwtTokenPair login(LoginRequest loginRequest);
 
-    TokenModel refresh(RefreshRequest refreshRequest);
+    JwtTokenPair refresh(RefreshRequest refreshRequest);
 
     void deleteUser(Long userId);
 }

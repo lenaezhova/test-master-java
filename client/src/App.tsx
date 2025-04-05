@@ -1,5 +1,5 @@
 import AppRouter from './shared/router/AppRouter';
-import {ConfigProvider, Layout} from 'antd';
+import {ConfigProvider, Layout as AntdLayout} from 'antd';
 import './App.css';
 import {QueryClient, QueryClientProvider} from 'react-query';
 import Navbar from './shared/ui/Navbar';
@@ -20,14 +20,9 @@ export const App = () => {
     <Provider {...stores}>
       <ConfigProvider>
         <QueryClientProvider client={queryClient}>
-          <Layout>
-            <Navbar/>
-            <Layout.Content>
-              <div className="page">
-                <AppRouter/>
-              </div>
-            </Layout.Content>
-          </Layout>
+          <div className="page">
+            <AppRouter/>
+          </div>
         </QueryClientProvider>
       </ConfigProvider>
     </Provider>
