@@ -14,7 +14,7 @@ public record AuthProperties(
         String jwtAccessSecret,
         @NotBlank
         String jwtRefreshSecret,
-        Duration jwtAccessLifeDuration,
-        Duration jwtRefreshLifeDuration
+        Long jwtAccessLifeDuration,
+        Long jwtRefreshLifeDuration
 ) {
 }

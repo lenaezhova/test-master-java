@@ -79,10 +79,8 @@ public class AuthServiceImpl implements TokenAuthService, UserAuthService {
 
     @Override
     public JwtTokenPair generateTokens(UserModel user) {
-//        String accessToken = this.createJWT(user, authProperties.jwtAccessSecret(), authProperties.jwtAccessLifeDuration());
-//        String refreshToken = this.createJWT(user, authProperties.jwtRefreshSecret(), authProperties.jwtRefreshLifeDuration());
-        String accessToken = this.createJWT(user, authProperties.jwtAccessSecret(), Duration.ofSeconds(10));
-        String refreshToken = this.createJWT(user, authProperties.jwtRefreshSecret(), Duration.ofSeconds(60));
+        String accessToken = this.createJWT(user, authProperties.jwtAccessSecret(), Duration.ofDays(authProperties.jwtAccessLifeDuration()));
+        String refreshToken = this.createJWT(user, authProperties.jwtRefreshSecret(), Duration.ofDays(authProperties.jwtRefreshLifeDuration()));
 
         return new JwtTokenPair(accessToken, refreshToken);
     }
