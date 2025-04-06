@@ -67,7 +67,7 @@ const LoginForm: FC<LoginFormProps> = injectBase(['$user'])(observer( (props) =>
               <span>Нет аккаунта?</span>
               <Link to={RouteNames.REGISTRATION}>Зарегистрируйтесь!</Link>
             </div>
-            <Button type={'primary'}>Войти</Button>
+            <Button htmlType={'submit'} type={'primary'}>Войти</Button>
           </Row>
         </Form.Item>
 

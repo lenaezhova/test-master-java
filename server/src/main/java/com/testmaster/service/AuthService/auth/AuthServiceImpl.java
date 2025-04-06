@@ -73,6 +73,7 @@ public class AuthServiceImpl implements TokenAuthService, UserAuthService {
                 .withClaim(HeaderParams.TYPE, "Bearer")
                 .withSubject(user.getId().toString())
                 .withClaim(JwtClaimNames.EMAIL, user.getEmail())
+                .withClaim(JwtClaimNames.NAME, user.getName())
                 .sign(this.getHmacAlgorithm(secret));
     }
 

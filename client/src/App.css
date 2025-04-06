@@ -4,6 +4,11 @@
   padding: 0;
 }
 
+.ant-avatar {
+  background-color: #eaf1ff;
+  color: #235fd9;
+}
+
 html {
   scroll-behavior: smooth;
   overflow: auto;
@@ -40,6 +45,7 @@ body {
   padding-right: 15px;
   margin: auto;
   margin-top: 0;
+  margin-bottom: 100px;
 }
 
 .backGroundColorGrey{
@@ -50,17 +56,63 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-size: 24px;
   color: white;
   height: 100%;
 
   .logo {
     font-size: 24px;
   }
+
+  .avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+}
+
+.pointer {
+  cursor: pointer;
 }
 
 .white {
   color: white;
+}
+
+.dropdown {
+  background-color: white;
+  color: black;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #5e6f8833;
+  box-shadow: 0 4px 8px -2px #14161b1a;
+  font-size: 16px;
+
+  .dropdown-header-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid #5e6f8833;
+    padding: 12px 16px 12px 16px;
+  }
+
+  .dropdown-item-wrapper {
+    padding: 12px 16px 12px 16px;
+    transition: 0.3s ease background-color;
+    cursor: pointer;
+
+    button {
+      font-size: 16px;
+    }
+
+    &:hover {
+      background-color: #5e6f880d;
+    }
+
+    &:not(:last-child) {
+      border: 1px solid #5e6f8833;
+    }
+  }
 }
 
 .clearButton {

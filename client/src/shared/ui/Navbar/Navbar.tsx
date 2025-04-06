@@ -1,20 +1,14 @@
 import {useNavigate} from 'react-router-dom'
-import {Button, Layout} from "antd";
-import {AllBaseStores, injectBase} from "../../stores/stores";
+import {Button, Layout, Row} from "antd";
+import {AllBaseStores, injectBase} from "../../../stores/stores";
 import {observer} from "mobx-react";
-import {FullscreenExitOutlined, LogoutOutlined} from "@ant-design/icons";
+import {FullscreenExitOutlined, LogoutOutlined, UserOutlined} from "@ant-design/icons";
+import Avatar from "antd/lib/avatar/Avatar";
+import NavbarUser from "./NavbarUser";
 
 const Navbar = injectBase(['$user'])(observer((props: AllBaseStores) => {
-  const { $user } = props;
+  const {$user} = props;
   const navigate = useNavigate();
-
-  const handleExit = async () => {
-    try {
-      await $user.logout();
-    } catch (e) {
-      console.log(e)
-    }
-  }
 
   return (
     <Layout.Header style={{padding: '0'}}>
@@ -22,9 +16,7 @@ const Navbar = injectBase(['$user'])(observer((props: AllBaseStores) => {
         <button className={'logo clearButton white'} onClick={() => navigate('/')}>
           Test Master
         </button>
-        {$user.isAuth && (
-          <Button type={'text'} danger onClick={handleExit} icon={<LogoutOutlined/>} />
-        )}
+        {$user.isAuth && <NavbarUser/>}
       </div>
     </Layout.Header>
   );

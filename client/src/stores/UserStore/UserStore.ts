@@ -5,7 +5,8 @@ import {getUser, logout, updateRefreshToken} from "../../api/user";
 import {API_URL} from "../../api";
 import {message} from "antd";
 import {UserTokensStore} from "./UserTokensStore";
-import {JwtTokenPair} from "../../api/user/type";
+import {IUser, JwtTokenPair} from "../../api/user/type";
+import {EMPTY_OBJECT} from "../../utils/const";
 
 class UserStore extends UserTokensStore {
   @observable isAuthLoading = true;
@@ -32,14 +33,18 @@ class UserStore extends UserTokensStore {
     this.setIsAuthLoading(false);
   }
 
-  @computed get currentUser() {
+  @computed get currentUser(): IUser {
     const token = this.accessToken;
     try {
-      return token ? jwtDecode(token) : {}
+      return token ? jwtDecode(token) : EMPTY_OBJECT
     } catch (error) {
       console.log(error);
-      return {};
+      return EMPTY_OBJECT;
     }
+  }
+
+  @computed get currentUserNameLetter(): string {
+    return this.currentUser.name.slice(0, 1);
   }
 
   @action

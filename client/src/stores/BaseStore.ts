@@ -1,7 +1,6 @@
 import {action, computed, makeObservable, observable} from 'mobx';
 import {AnyObject} from "antd/es/_util/type";
-
-const EMPTY_OBJECT: any = {}
+import {EMPTY_OBJECT} from "../utils/const";
 
 export class BaseStore<ItemType extends AnyObject = AnyObject> {
   constructor() {
