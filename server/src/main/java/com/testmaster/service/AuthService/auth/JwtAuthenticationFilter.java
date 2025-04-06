@@ -1,7 +1,11 @@
 package com.testmaster.service.AuthService.auth;
 
 import api.domain.user.JwtClaimNames;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.testmaster.config.custom.CustomAuthenticationEntryPoint;
+import com.testmaster.exeption.AuthException;
 import com.testmaster.exeption.ClientException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -10,6 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,6 +23,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.time.Instant;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -25,6 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final UserAuthService userAuthService;
     private final UserDetailsService userDetailsService;
+    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -63,10 +72,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
 
             filterChain.doFilter(request, response);
-        } catch (ClientException ex) {
-            response.setStatus(ex.getStatusCode());
-            response.setContentType("application/json");
-            response.getWriter().write("{\"error\": \"" + ex.getMessage() + "\"}");
+        } catch (AuthException ex) {
+            authenticationEntryPoint.commence(request, response, new AuthenticationException(ex.getMessage()) {
+            });
         }
     }
 }

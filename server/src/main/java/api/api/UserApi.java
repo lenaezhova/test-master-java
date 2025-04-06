@@ -2,7 +2,7 @@ package api.api;
 
 import api.domain.user.request.CreateUserRequest;
 import api.domain.user.request.LoginRequest;
-import api.domain.user.request.RefreshRequest;
+import api.domain.user.request.RefreshTokenRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,8 +22,12 @@ public interface UserApi {
     @Operation(summary = "Войти в систему с помощью пароля")
     ResponseEntity<Object> login(@RequestBody LoginRequest request);
 
+    @PostMapping("/auth/logout")
+    @Operation(summary = "Выйти из системы")
+    ResponseEntity<Object> logout(@RequestBody RefreshTokenRequest request);
+
     @PostMapping("/auth/refresh")
     @Operation(summary = "Обновить рефреш токен")
-    ResponseEntity<Object> refresh(@RequestBody RefreshRequest request,
+    ResponseEntity<Object> refresh(@RequestBody RefreshTokenRequest request,
                                  HttpServletResponse response);
 }

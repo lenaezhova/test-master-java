@@ -1,5 +1,4 @@
 'use client'
-import s from "./MainLayout.module.scss";
 import {FC, memo, useEffect} from "react";
 import {AllBaseStores, injectBase} from "../stores/stores";
 import {observer} from "mobx-react";

@@ -26,12 +26,12 @@ const AppRouter : FC = injectBase(['$user'])(observer((props:AllBaseStores) => {
 
   const getPrivateRoutes = () => (
     <Fragment>
-      <Layout.Content>
-        <Route path={RouteNames.TESTS}>
-          <Route index element={<Tests />} />
-        </Route>
-        <Route path="*" element={<Navigate to={RouteNames.TESTS} replace/>}/>
-      </Layout.Content>
+      <Route element={<Layout.Content />}>
+      </Route>
+      <Route path={RouteNames.TESTS}>
+        <Route index element={<Tests />} />
+      </Route>
+      <Route path="*" element={<Navigate to={RouteNames.TESTS} replace/>}/>
     </Fragment>
   )
 

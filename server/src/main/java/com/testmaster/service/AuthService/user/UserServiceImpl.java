@@ -3,7 +3,7 @@ package com.testmaster.service.AuthService.user;
 import api.domain.user.JwtTokenPair;
 import api.domain.user.request.CreateUserRequest;
 import api.domain.user.request.LoginRequest;
-import api.domain.user.request.RefreshRequest;
+import api.domain.user.request.RefreshTokenRequest;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.testmaster.exeption.AuthException;
@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
         passwordValidationService.validate(createUserRequest);
 
         if (userRepository.existsByEmail(createUserRequest.email())) {
-            throw UnprocessableEntity("Email is already in use!");
+            throw UnprocessableEntity("Email уже используется!");
         }
 
         UserModel user = map(createUserRequest);
@@ -61,19 +61,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public JwtTokenPair login(@Nonnull LoginRequest loginRequest) {
         if (!hasText(loginRequest.email()) || !hasText(loginRequest.password())) {
-            throw new AuthException("Username or password cannot be empty!");
+            throw new AuthException("Имя или пароль не могут быть пустыми!");
         }
 
         UserModel user = userRepository
                 .findByEmail(loginRequest.email())
-                .orElseThrow(() -> new AuthException("User " + loginRequest.email() + " does not exist!"));
+                .orElseThrow(() -> new AuthException("Пользователь с email " + loginRequest.email() + " не существует!"));
 
         if (!passwordEncoder.matches(loginRequest.password(), user.getPassword())) {
-            throw new AuthException("Wrong password!");
+            throw new AuthException("Неверный email или пароль!");
         }
 
         if (user.getDeleted()) {
-            throw new AuthException("User " + user.getEmail() + " is deleted!");
+            throw new AuthException("Пользователь с email " + user.getEmail() + " удален!");
         }
 
         JwtTokenPair jwtTokenPair = userAuthService.generateTokens(user);
@@ -83,22 +83,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public JwtTokenPair refresh(RefreshRequest refreshRequest) {
+    public void logout(RefreshTokenRequest refreshRequest) {
         String refreshToken = refreshRequest.refreshToken();
-        if (!hasText(refreshToken)) {
-            throw new AuthException("User is not authorized!");
-        }
 
-        DecodedJWT decodedRefreshJWT = userAuthService.validateRefreshToken(refreshToken);
-        Optional<TokenModel> tokenFromDB = userAuthService.findToken(refreshToken);
+        UserModel user = this.getUserByRefresh(refreshToken);
 
-        if (decodedRefreshJWT == null || tokenFromDB.isEmpty()) {
-            throw new AuthException("User is not authorized!");
-        }
+        userAuthService.removeToken(refreshToken);
+    }
 
-        UserModel user = tokenFromDB
-                .orElseThrow(() -> new AuthException("User is not authorized!"))
-                .getUser();
+    @Override
+    public JwtTokenPair refresh(RefreshTokenRequest refreshRequest) {
+        String refreshToken = refreshRequest.refreshToken();
+
+        UserModel user = this.getUserByRefresh(refreshToken);
 
         JwtTokenPair jwtTokenPair = userAuthService.generateTokens(user);
 
@@ -110,5 +107,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(@Nonnull Long userId) {
         userRepository.deleteById(userId);
+    }
+
+    private UserModel getUserByRefresh(String refreshToken) {
+        if (!hasText(refreshToken)) {
+            throw new AuthException("Пользователь не авторизован!");
+        }
+
+        DecodedJWT decodedRefreshJWT = userAuthService.validateRefreshToken(refreshToken);
+        Optional<TokenModel> tokenFromDB = userAuthService.findToken(refreshToken);
+
+        if (decodedRefreshJWT == null || tokenFromDB.isEmpty()) {
+            throw new AuthException("Пользователь не авторизован!");
+        }
+
+        return tokenFromDB
+                .orElseThrow(() -> new AuthException("Пользователь не авторизован!"))
+                .getUser();
     }
 }

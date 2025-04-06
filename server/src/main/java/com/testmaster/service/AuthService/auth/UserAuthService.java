@@ -23,5 +23,4 @@ public interface UserAuthService {
     Optional<TokenModel> findToken(String refreshToken);
 
     TokenModel saveToken(UserModel user, String refreshToken);
-
 }

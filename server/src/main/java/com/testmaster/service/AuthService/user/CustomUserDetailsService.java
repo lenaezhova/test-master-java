@@ -24,7 +24,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         Optional<UserModel> userOptional = repository.findByEmail(email);
 
         UserModel user = userOptional.orElseThrow(() ->
-                new UsernameNotFoundException("User with email: " + email + " not found")
+                new UsernameNotFoundException("Пользователь с email: " + email + " не найден")
         );
 
         List<SimpleGrantedAuthority> authorities = user.getRoles().stream()

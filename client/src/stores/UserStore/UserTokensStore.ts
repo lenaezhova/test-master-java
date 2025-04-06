@@ -4,23 +4,39 @@ import {BaseStore} from '../BaseStore';
 import {getUser, updateRefreshToken} from "../../api/user";
 import {API_URL} from "../../api";
 import {message} from "antd";
+import {
+  getAccessToken,
+  getRefreshToken,
+  removeAccessToken,
+  removeRefreshToken,
+  setAccessToken,
+  setRefreshToken
+} from "../../utils/tokens";
 
 class UserTokensStore extends BaseStore {
-    @computed get accessToken() {
-        return localStorage.getItem('access-token')
-    }
+  @computed get accessToken() {
+    return getAccessToken();
+  }
 
-    @computed get refreshToken() {
-        return localStorage.getItem('refresh-token')
-    }
+  @computed get refreshToken() {
+    return getRefreshToken()
+  }
 
-    @action setAccessToken(token: string){
-        localStorage.setItem('access-token', token);
-    }
+  @action removeAccessToken(){
+    removeAccessToken();
+  }
 
-    @action setRefreshToken(token: string){
-        localStorage.setItem('refresh-token', token);
-    }
+  @action removeRefreshToken(){
+    removeRefreshToken();
+  }
+
+  @action setAccessToken(token: string){
+    setAccessToken(token);
+  }
+
+  @action setRefreshToken(token: string){
+    setRefreshToken(token);
+  }
 }
 
 export {UserTokensStore};

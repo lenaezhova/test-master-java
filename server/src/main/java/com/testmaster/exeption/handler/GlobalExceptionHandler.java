@@ -1,5 +1,6 @@
 package com.testmaster.exeption.handler;
 
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.testmaster.exeption.AuthException;
 import com.testmaster.exeption.ClientException;
 import org.springframework.http.ResponseEntity;
@@ -27,14 +28,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AuthException.class)
     public ResponseEntity<Map<String, Object>> handleAuthException(AuthException ex) {
         Map<String, Object> body = new HashMap<>();
-        body.put("status", 400);
+        body.put("status", 401);
         body.put("message", ex.getMessage());
         body.put("timestamp", Instant.now().toString());
-        return ResponseEntity.status(400).body(body);
+        return ResponseEntity.status(401).body(body);
     }
 
     @ExceptionHandler(ClientException.class)
-    public ResponseEntity<Map<String, Object>> handleAuthException(ClientException ex) {
+    public ResponseEntity<Map<String, Object>> handleClientException(ClientException ex) {
         Map<String, Object> body = new HashMap<>();
         body.put("status", ex.getStatusCode());
         body.put("message", ex.getMessage());

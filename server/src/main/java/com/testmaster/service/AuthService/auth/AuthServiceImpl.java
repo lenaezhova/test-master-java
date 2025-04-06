@@ -15,6 +15,7 @@ import com.testmaster.model.TokenModel;
 import com.testmaster.model.UserModel;
 import com.testmaster.repository.TokenRepository;
 import com.testmaster.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -56,7 +57,7 @@ public class AuthServiceImpl implements TokenAuthService, UserAuthService {
                 .orElseGet(() -> userRepository.save(UserMapper.map(decodedJWT)));
 
         if (user.getDeleted()) {
-            throw new AuthException("User " + email + " is deleted!");
+            throw new AuthException("Пользователь с " + email + " удален!");
         }
 
         return token;
@@ -78,8 +79,10 @@ public class AuthServiceImpl implements TokenAuthService, UserAuthService {
 
     @Override
     public JwtTokenPair generateTokens(UserModel user) {
-        String accessToken = this.createJWT(user, authProperties.jwtAccessSecret(), authProperties.jwtAccessLifeDuration());
-        String refreshToken = this.createJWT(user, authProperties.jwtRefreshSecret(), authProperties.jwtRefreshLifeDuration());
+//        String accessToken = this.createJWT(user, authProperties.jwtAccessSecret(), authProperties.jwtAccessLifeDuration());
+//        String refreshToken = this.createJWT(user, authProperties.jwtRefreshSecret(), authProperties.jwtRefreshLifeDuration());
+        String accessToken = this.createJWT(user, authProperties.jwtAccessSecret(), Duration.ofSeconds(10));
+        String refreshToken = this.createJWT(user, authProperties.jwtRefreshSecret(), Duration.ofSeconds(60));
 
         return new JwtTokenPair(accessToken, refreshToken);
     }
@@ -111,6 +114,7 @@ public class AuthServiceImpl implements TokenAuthService, UserAuthService {
 
 
     @Override
+    @Transactional
     public void removeToken(String refreshToken) {
         tokenRepository.deleteByRefreshToken(refreshToken);
     }

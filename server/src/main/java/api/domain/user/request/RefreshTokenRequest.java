@@ -1,5 +1,5 @@
 package api.domain.user.request;
 
-public record RefreshRequest (
+public record RefreshTokenRequest (
         String refreshToken
 ) {}

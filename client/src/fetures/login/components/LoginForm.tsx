@@ -1,15 +1,34 @@
 import {FC, memo} from "react";
-import {Form, Input, Row} from "antd";
+import {Button, Form, FormProps, Input, Row} from "antd";
 import {useForm} from "antd/lib/form/Form";
 import s from './Auth.module.scss'
 import {requiredMessage} from "../../../utils/const";
 import {Link} from "react-router";
 import {RouteNames} from "../../../shared/router";
+import {CreateUserRequest, LoginRequest} from "../../../api/user/type";
+import {useLogin} from "../../../api/user/query";
+import {AllBaseStores, injectBase} from "../../../stores/stores";
+import {observer} from "mobx-react";
 
-interface LoginFormProps {}
+type FieldType = LoginRequest
 
-const LoginForm: FC<LoginFormProps> = (props) => {
+interface LoginFormProps extends AllBaseStores {}
+
+const LoginForm: FC<LoginFormProps> = injectBase(['$user'])(observer( (props) => {
+  const { $user } = props;
+
+  const login = useLogin();
+
   const [form] = useForm();
+
+  const onSendForm: FormProps<FieldType>['onFinish'] = async (values) => {
+    try {
+      const response = await login.mutateAsync(values);
+      $user.login(response?.data);
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   return (
     <div className={s.auth}>
@@ -17,21 +36,20 @@ const LoginForm: FC<LoginFormProps> = (props) => {
       <Form
         form={form}
         layout={'vertical'}
+        onFinish={onSendForm}
       >
         <Form.Item
           name={'email'}
-          label="Email"
           rules={[{
             type: 'email',
             message: 'Некорректный email'
           }]}
         >
-          <Input />
+          <Input placeholder={'Email'} />
         </Form.Item>
 
         <Form.Item
           name="password"
-          label="Пароль"
           rules={[
             {
               required: true,
@@ -40,18 +58,22 @@ const LoginForm: FC<LoginFormProps> = (props) => {
           ]}
           hasFeedback
         >
-          <Input.Password />
+          <Input.Password placeholder={'Пароль'} />
         </Form.Item>
 
-        <Row justify='space-between' align='middle' className={s.footer}>
-          <div className={s.footerLeft}>
-            <span>Нет аккаунта?</span>
-            <Link to={RouteNames.REGISTRATION}>Зарегистрируйтесь!</Link>
-          </div>
-        </Row>
+        <Form.Item>
+          <Row justify='space-between' align='middle'>
+            <div className={s.footerLinkWrapper}>
+              <span>Нет аккаунта?</span>
+              <Link to={RouteNames.REGISTRATION}>Зарегистрируйтесь!</Link>
+            </div>
+            <Button type={'primary'}>Войти</Button>
+          </Row>
+        </Form.Item>
+
       </Form>
     </div>
   );
-};
+}));
 
 export default LoginForm;

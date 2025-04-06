@@ -6,7 +6,7 @@
 
 html {
   scroll-behavior: smooth;
-  overflow: hidden;
+  overflow: auto;
 }
 
 body {
@@ -54,7 +54,7 @@ body {
   color: white;
   height: 100%;
 
-  button {
+  .logo {
     font-size: 24px;
   }
 }

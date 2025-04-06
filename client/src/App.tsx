@@ -2,9 +2,11 @@ import AppRouter from './shared/router/AppRouter';
 import {ConfigProvider, Layout as AntdLayout} from 'antd';
 import './App.css';
 import {QueryClient, QueryClientProvider} from 'react-query';
-import Navbar from './shared/ui/Navbar';
 import {Provider} from "mobx-react";
 import {stores} from "./stores/stores";
+import {axiosSetup} from "./api";
+
+axiosSetup(stores.$user);
 
 export const App = () => {
   const queryClient = new QueryClient({

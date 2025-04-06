@@ -1,10 +1,11 @@
 import {jwtDecode} from 'jwt-decode';
 import {action, computed, makeObservable, observable} from 'mobx';
 import {BaseStore} from '../BaseStore';
-import {getUser, updateRefreshToken} from "../../api/user";
+import {getUser, logout, updateRefreshToken} from "../../api/user";
 import {API_URL} from "../../api";
 import {message} from "antd";
 import {UserTokensStore} from "./UserTokensStore";
+import {JwtTokenPair} from "../../api/user/type";
 
 class UserStore extends UserTokensStore {
   @observable isAuthLoading = true;
@@ -51,10 +52,29 @@ class UserStore extends UserTokensStore {
       this.setIsAuth(true);
     } catch (e) {
       this.setIsAuth(false);
-      message.error('Произошла ошибка при проверка авторизации')
     } finally {
       this.setIsAuthLoading(false);
     }
+  }
+
+  @action
+  async logout() {
+    try {
+      await logout({refreshToken: this.refreshToken});
+      this.removeAccessToken();
+      this.removeRefreshToken();
+      this.setIsAuth(false);
+    } catch (e) {
+      message.error('Произошла ошибка')
+    } finally {
+      this.setIsAuthLoading(false);
+    }
+  }
+
+  @action login(tokens: JwtTokenPair) {
+    this.setAccessToken(tokens.accessToken);
+    this.setRefreshToken(tokens.refreshToken);
+    this.setIsAuth(true);
   }
 }
 

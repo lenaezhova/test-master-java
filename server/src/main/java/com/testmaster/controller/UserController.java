@@ -4,13 +4,9 @@ import api.api.UserApi;
 import api.domain.user.JwtTokenPair;
 import api.domain.user.request.CreateUserRequest;
 import api.domain.user.request.LoginRequest;
-import api.domain.user.request.RefreshRequest;
-import api.domain.user.response.LoginResponse;
-import api.domain.user.response.RefreshResponse;
-import com.testmaster.model.TokenModel;
-import com.testmaster.model.UserModel;
+import api.domain.user.request.RefreshTokenRequest;
+import api.domain.user.response.TokensResponse;
 import com.testmaster.service.AuthService.user.UserService;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -33,7 +29,7 @@ public class UserController implements UserApi {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .build();
+                .body(new TokensResponse(jwtTokenPair.accessToken(), jwtTokenPair.refreshToken()));
     }
 
     @Override
@@ -42,23 +38,32 @@ public class UserController implements UserApi {
         return ResponseEntity
                 .ok()
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .body(new LoginResponse(jwtTokenPair.accessToken()));
+                .body(new TokensResponse(jwtTokenPair.accessToken(), jwtTokenPair.refreshToken()));
     }
 
     @Override
-    public ResponseEntity<Object> refresh(RefreshRequest request, HttpServletResponse response) {
+    public ResponseEntity<Object> logout(RefreshTokenRequest request) {
+        userService.logout(request);
+
+        return ResponseEntity
+                .ok()
+                .build();
+    }
+
+    @Override
+    public ResponseEntity<Object> refresh(RefreshTokenRequest request, HttpServletResponse response) {
         JwtTokenPair jwtTokenPair = userService.refresh(request);
 
-        String refreshToken = jwtTokenPair.refreshToken();
-        Cookie refreshCookie = new Cookie("refreshToken", refreshToken);
-        refreshCookie.setHttpOnly(true);
-        refreshCookie.setMaxAge(30 * 24 * 60 * 60);
-        refreshCookie.setPath("/");
-        response.addCookie(refreshCookie);
+//        String refreshToken = jwtTokenPair.refreshToken();
+//        Cookie refreshCookie = new Cookie("refreshToken", refreshToken);
+//        refreshCookie.setHttpOnly(true);
+//        refreshCookie.setMaxAge(30 * 24 * 60 * 60);
+//        refreshCookie.setPath("/");
+//        response.addCookie(refreshCookie);
 
         return ResponseEntity
                 .ok()
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .body(new RefreshResponse(jwtTokenPair));
+                .body((new TokensResponse(jwtTokenPair.accessToken(), jwtTokenPair.refreshToken())));
     }
 }
