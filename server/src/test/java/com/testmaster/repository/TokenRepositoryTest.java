@@ -1,13 +1,15 @@
 package com.testmaster.repository;
 
+import api.domain.user.UserRoles;
 import com.testmaster.model.TokenModel;
-import com.testmaster.model.UserModel.UserModel;
+import com.testmaster.model.UserModel;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,6 +32,7 @@ public class TokenRepositoryTest {
                 "password123",
                 "abc123-activation",
                 false,
+                List.of(UserRoles.USER),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -44,8 +47,8 @@ public class TokenRepositoryTest {
 
         assertNotNull(saved.getId());
         assertEquals("simple-token-123", saved.getRefreshToken());
-        assertNotNull(saved.getUsers());
-        assertEquals("Иван Иванов", saved.getUsers().getName());
+        assertNotNull(saved.getUser());
+        assertEquals("Иван Иванов", saved.getUser().getName());
     }
 
 
@@ -58,6 +61,7 @@ public class TokenRepositoryTest {
                 "password123",
                 "abc123-activation",
                 false,
+                List.of(UserRoles.USER),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -76,7 +80,7 @@ public class TokenRepositoryTest {
 
         TokenModel found = foundOpt.get();
         assertEquals("simple-token-123", found.getRefreshToken());
-        assertNotNull(found.getUsers());
-        assertEquals("Иван Иванов", found.getUsers().getName());
+        assertNotNull(found.getUser());
+        assertEquals("Иван Иванов", found.getUser().getName());
     }
 }

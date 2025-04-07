@@ -3,10 +3,11 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
-        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+            https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
 
     <include file="db/changelog/create-tables.xml"/>
     <include file="db/changelog/changes/0.0.1_add_activation_fields_to_users.xml"/>
     <include file="db/changelog/changes/0.0.2_rename_value_column_to_user_value.xml"/>
+    <include file="db/changelog/changes/0.0.3_migrate_on_field_roles.xml"/>
 
 </databaseChangeLog>

@@ -1,8 +1,13 @@
 import AppRouter from './shared/router/AppRouter';
-import {ConfigProvider, Layout} from 'antd';
+import {ConfigProvider, Layout as AntdLayout} from 'antd';
 import './App.css';
 import {QueryClient, QueryClientProvider} from 'react-query';
-import Navbar from './shared/ui/Navbar';
+import {Provider} from "mobx-react";
+import {stores} from "./stores/stores";
+import {axiosSetup} from "./api";
+
+axiosSetup(stores.$user);
+
 export const App = () => {
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -14,18 +19,14 @@ export const App = () => {
   });
 
   return (
-    <ConfigProvider>
-      <QueryClientProvider client={queryClient}>
-        <Layout>
-          <Navbar/>
-          <Layout.Content>
-            <div className="page">
-              <AppRouter/>
-            </div>
-          </Layout.Content>
-        </Layout>
-      </QueryClientProvider>
-    </ConfigProvider>
-
+    <Provider {...stores}>
+      <ConfigProvider>
+        <QueryClientProvider client={queryClient}>
+          <div className="page">
+            <AppRouter/>
+          </div>
+        </QueryClientProvider>
+      </ConfigProvider>
+    </Provider>
   );
 };

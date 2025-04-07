@@ -1,6 +1,11 @@
 server:
   port: 8080
 
+auth:
+  local:
+    jwt-secret: ${JWT_SECRET}
+    token-life-duration: 8h
+
 spring:
   datasource:
     url: ${DB_URL}

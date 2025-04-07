@@ -1,9 +1,10 @@
 package com.testmaster.controller;
 
 import com.testmaster.dto.TestDto;
-import com.testmaster.mapper.test.TestMapper;
+import com.testmaster.mapper.TestMapper;
 import lombok.RequiredArgsConstructor;
-import com.testmaster.model.TestModel.TestModel;
+import com.testmaster.model.TestModel;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import com.testmaster.service.TestService;
 
@@ -17,6 +18,7 @@ public class TestController {
 
     private final TestService testService;
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping
     public List<TestDto> all() {
         return testService.getAll()

@@ -33,6 +33,7 @@ liquibase-update:
 liquibase-clear-checksums:
 	source .env && ./mvnw liquibase:clearCheckSums
 
+# UPDATE DATABASECHANGELOGLOCK SET LOCKED = false, LOCKGRANTED = NULL, LOCKEDBY = NULL WHERE ID = 1;
 liquibase-drop-all:
 	source .env && ./mvnw liquibase:dropAll
 

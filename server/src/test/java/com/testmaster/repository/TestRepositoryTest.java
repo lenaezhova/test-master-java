@@ -1,19 +1,25 @@
 package com.testmaster.repository;
 
-import com.testmaster.model.TestModel.TestModel;
-import com.testmaster.model.TestModel.TestStatus;
-import com.testmaster.model.UserModel.UserModel;
+import api.domain.user.UserRoles;
+import com.testmaster.model.TestModel;
+import api.domain.test.TestStatus;
+import com.testmaster.model.UserModel;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
+@ActiveProfiles("test")
+@TestPropertySource(locations = "classpath:application-test.yml")
 public class TestRepositoryTest {
 
     @Autowired
@@ -31,6 +37,7 @@ public class TestRepositoryTest {
                 "password123",
                 "abc123-activation",
                 false,
+                List.of(UserRoles.USER),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -61,6 +68,7 @@ public class TestRepositoryTest {
                 "password123",
                 "abc123-activation",
                 false,
+                List.of(UserRoles.USER),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );

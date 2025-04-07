@@ -1,6 +1,5 @@
 package com.testmaster.model;
 
-import com.testmaster.model.UserModel.UserModel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -16,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class TokenModel extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private UserModel users;
+    private UserModel user;
 
     @Column(name = "refresh_token", nullable = false)
     private String refreshToken;
