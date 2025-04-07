@@ -1,8 +1,8 @@
-package api.api;
+package com.testmasterapi.api;
 
-import api.domain.user.request.CreateUserRequest;
-import api.domain.user.request.LoginRequest;
-import api.domain.user.request.RefreshTokenRequest;
+import com.testmasterapi.domain.user.request.CreateUserRequest;
+import com.testmasterapi.domain.user.request.LoginRequest;
+import com.testmasterapi.domain.user.request.RefreshTokenRequest;
 import com.testmaster.dto.UserDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

@@ -1,8 +1,7 @@
 package com.testmaster.service.AuthService.auth;
 
-import api.domain.user.JwtClaimNames;
+import com.testmasterapi.domain.user.JwtClaimNames;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.testmaster.exeption.AuthException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

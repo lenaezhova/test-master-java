@@ -1,6 +1,4 @@
-package api.domain.user.response;
-
-import api.domain.user.JwtTokenPair;
+package com.testmasterapi.domain.user.response;
 
 public record TokensResponse(String accessToken, String refreshToken) {
 }

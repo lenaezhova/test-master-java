@@ -1,4 +1,4 @@
-package api.api;
+package com.testmasterapi.api;
 
 import com.testmaster.dto.TestDto;
 import com.testmaster.model.TestModel;

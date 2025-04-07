@@ -1,8 +1,8 @@
 package com.testmaster.repository;
 
-import api.domain.user.UserRoles;
+import com.testmasterapi.domain.user.UserRoles;
 import com.testmaster.model.TestModel;
-import api.domain.test.TestStatus;
+import com.testmasterapi.domain.test.TestStatus;
 import com.testmaster.model.TypeQuestionModel;
 import com.testmaster.model.QuestionModel;
 import com.testmaster.model.UserModel;

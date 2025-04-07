@@ -1,6 +1,6 @@
 package com.testmaster.validation;
 
-import api.domain.user.request.CreateUserRequest;
+import com.testmasterapi.domain.user.request.CreateUserRequest;
 import org.springframework.stereotype.Service;
 
 import static com.testmaster.exeption.ClientException.UnprocessableEntity;

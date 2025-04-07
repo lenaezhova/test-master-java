@@ -1,6 +1,6 @@
 package com.testmaster.service.AuthService.auth;
 
-import api.domain.user.JwtTokenPair;
+import com.testmasterapi.domain.user.JwtTokenPair;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.testmaster.model.TokenModel;
 import com.testmaster.model.UserModel;

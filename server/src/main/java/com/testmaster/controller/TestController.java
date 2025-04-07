@@ -1,6 +1,6 @@
 package com.testmaster.controller;
 
-import api.api.TestApi;
+import com.testmasterapi.api.TestApi;
 import com.testmaster.dto.TestDto;
 import com.testmaster.mapper.TestMapper;
 import lombok.RequiredArgsConstructor;

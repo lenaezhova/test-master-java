@@ -1,9 +1,9 @@
 package com.testmaster.repository.GroupRepository;
 
-import api.domain.user.UserRoles;
+import com.testmasterapi.domain.user.UserRoles;
 import com.testmaster.model.GroupModel.GroupModel;
 import com.testmaster.model.GroupModel.GroupsUserModel;
-import api.domain.user.UserGroupsId;
+import com.testmasterapi.domain.user.UserGroupsId;
 import com.testmaster.model.UserModel;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
