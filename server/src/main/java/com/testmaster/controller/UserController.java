@@ -1,11 +1,11 @@
 package com.testmaster.controller;
 
-import api.api.UserApi;
-import api.domain.user.JwtTokenPair;
-import api.domain.user.request.CreateUserRequest;
-import api.domain.user.request.LoginRequest;
-import api.domain.user.request.RefreshTokenRequest;
-import api.domain.user.response.TokensResponse;
+import com.testmasterapi.api.UserApi;
+import com.testmasterapi.domain.user.JwtTokenPair;
+import com.testmasterapi.domain.user.request.CreateUserRequest;
+import com.testmasterapi.domain.user.request.LoginRequest;
+import com.testmasterapi.domain.user.request.RefreshTokenRequest;
+import com.testmasterapi.domain.user.response.TokensResponse;
 import com.testmaster.dto.UserDto;
 import com.testmaster.mapper.UserMapper;
 import com.testmaster.model.UserModel;

@@ -1,6 +1,6 @@
 package com.testmaster.repository.GroupRepository;
 
-import api.domain.user.UserRoles;
+import com.testmasterapi.domain.user.UserRoles;
 import com.testmaster.model.GroupModel.GroupModel;
 import com.testmaster.model.UserModel;
 import org.junit.jupiter.api.Test;

@@ -1,4 +1,4 @@
-package api.api;
+package com.testmasterapi.api;
 
 import com.testmaster.dto.TestDto;
 import com.testmaster.model.TestModel;
@@ -12,7 +12,7 @@ import java.util.List;
 
 @Tag(name = "Тесты", description = "API для работы c тестами")
 public interface TestApi {
-    String PATH = "/api/test";
+    String PATH = "/com/testmasterapi/test";
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping

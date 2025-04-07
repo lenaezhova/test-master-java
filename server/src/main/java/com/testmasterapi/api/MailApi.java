@@ -1,16 +1,15 @@
-package api.api;
+package com.testmasterapi.api;
 
-import api.domain.mail.request.SendConfirmEmailRequest;
+import com.testmasterapi.domain.mail.request.SendConfirmEmailRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Tag(name = "Почта", description = "API для работы c почтой")
 public interface MailApi {
-    String PATH = "/api/mail";
+    String PATH = "/com/testmasterapi/mail";
 
     @PostMapping
     @Operation(summary = "Отправить почту")

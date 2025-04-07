@@ -1,6 +1,6 @@
 package com.testmaster.dto;
 
-import api.domain.test.TestStatus;
+import com.testmasterapi.domain.test.TestStatus;
 import lombok.*;
 
 @Data

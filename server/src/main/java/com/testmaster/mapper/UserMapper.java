@@ -1,8 +1,8 @@
 package com.testmaster.mapper;
 
-import api.domain.user.JwtClaimNames;
-import api.domain.user.UserRoles;
-import api.domain.user.request.CreateUserRequest;
+import com.testmasterapi.domain.user.JwtClaimNames;
+import com.testmasterapi.domain.user.UserRoles;
+import com.testmasterapi.domain.user.request.CreateUserRequest;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.testmaster.dto.UserDto;
 import com.testmaster.model.UserModel;

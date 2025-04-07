@@ -1,9 +1,9 @@
 package com.testmaster.service.AuthService.user;
 
-import api.domain.user.JwtTokenPair;
-import api.domain.user.request.CreateUserRequest;
-import api.domain.user.request.LoginRequest;
-import api.domain.user.request.RefreshTokenRequest;
+import com.testmasterapi.domain.user.JwtTokenPair;
+import com.testmasterapi.domain.user.request.CreateUserRequest;
+import com.testmasterapi.domain.user.request.LoginRequest;
+import com.testmasterapi.domain.user.request.RefreshTokenRequest;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.testmaster.exeption.AuthException;
 import com.testmaster.exeption.ClientException;
@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
         JwtTokenPair jwtTokenPair = userAuthService.generateTokens(user);
         userAuthService.saveToken(user, jwtTokenPair.refreshToken());
 
-        String link = System.getenv("API_URL") + "/api/users/auth/activate/" + activationLink;
+        String link = System.getenv("API_URL") + "/com/testmasterapi/users/auth/activate/" + activationLink;
         mailService.sendConfirmEmail(user.getEmail(), link);
 
         return jwtTokenPair;

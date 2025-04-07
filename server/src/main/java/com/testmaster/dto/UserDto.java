@@ -1,8 +1,6 @@
 package com.testmaster.dto;
 
-import api.domain.user.UserRoles;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import com.testmasterapi.domain.user.UserRoles;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

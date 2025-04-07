@@ -1,6 +1,6 @@
-package api.domain.user.converter;
+package com.testmasterapi.domain.user.converter;
 
-import api.domain.user.UserRoles;
+import com.testmasterapi.domain.user.UserRoles;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
 
