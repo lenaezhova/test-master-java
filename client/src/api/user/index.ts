@@ -18,15 +18,15 @@ export const updateRefreshToken = async (values: { refreshToken: string }): Prom
 export const login = async (values: LoginRequest): Promise<{
   data: JwtTokenPair,
 }> => {
-  return await axios.post(API_URL + userApiPrefix + `/auth/login`, values);
+  return await $api.post(userApiPrefix + `/auth/login`, values);
 };
 
 export const logout = async (values: LogoutRequest) => {
-  return await axios.post(API_URL + userApiPrefix + `/auth/logout`, values);
+  return await $api.post(userApiPrefix + `/auth/logout`, values);
 };
 
 export const registration = async (values: CreateUserRequest): Promise<{
   data: JwtTokenPair,
 }> => {
-  return await axios.post(API_URL + userApiPrefix + `/auth/registration`, values);
+  return await $api.post(userApiPrefix + `/auth/registration`, values);
 };
