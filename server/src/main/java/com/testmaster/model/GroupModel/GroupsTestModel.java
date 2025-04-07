@@ -1,6 +1,6 @@
 package com.testmaster.model.GroupModel;
 
-import com.testmasterapi.domain.test.TestGroupsId;
+import api.domain.test.TestGroupsId;
 import com.testmaster.model.TestModel;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

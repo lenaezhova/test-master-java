@@ -1,6 +1,6 @@
 package com.testmaster.validation;
 
-import com.testmasterapi.domain.user.request.CreateUserRequest;
+import api.domain.user.request.CreateUserRequest;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.springframework.stereotype.Service;

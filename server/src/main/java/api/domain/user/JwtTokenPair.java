@@ -1,4 +1,4 @@
-package com.testmasterapi.domain.user;
+package api.domain.user;
 
 public record JwtTokenPair(
         String accessToken,

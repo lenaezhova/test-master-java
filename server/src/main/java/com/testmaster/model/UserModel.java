@@ -1,7 +1,7 @@
 package com.testmaster.model;
 
-import com.testmasterapi.domain.user.UserRoles;
-import com.testmasterapi.domain.user.converter.RoleListConverter;
+import api.domain.user.UserRoles;
+import api.domain.user.converter.RoleListConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

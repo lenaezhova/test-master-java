@@ -1,4 +1,4 @@
-package com.testmasterapi.domain.test;
+package api.domain.test;
 
 public enum TestStatus {
     OPEN,

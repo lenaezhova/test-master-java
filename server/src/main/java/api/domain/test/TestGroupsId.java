@@ -1,4 +1,4 @@
-package com.testmasterapi.domain.test;
+package api.domain.test;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;

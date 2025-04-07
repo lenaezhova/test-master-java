@@ -1,6 +1,6 @@
 package com.testmaster.model;
 
-import com.testmasterapi.domain.test.TestStatus;
+import api.domain.test.TestStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

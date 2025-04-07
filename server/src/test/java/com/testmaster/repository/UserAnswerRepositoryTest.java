@@ -1,9 +1,9 @@
 package com.testmaster.repository;
 
-import com.testmasterapi.domain.user.UserRoles;
+import api.domain.user.UserRoles;
 import com.testmaster.model.*;
         import com.testmaster.model.TestModel;
-import com.testmasterapi.domain.test.TestStatus;
+import api.domain.test.TestStatus;
 import com.testmaster.model.UserModel;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

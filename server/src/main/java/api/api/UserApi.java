@@ -1,8 +1,8 @@
-package com.testmasterapi.api;
+package api.api;
 
-import com.testmasterapi.domain.user.request.CreateUserRequest;
-import com.testmasterapi.domain.user.request.LoginRequest;
-import com.testmasterapi.domain.user.request.RefreshTokenRequest;
+import api.domain.user.request.CreateUserRequest;
+import api.domain.user.request.LoginRequest;
+import api.domain.user.request.RefreshTokenRequest;
 import com.testmaster.dto.UserDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Пользователи", description = "API для работы c пользователями")
 public interface UserApi {
-    String PATH = "/com/testmasterapi/users";
+    String PATH = "/api/users";
 
     @PostMapping("/auth/registration")
     @Operation(summary = "Регистрация")

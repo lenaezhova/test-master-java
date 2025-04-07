@@ -1,6 +1,6 @@
 package com.testmaster.repository;
 
-import com.testmasterapi.domain.user.UserRoles;
+import api.domain.user.UserRoles;
 import com.testmaster.model.TokenModel;
 import com.testmaster.model.UserModel;
 import org.junit.jupiter.api.Test;

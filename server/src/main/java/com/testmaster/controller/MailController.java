@@ -1,7 +1,7 @@
 package com.testmaster.controller;
 
-import com.testmasterapi.api.MailApi;
-import com.testmasterapi.domain.mail.request.SendConfirmEmailRequest;
+import api.api.MailApi;
+import api.domain.mail.request.SendConfirmEmailRequest;
 import com.testmaster.service.AuthService.mail.MailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

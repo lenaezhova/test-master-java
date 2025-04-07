@@ -1,4 +1,4 @@
-package com.testmasterapi.domain.mail.request;
+package api.domain.mail.request;
 
 public record SendConfirmEmailRequest (
         String email,

@@ -1,7 +1,7 @@
 package com.testmaster.service.AuthService.auth;
 
-import com.testmasterapi.domain.user.JwtClaimNames;
-import com.testmasterapi.domain.user.JwtTokenPair;
+import api.domain.user.JwtClaimNames;
+import api.domain.user.JwtTokenPair;
 import com.auth0.jwt.HeaderParams;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
