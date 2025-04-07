@@ -1,10 +1,8 @@
 package com.testmaster.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.testmaster.config.custom.CustomAuthenticationEntryPoint;
+import com.testmaster.config.handler.CustomAuthenticationEntryPoint;
 import com.testmaster.service.AuthService.auth.JwtAuthenticationFilter;
 import com.testmaster.service.AuthService.user.CustomUserDetailsService;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,7 +28,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthFilter;
+
     private final CustomUserDetailsService userDetailsService;
+
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Bean
@@ -52,14 +52,8 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/api/users/auth/**",
-                                "/v3/api-docs/**",
-                                "/swagger-ui/**",
-                                "/error"
-                        ).permitAll()
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .anyRequest().authenticated()
+                        .anyRequest().permitAll()
                 )
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)

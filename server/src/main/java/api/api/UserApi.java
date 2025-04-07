@@ -36,6 +36,6 @@ public interface UserApi {
     ResponseEntity<Object> activate(@PathVariable String link);
 
     @GetMapping("/{id}")
-    @Operation(summary = "Активация аккаунта по ссылке")
+    @Operation(summary = "Получить пользователя по id")
     ResponseEntity<UserDto> getUser(@PathVariable Long id);
 }

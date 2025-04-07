@@ -5,6 +5,10 @@ auth:
     jwt-access-life-duration: ${JWT_ACCESS_DURATION}
     jwt-refresh-life-duration: ${JWT_REFRESH_DURATION}
 
+logging:
+  level:
+    org.springframework.security: DEBUG
+
 spring:
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:default}

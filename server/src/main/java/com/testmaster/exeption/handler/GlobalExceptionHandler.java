@@ -3,8 +3,10 @@ package com.testmaster.exeption.handler;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.testmaster.exeption.AuthException;
 import com.testmaster.exeption.ClientException;
+import kotlin.io.AccessDeniedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -20,11 +22,12 @@ public class GlobalExceptionHandler {
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "Internal server error"
         );
+        ex.printStackTrace();
         return ResponseEntity.status(500).body(body);
     }
 
-    @ExceptionHandler({AuthException.class})
-    public ResponseEntity<Map<String, Object>> handleAuthException(AuthException ex) {
+    @ExceptionHandler({AuthException.class, AuthorizationDeniedException.class})
+    public ResponseEntity<Map<String, Object>> handleAuthException(Exception ex) {
         Map<String, Object> body = this.getBody(
                 HttpStatus.UNAUTHORIZED.value(),
                 ex.getMessage()

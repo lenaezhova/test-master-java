@@ -1,10 +1,11 @@
 package com.testmaster.controller;
 
+import api.api.TestApi;
 import com.testmaster.dto.TestDto;
 import com.testmaster.mapper.TestMapper;
 import lombok.RequiredArgsConstructor;
 import com.testmaster.model.TestModel;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.testmaster.service.TestService;
 
@@ -12,39 +13,48 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/test")
-public class TestController {
+@RequestMapping(TestApi.PATH)
+public class TestController implements TestApi {
     private final TestMapper testMapper;
 
     private final TestService testService;
 
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping
-    public List<TestDto> all() {
-        return testService.getAll()
-                .stream()
-                .map(testMapper::toDto)
-                .toList();
+    @Override
+    public ResponseEntity<List<TestDto>> all() {
+
+        return ResponseEntity.ok(
+                testService.getAll()
+                        .stream()
+                        .map(testMapper::toDto)
+                        .toList()
+        );
     }
 
-    @GetMapping("/{id}")
-    public TestDto one(@PathVariable Long id) {
+    @Override
+    public ResponseEntity<TestDto> one(@PathVariable Long id) {
         TestModel model = testService.getOne(id);
-        return testMapper.toDto(model);
+
+        return ResponseEntity.ok(testMapper.toDto(model));
     }
 
-    @PostMapping
-    public TestModel create(@RequestBody TestModel test) {
-        return testService.addTest(test.getTitle(), test.getDescription());
+    @Override
+    public ResponseEntity<Object> create(@RequestBody TestModel test) {
+        testService.addTest(test.getTitle(), test.getDescription());
+
+        return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/{id}")
-    public TestModel create(@PathVariable Long id, @RequestBody TestModel test) {
-        return testService.updateTest(id, test);
+    @Override
+    public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody TestModel test) {
+        testService.updateTest(id, test);
+
+        return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    @Override
+    public ResponseEntity<Object> delete(@PathVariable Long id) {
         testService.deleteTest(id);
+
+        return ResponseEntity.ok().build();
     }
 }
