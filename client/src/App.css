@@ -76,6 +76,10 @@ body {
   cursor: pointer;
 }
 
+.red {
+  color: #ef4444;
+}
+
 .white {
   color: white;
 }

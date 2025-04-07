@@ -1,7 +1,7 @@
 export enum UserRoles {
-    USER = 'USER',
-    AUTHOR = 'AUTHOR',
-    ADMIN = 'ADMIN',
+    USER = 'Пользователь',
+    AUTHOR = 'Автор',
+    ADMIN = 'Администратор',
 }
 
 

@@ -5,6 +5,7 @@ import Avatar from "antd/lib/avatar/Avatar";
 import {Button, Dropdown} from "antd";
 import s from './NavBar.module.scss'
 import clsx from "clsx";
+import {UserRoles} from "../../../api/user/type";
 
 const NavbarUser = injectBase(['$user'])(observer((props: AllBaseStores) => {
   const { $user } = props;
@@ -33,12 +34,12 @@ const NavbarUser = injectBase(['$user'])(observer((props: AllBaseStores) => {
                   <span>Роли: </span>
                   {$user.item.roles.map((role, index) => (
                     <div key={index} className={s.role}>
-                      {role}
+                      {UserRoles[role]}
                     </div>
                   ))}
                 </div>
               </div>
-              <div className="dropdown-item-wrapper pointer" onClick={handleExit}>
+              <div className="dropdown-item-wrapper pointer red" onClick={handleExit}>
                 Выйти
               </div>
             </div>
