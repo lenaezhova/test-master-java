@@ -41,9 +41,6 @@ const ConfirmEmailBlock = injectBase(['$user'])(observer((props: AllBaseStores) 
         <div>
           Для этого перейдите по ссылке, которая прикреплена к письму.
         </div>
-        <div>
-          После подтверждения, обновите страницу.
-        </div>
       </div>
       <div className={s.confirmBtn}>
         <Button
