@@ -1,11 +1,11 @@
 import $api from "../index";
-import {CreateUserRequest, JwtTokenPair, LoginRequest, LogoutRequest} from "./type";
+import {CreateUserRequest, IUser, JwtTokenPair, LoginRequest, LogoutRequest} from "./type";
 import axios from "axios";
 import {API_URL} from "../../utils/const";
 
 const userApiPrefix = '/users'
 
-export const getUser = async (values: { id: number }): Promise<{}> => {
+export const getUser = async (values: { id: string }): Promise<IUser> => {
   const {data} = await $api.get(userApiPrefix + `/${values.id}`);
   return data;
 };

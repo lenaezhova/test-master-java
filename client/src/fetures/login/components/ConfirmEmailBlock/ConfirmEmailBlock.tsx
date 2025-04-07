@@ -1,18 +1,20 @@
 import React from 'react';
 import s from "./ConfirmEmailBlock.module.scss";
 import Lottie from "lottie-react";
-import sendEmailAnimationLottie from "../../animation/sendEmailAnimationLottie.json";
+import sendEmailAnimationLottie from "../../animation/tesdt.json";
 import {AllBaseStores, injectBase} from "../../../../stores/stores";
 import {observer} from "mobx-react";
 import {Button, message, Row} from "antd";
+import {useGetUser} from "../../../../api/user/query";
 
 const ConfirmEmailBlock = injectBase(['$user'])(observer((props: AllBaseStores) => {
   const { $user } = props;
-  const isLoading = $user.fetchItemProgress;
+  const getUser = useGetUser($user);
 
   const onCheckEmail = async () => {
     try {
-      await $user.fetchItem();
+      const response = await getUser.mutateAsync();
+      $user.setItem(response);
       if ($user.isConfirmEmail) {
         message.success('Email успешно подтвержден!');
       } else {
@@ -26,7 +28,7 @@ const ConfirmEmailBlock = injectBase(['$user'])(observer((props: AllBaseStores) 
   return (
     <div className={s.confirmEmailBlock}>
       <Row justify={'center'}>
-        <Lottie className={s.sendEmailLottie} animationData={sendEmailAnimationLottie} loop={false} />
+        <Lottie className={s.sendEmailLottie} animationData={sendEmailAnimationLottie} loop />
       </Row>
       <div className={s.title}>
         Привет! {$user.item.name}
@@ -48,7 +50,7 @@ const ConfirmEmailBlock = injectBase(['$user'])(observer((props: AllBaseStores) 
           onClick={onCheckEmail}
           size={'large'}
           type={'primary'}
-          loading={isLoading}
+          loading={getUser?.isLoading}
         >
           Проверить подтверждение
         </Button>

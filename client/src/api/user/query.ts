@@ -4,8 +4,6 @@ import {getUser, login, registration} from "./index";
 import {UserStore} from "../../stores/UserStore/UserStore";
 import {getErrorData} from "../../utils/error";
 
-export const getUserKey = ($user: UserStore): QueryKey => ['user', $user.item.id];
-
 const useLogin = () => {
   return useMutation(
     login,
@@ -20,6 +18,13 @@ const useLogin = () => {
     }
   )
 }
+
+const useGetUser = ($user: UserStore) => {
+  return useMutation(
+    () => getUser({id: $user.item.id}),
+  )
+}
+
 
 const useRegistration = () => {
   return useMutation(
@@ -36,4 +41,5 @@ const useRegistration = () => {
 export {
   useLogin,
   useRegistration,
+  useGetUser
 }
