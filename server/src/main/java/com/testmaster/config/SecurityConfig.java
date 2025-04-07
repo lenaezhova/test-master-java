@@ -1,8 +1,8 @@
 package com.testmaster.config;
 
 import com.testmaster.config.handler.CustomAuthenticationEntryPoint;
-import com.testmaster.service.AuthService.auth.JwtAuthenticationFilter;
-import com.testmaster.service.AuthService.user.CustomUserDetailsService;
+import com.testmaster.service.AuthService.JwtAuthenticationFilter;
+import com.testmaster.service.UserService.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

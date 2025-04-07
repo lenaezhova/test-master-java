@@ -1,4 +1,4 @@
-package com.testmaster.service.AuthService.auth;
+package com.testmaster.service.AuthService;
 
 public interface TokenAuthService {
 

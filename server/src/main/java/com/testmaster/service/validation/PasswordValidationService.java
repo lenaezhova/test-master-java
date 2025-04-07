@@ -1,4 +1,4 @@
-package com.testmaster.validation;
+package com.testmaster.service.validation;
 
 import com.testmasterapi.domain.user.request.CreateUserRequest;
 import org.springframework.stereotype.Service;

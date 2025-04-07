@@ -1,4 +1,4 @@
-package com.testmaster.service.AuthService.user;
+package com.testmaster.service.UserService;
 
 import com.testmasterapi.domain.user.JwtTokenPair;
 import com.testmasterapi.domain.user.request.CreateUserRequest;

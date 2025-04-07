@@ -1,4 +1,4 @@
-package com.testmaster.service.AuthService.auth;
+package com.testmaster.service.AuthService;
 
 import com.testmasterapi.domain.user.JwtClaimNames;
 import com.auth0.jwt.interfaces.DecodedJWT;

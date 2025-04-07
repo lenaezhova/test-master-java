@@ -1,4 +1,4 @@
-package com.testmaster.service.AuthService.mail;
+package com.testmaster.service;
 
 import com.testmaster.exeption.ClientException;
 import jakarta.mail.MessagingException;

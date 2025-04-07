@@ -1,4 +1,4 @@
-package com.testmaster.service.AuthService.user;
+package com.testmaster.service.UserService;
 
 import com.testmasterapi.domain.user.JwtTokenPair;
 import com.testmasterapi.domain.user.request.CreateUserRequest;
@@ -10,10 +10,10 @@ import com.testmaster.exeption.ClientException;
 import com.testmaster.model.TokenModel;
 import com.testmaster.model.UserModel;
 import com.testmaster.repository.UserRepository;
-import com.testmaster.service.AuthService.auth.UserAuthService;
-import com.testmaster.service.AuthService.mail.MailService;
-import com.testmaster.validation.PasswordValidationService;
-import com.testmaster.validation.UserValidationService;
+import com.testmaster.service.AuthService.UserAuthService;
+import com.testmaster.service.MailService;
+import com.testmaster.service.validation.PasswordValidationService;
+import com.testmaster.service.validation.UserValidationService;
 import jakarta.annotation.Nonnull;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

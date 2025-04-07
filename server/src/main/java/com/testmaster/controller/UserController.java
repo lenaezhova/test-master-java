@@ -9,7 +9,7 @@ import com.testmasterapi.domain.user.response.TokensResponse;
 import com.testmaster.dto.UserDto;
 import com.testmaster.mapper.UserMapper;
 import com.testmaster.model.UserModel;
-import com.testmaster.service.AuthService.user.UserService;
+import com.testmaster.service.UserService.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
