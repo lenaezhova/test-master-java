@@ -1,6 +1,7 @@
-import $api, {API_URL} from "../index";
+import $api from "../index";
 import {CreateUserRequest, JwtTokenPair, LoginRequest, LogoutRequest} from "./type";
 import axios from "axios";
+import {API_URL} from "../../utils/const";
 
 const userApiPrefix = '/users'
 

@@ -6,6 +6,9 @@ import api.domain.user.request.CreateUserRequest;
 import api.domain.user.request.LoginRequest;
 import api.domain.user.request.RefreshTokenRequest;
 import api.domain.user.response.TokensResponse;
+import com.testmaster.dto.UserDto;
+import com.testmaster.mapper.UserMapper;
+import com.testmaster.model.UserModel;
 import com.testmaster.service.AuthService.user.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +19,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URI;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(UserApi.PATH)
 public class UserController implements UserApi {
+    private final UserMapper userMapper;
+
     private final UserService userService;
 
     @Override
@@ -65,5 +72,23 @@ public class UserController implements UserApi {
                 .ok()
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .body((new TokensResponse(jwtTokenPair.accessToken(), jwtTokenPair.refreshToken())));
+    }
+
+    @Override
+    public ResponseEntity<Object> activate(String link) {
+        userService.activate(link);
+
+        String clientUrl = System.getenv("CLIENT_URL");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(URI.create(clientUrl));
+
+        return new ResponseEntity<>(headers, HttpStatus.FOUND);
+    }
+
+    @Override
+    public ResponseEntity<UserDto> getUser(Long id) {
+        UserModel user = userService.getUser(id);
+
+        return ResponseEntity.ok(userMapper.toDto(user));
     }
 }

@@ -2,12 +2,12 @@ import {FC, memo} from "react";
 import {Button, Form, FormProps, Input, Row} from "antd";
 import {useForm} from "antd/lib/form/Form";
 import s from './Auth.module.scss'
-import {requiredMessage} from "../../../utils/const";
+import {requiredMessage} from "../../../../utils/const";
 import {Link} from "react-router";
-import {RouteNames} from "../../../shared/router";
-import {CreateUserRequest, LoginRequest} from "../../../api/user/type";
-import {useLogin} from "../../../api/user/query";
-import {AllBaseStores, injectBase} from "../../../stores/stores";
+import {RouteNames} from "../../../../shared/router";
+import {CreateUserRequest, LoginRequest} from "../../../../api/user/type";
+import {useLogin} from "../../../../api/user/query";
+import {AllBaseStores, injectBase} from "../../../../stores/stores";
 import {observer} from "mobx-react";
 
 type FieldType = LoginRequest
@@ -18,13 +18,15 @@ const LoginForm: FC<LoginFormProps> = injectBase(['$user'])(observer( (props) =>
   const { $user } = props;
 
   const login = useLogin();
+  const isLoading = login.isLoading || $user.fetchItemProgress;
 
   const [form] = useForm();
 
   const onSendForm: FormProps<FieldType>['onFinish'] = async (values) => {
     try {
       const response = await login.mutateAsync(values);
-      $user.login(response?.data);
+      $user.login(response.data);
+      await $user.fetchItem();
     } catch (e) {
       console.log(e);
     }
@@ -67,7 +69,13 @@ const LoginForm: FC<LoginFormProps> = injectBase(['$user'])(observer( (props) =>
               <span>Нет аккаунта?</span>
               <Link to={RouteNames.REGISTRATION}>Зарегистрируйтесь!</Link>
             </div>
-            <Button htmlType={'submit'} type={'primary'}>Войти</Button>
+            <Button
+              loading={isLoading}
+              htmlType={'submit'}
+              type={'primary'}
+            >
+              Войти
+            </Button>
           </Row>
         </Form.Item>
 

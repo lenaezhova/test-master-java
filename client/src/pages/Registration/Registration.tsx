@@ -1,6 +1,6 @@
 import React from 'react';
 import {Row} from "antd";
-import RegistrationForm from "../../fetures/login/components/RegistrationForm";
+import RegistrationForm from "../../fetures/login/components/Auth/RegistrationForm";
 
 const Registration = () => {
   return (

@@ -39,6 +39,7 @@ body {
 }
 
 .container {
+  height: calc(100vh - 164px);
   width: 100%;
   max-width: 1230px;
   padding-left: 15px;
@@ -94,12 +95,18 @@ body {
     gap: 8px;
     border-bottom: 1px solid #5e6f8833;
     padding: 12px 16px 12px 16px;
+
+    p {
+      width: 80%;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
   }
 
   .dropdown-item-wrapper {
     padding: 12px 16px 12px 16px;
     transition: 0.3s ease background-color;
-    cursor: pointer;
 
     button {
       font-size: 16px;
@@ -110,7 +117,7 @@ body {
     }
 
     &:not(:last-child) {
-      border: 1px solid #5e6f8833;
+      border-bottom: 1px solid #5e6f8833;
     }
   }
 }
@@ -187,15 +194,21 @@ body {
   cursor: pointer;
 }
 
-/* styling app content container */
+.full {
+  height: 100vh;
+}
+
 .app-content {
   margin: 1rem auto;
   width: 80%;
   padding: 5%;
-  background-color: #f4f5f9;
+  /*background-color: #f4f5f9;*/
 }
 
-/* styling alert text when edit mode is enabled */
+.ant-layout {
+  background-color: white;
+}
+
 .edit-mode-alert {
   text-decoration: underline;
   color: #c80000;

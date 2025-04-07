@@ -1,29 +1,48 @@
 'use client'
-import {FC, memo, useEffect} from "react";
+import {FC, memo, useEffect, useLayoutEffect, useState} from "react";
 import {AllBaseStores, injectBase} from "../stores/stores";
 import {observer} from "mobx-react";
 import {Outlet} from "react-router";
-import {Layout, Spin} from "antd";
+import {Layout, Row, Spin} from "antd";
 import Navbar from "../shared/ui/Navbar/Navbar";
 
 const MainLayout: FC<AllBaseStores> = injectBase(['$user'])(observer(props => {
   const { $user } = props;
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
 
-  useEffect(() => {
+  const fetch = async () => {
+    try {
+      await $user.checkAuth();
+      await $user.fetchItem();
+    } catch (e) {
+      console.log(e)
+    } finally {
+      setIsAuthLoading(false)
+    }
+  }
+
+  useLayoutEffect(() => {
     if ($user.accessToken) {
-      $user.checkAuth()
+      fetch();
     } else {
-      $user.setIsAuthLoading(false);
+      setIsAuthLoading(false);
     }
   }, []);
 
   return (
-    <Spin spinning={$user.isAuthLoading}>
-      <Layout>
-        <Navbar/>
-        <Outlet />
-      </Layout>
-    </Spin>
+    isAuthLoading || $user.fetchItemProgress
+      ? (
+        <Row justify={'center'} align={'middle'} style={{ height: '100vh' }}>
+          <Spin spinning />
+        </Row>
+      )
+      : (
+        <Layout>
+          <Navbar/>
+          <Outlet />
+        </Layout>
+      )
+
   );
 }));
 

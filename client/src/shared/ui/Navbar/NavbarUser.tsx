@@ -2,8 +2,9 @@ import React from 'react';
 import {AllBaseStores, injectBase} from "../../../stores/stores";
 import {observer} from "mobx-react";
 import Avatar from "antd/lib/avatar/Avatar";
-import {LogoutOutlined, UserOutlined} from "@ant-design/icons";
 import {Button, Dropdown} from "antd";
+import s from './NavBar.module.scss'
+import clsx from "clsx";
 
 const NavbarUser = injectBase(['$user'])(observer((props: AllBaseStores) => {
   const { $user } = props;
@@ -22,20 +23,31 @@ const NavbarUser = injectBase(['$user'])(observer((props: AllBaseStores) => {
         placement={'bottomRight'}
         dropdownRender={(originNode) => {
           return (
-            <div className={"dropdown"} style={{minWidth: 280}}>
+            <div className={clsx("dropdown", s.userDropdown)}>
               <div className="dropdown-header-wrapper">
-                <Avatar>{$user.currentUserNameLetter}</Avatar>
-                <p>{$user.currentUser.email}</p>
+                <Avatar>{$user.firstNameLetter}</Avatar>
+                <p>{$user.item.email}</p>
               </div>
-              <div className="dropdown-item-wrapper" onClick={handleExit}>
+              <div className={clsx("dropdown-item-wrapper", s.rolesWrapperItem)}>
+                <div className={s.roles}>
+                  <span>Роли: </span>
+                  {$user.item.roles.map((role, index) => (
+                    <div key={index} className={s.role}>
+                      {role}
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="dropdown-item-wrapper pointer" onClick={handleExit}>
                 Выйти
               </div>
             </div>
           )
         }}
-        trigger={['click']}
+        trigger = {['click']}
       >
-        <Avatar className={"pointer"}>{$user.currentUserNameLetter}</Avatar>
+        < Avatar
+          className={"pointer"}> {$user.firstNameLetter}</Avatar>
       </Dropdown>
     </div>
   );

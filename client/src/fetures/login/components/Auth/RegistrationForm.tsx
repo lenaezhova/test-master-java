@@ -1,13 +1,13 @@
 import {FC, memo} from "react";
 import {Button, Form, FormProps, Input, Row} from "antd";
 import {useForm} from "antd/lib/form/Form";
-import {requiredMessage} from "../../../utils/const";
+import {requiredMessage} from "../../../../utils/const";
 import s from './Auth.module.scss'
 import {Link} from "react-router";
-import {RouteNames} from "../../../shared/router";
-import {useRegistration} from "../../../api/user/query";
-import {CreateUserRequest} from "../../../api/user/type";
-import {AllBaseStores, injectBase} from "../../../stores/stores";
+import {RouteNames} from "../../../../shared/router";
+import {useRegistration} from "../../../../api/user/query";
+import {CreateUserRequest} from "../../../../api/user/type";
+import {AllBaseStores, injectBase} from "../../../../stores/stores";
 import {observer} from "mobx-react";
 
 type FieldType = CreateUserRequest & {
@@ -19,13 +19,15 @@ interface RegistrationFormProps extends AllBaseStores {}
 const RegistrationForm: FC<RegistrationFormProps> = injectBase(['$user'])(observer((props) => {
   const { $user } = props;
   const registration = useRegistration();
+  const isLoading = registration.isLoading || $user.fetchItemProgress;
 
   const [form] = useForm();
 
   const onSendForm: FormProps<FieldType>['onFinish'] = async (values) => {
     try {
       const response = await registration.mutateAsync(values);
-      $user.login(response?.data);
+      $user.login(response.data);
+      await $user.fetchItem();
     } catch (e) {
       console.log(e);
     }
@@ -99,7 +101,13 @@ const RegistrationForm: FC<RegistrationFormProps> = injectBase(['$user'])(observ
               <span>Есть аккаунт?</span>
               <Link to={RouteNames.LOGIN}>Войдите!</Link>
             </div>
-            <Button htmlType={'submit'} type={'primary'}>Регистрация</Button>
+            <Button
+              loading={isLoading}
+              htmlType={'submit'}
+              type={'primary'}
+            >
+              Регистрация
+            </Button>
           </Row>
         </Form.Item>
 

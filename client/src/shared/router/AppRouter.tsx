@@ -8,31 +8,29 @@ import Tests from "../../pages/Tests/Tests";
 import {Layout} from "antd";
 import Login from "../../pages/Login/Login";
 import Registration from "../../pages/Registration/Registration";
+import ConfirmEmail from "../../pages/ConfirmEmail/ConfirmEmail";
+import ConfirmEmailLayout from "../../layout/ConfirmEmailLayout";
 
 const AppRouter : FC = injectBase(['$user'])(observer((props:AllBaseStores) => {
   const { $user } = props;
 
   const getPublicRoutes = () => (
     <Fragment>
-      <Route path={RouteNames.LOGIN}>
-        <Route index element={<Login />} />
-      </Route>
-      <Route path={RouteNames.REGISTRATION}>
-        <Route index element={<Registration />} />
-      </Route>
+      <Route path={RouteNames.LOGIN} element={<Login />} />
+      <Route path={RouteNames.REGISTRATION} element={<Registration />} />
       <Route path="*" element={<Navigate to={RouteNames.LOGIN} replace/>}/>
     </Fragment>
   )
 
   const getPrivateRoutes = () => (
-    <Fragment>
+    <Route element={<ConfirmEmailLayout/>}>
       <Route element={<Layout.Content />}>
       </Route>
       <Route path={RouteNames.TESTS}>
         <Route index element={<Tests />} />
       </Route>
       <Route path="*" element={<Navigate to={RouteNames.TESTS} replace/>}/>
-    </Fragment>
+    </Route>
   )
 
   return (

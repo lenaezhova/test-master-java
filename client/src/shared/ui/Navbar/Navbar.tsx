@@ -16,7 +16,7 @@ const Navbar = injectBase(['$user'])(observer((props: AllBaseStores) => {
         <button className={'logo clearButton white'} onClick={() => navigate('/')}>
           Test Master
         </button>
-        {$user.isAuth && <NavbarUser/>}
+        {$user.isConfirmEmail && <NavbarUser/>}
       </div>
     </Layout.Header>
   );

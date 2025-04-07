@@ -2,20 +2,22 @@ import {jwtDecode} from 'jwt-decode';
 import {action, computed, makeObservable, observable} from 'mobx';
 import {BaseStore} from '../BaseStore';
 import {getUser, logout, updateRefreshToken} from "../../api/user";
-import {API_URL} from "../../api";
 import {message} from "antd";
 import {UserTokensStore} from "./UserTokensStore";
-import {IUser, JwtTokenPair} from "../../api/user/type";
-import {EMPTY_OBJECT} from "../../utils/const";
+import {AccessToken, IUser, JwtTokenPair} from "../../api/user/type";
 
 class UserStore extends UserTokensStore {
-  @observable isAuthLoading = true;
-
   @observable isAuth = false;
 
   constructor() {
     super();
     makeObservable(this);
+    this.fetchItem = (params?) => {
+      return super.fetchItem({
+        id: this.decodedAccessToken?.id,
+        ...params
+      });
+    }
   }
 
   fetchItemMethod = getUser;
@@ -24,41 +26,29 @@ class UserStore extends UserTokensStore {
     this.item = response;
   }
 
-  @action setIsAuthLoading(isAuthLoading: boolean) {
-    this.isAuthLoading = isAuthLoading;
-  }
-
   @action setIsAuth(isAuth: boolean) {
     this.isAuth = isAuth;
-    this.setIsAuthLoading(false);
   }
 
-  @computed get currentUser(): IUser {
-    const token = this.accessToken;
-    try {
-      return token ? jwtDecode(token) : EMPTY_OBJECT
-    } catch (error) {
-      console.log(error);
-      return EMPTY_OBJECT;
-    }
+  @computed get isConfirmEmail(): Boolean {
+    return Boolean(this.isAuth && this.item?.isActivate && this.item?.activationLink)
   }
 
-  @computed get currentUserNameLetter(): string {
-    return this.currentUser.name.slice(0, 1);
+  @computed get firstNameLetter(): string {
+    return this.item.name.slice(0, 1);
   }
 
   @action
   async checkAuth() {
-    this.setIsAuthLoading(true);
     try {
       const response = await updateRefreshToken({ refreshToken: this.refreshToken });
-      this.setAccessToken(response.accessToken);
+      const accessToken = response.accessToken;
+      this.setAccessToken(accessToken);
       this.setRefreshToken(response.refreshToken);
       this.setIsAuth(true);
     } catch (e) {
       this.setIsAuth(false);
-    } finally {
-      this.setIsAuthLoading(false);
+      this.resetItem();
     }
   }
 
@@ -71,8 +61,6 @@ class UserStore extends UserTokensStore {
       this.setIsAuth(false);
     } catch (e) {
       message.error('Произошла ошибка')
-    } finally {
-      this.setIsAuthLoading(false);
     }
   }
 

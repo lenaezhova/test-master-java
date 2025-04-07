@@ -9,6 +9,18 @@ spring:
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:default}
 
+  mail:
+    host: ${SMTP_HOST}
+    port: ${SMTP_PORT}
+    username: ${SMTP_USER}
+    password: ${SMTP_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
   config:
     import: optional:file:.env[.properties]
 

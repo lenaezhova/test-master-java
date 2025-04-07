@@ -1,8 +1,7 @@
 import axios from 'axios'
-import {ErrorResponse, ErrorResponseData} from "./type";
 import {getAccessToken, getRefreshToken, removeAccessToken, setAccessToken} from "../utils/tokens";
-import {stores} from "../stores/stores";
 import {UserStore} from "../stores/UserStore/UserStore";
+import {API_URL} from "../utils/const";
 type AuthResponse = any;
 
 let isRefreshing = false;
@@ -18,14 +17,6 @@ const processQueue = (error, token = null) => {
   });
   pendingRequests = [];
 };
-
-export const API_URL_BASE = process.env.REACT_APP_API_URL
-export const API_URL = process.env.REACT_APP_API_URL +  '/api'
-export const CLIENT_URL= process.env.REACT_APP_CLIENT_URL
-
-export const getErrorData = (error: any): ErrorResponseData => {
-  return (error as ErrorResponse)?.response?.data
-}
 
 const $api = axios.create({
   baseURL: API_URL
