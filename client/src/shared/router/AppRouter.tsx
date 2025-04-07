@@ -24,8 +24,6 @@ const AppRouter : FC = injectBase(['$user'])(observer((props:AllBaseStores) => {
 
   const getPrivateRoutes = () => (
     <Route element={<ConfirmEmailLayout/>}>
-      <Route element={<Layout.Content />}>
-      </Route>
       <Route path={RouteNames.TESTS}>
         <Route index element={<Tests />} />
       </Route>

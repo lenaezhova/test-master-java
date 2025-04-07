@@ -39,7 +39,9 @@ const MainLayout: FC<AllBaseStores> = injectBase(['$user'])(observer(props => {
       : (
         <Layout>
           <Navbar/>
-          <Outlet />
+          <Layout.Content>
+            <Outlet />
+          </Layout.Content>
         </Layout>
       )
 

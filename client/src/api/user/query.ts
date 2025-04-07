@@ -8,9 +8,6 @@ const useLogin = () => {
   return useMutation(
     login,
     {
-      onSuccess: () => {
-        message.success('Вы успешно авторизовались!')
-      },
       onError: (error) => {
         const errorData = getErrorData(error);
         message.error(errorData?.message || 'Произошла ошибка при авторизации')
