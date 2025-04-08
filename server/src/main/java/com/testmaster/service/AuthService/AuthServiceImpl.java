@@ -29,8 +29,6 @@ import java.time.Duration;
 public class AuthServiceImpl implements AuthService {
     private final AuthProperties authProperties;
 
-    private final UserRepository userRepository;
-
     private final TokenRepository tokenRepository;
 
     private Algorithm getHmacAlgorithm(String secret) {
@@ -45,22 +43,6 @@ public class AuthServiceImpl implements AuthService {
         }  catch (TokenExpiredException tokenExpiredException) {
             throw AuthException.jwtExpired(tokenExpiredException);
         }
-    }
-
-    @Override
-    public String login(String token) {
-        DecodedJWT decodedJWT = validateAccessToken(token);
-        String email = decodedJWT.getClaim(JwtClaimNames.EMAIL).asString();
-
-        UserModel user = userRepository
-                .findByEmail(email)
-                .orElseGet(() -> userRepository.save(UserMapper.map(decodedJWT)));
-
-        if (user.getDeleted()) {
-            throw new AuthException("Пользователь с " + email + " удален!");
-        }
-
-        return token;
     }
 
     @Override

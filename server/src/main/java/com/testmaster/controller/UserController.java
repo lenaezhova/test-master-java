@@ -1,5 +1,6 @@
 package com.testmaster.controller;
 
+import com.testmaster.util.CookieUtil;
 import com.testmasterapi.api.UserApi;
 import com.testmasterapi.domain.user.JwtTokenPair;
 import com.testmasterapi.domain.user.request.CreateUserRequest;
@@ -10,6 +11,8 @@ import com.testmaster.dto.UserDto;
 import com.testmaster.mapper.UserMapper;
 import com.testmaster.model.UserModel;
 import com.testmaster.service.UserService.UserService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -30,27 +33,36 @@ public class UserController implements UserApi {
     private final UserService userService;
 
     @Override
-    public ResponseEntity<Object> registration(CreateUserRequest request) {
+    public ResponseEntity<Object> registration(CreateUserRequest request, HttpServletResponse response) {
         JwtTokenPair jwtTokenPair = userService.registration(request);
+
+        CookieUtil.addRefreshTokenCookie(response, jwtTokenPair.refreshToken());
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .body(new TokensResponse(jwtTokenPair.accessToken(), jwtTokenPair.refreshToken()));
+                .body(new TokensResponse(jwtTokenPair.accessToken()));
     }
 
     @Override
-    public ResponseEntity<Object> login(LoginRequest request) {
+    public ResponseEntity<Object> login(LoginRequest request, HttpServletResponse response) {
         JwtTokenPair jwtTokenPair = userService.login(request);
+
+        CookieUtil.addRefreshTokenCookie(response, jwtTokenPair.refreshToken());
+
         return ResponseEntity
                 .ok()
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .body(new TokensResponse(jwtTokenPair.accessToken(), jwtTokenPair.refreshToken()));
+                .body(new TokensResponse(jwtTokenPair.accessToken()));
     }
 
     @Override
-    public ResponseEntity<Object> logout(RefreshTokenRequest request) {
-        userService.logout(request);
+    public ResponseEntity<Object> logout(HttpServletRequest request, HttpServletResponse response) {
+        String refreshToken = CookieUtil.getCookieValue(request, "refreshToken");
+
+        userService.logout(refreshToken);
+
+        CookieUtil.deleteRefreshTokenCookie(response);
 
         return ResponseEntity
                 .ok()
@@ -58,20 +70,18 @@ public class UserController implements UserApi {
     }
 
     @Override
-    public ResponseEntity<Object> refresh(RefreshTokenRequest request, HttpServletResponse response) {
-        JwtTokenPair jwtTokenPair = userService.refresh(request);
+    public ResponseEntity<Object> refresh(HttpServletRequest request, HttpServletResponse response) {
+        String refreshToken = CookieUtil.getCookieValue(request, "refreshToken");
 
-//        String refreshToken = jwtTokenPair.refreshToken();
-//        Cookie refreshCookie = new Cookie("refreshToken", refreshToken);
-//        refreshCookie.setHttpOnly(true);
-//        refreshCookie.setMaxAge(30 * 24 * 60 * 60);
-//        refreshCookie.setPath("/");
-//        response.addCookie(refreshCookie);
+        JwtTokenPair jwtTokenPair = userService.refresh(refreshToken);
+
+        CookieUtil.addRefreshTokenCookie(response, jwtTokenPair.refreshToken());
 
         return ResponseEntity
                 .ok()
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .body((new TokensResponse(jwtTokenPair.accessToken(), jwtTokenPair.refreshToken())));
+                .body(new TokensResponse(jwtTokenPair.accessToken()));
+
     }
 
     @Override

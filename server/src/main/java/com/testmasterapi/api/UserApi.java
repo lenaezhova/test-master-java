@@ -25,7 +25,7 @@ public interface UserApi {
 
     @PostMapping("/auth/logout")
     @Operation(summary = "Выйти из системы")
-    ResponseEntity<Object> logout(@RequestBody RefreshTokenRequest request, HttpServletResponse response);
+    ResponseEntity<Object> logout(HttpServletRequest request, HttpServletResponse response);
 
     @PostMapping("/auth/refresh")
     @Operation(summary = "Обновить рефреш токен")

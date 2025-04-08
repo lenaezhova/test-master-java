@@ -10,8 +10,6 @@ import java.util.Optional;
 
 public interface AuthService {
 
-    String login(String token);
-
     String createJWT(UserModel user, String secret, Duration expiration);
 
     JwtTokenPair generateTokens(UserModel user);

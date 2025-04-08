@@ -11,9 +11,9 @@ public interface UserService {
 
     JwtTokenPair login(LoginRequest loginRequest);
 
-    void logout(RefreshTokenRequest logoutRequest);
+    void logout(String refreshToken);
 
-    JwtTokenPair refresh(RefreshTokenRequest refreshRequest);
+    JwtTokenPair refresh(String refreshToken);
 
     void activate(String link);
 

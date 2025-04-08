@@ -96,9 +96,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void logout(RefreshTokenRequest refreshRequest) {
-        String refreshToken = refreshRequest.refreshToken();
-
+    public void logout(String refreshToken) {
         UserModel user = this.getUserByRefresh(refreshToken);
 
         userAuthService.removeToken(refreshToken);
@@ -106,10 +104,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public JwtTokenPair refresh(RefreshTokenRequest refreshRequest) {
-        String refreshToken = refreshRequest.refreshToken();
-
+    public JwtTokenPair refresh(String refreshToken) {
         UserModel user = this.getUserByRefresh(refreshToken);
+        System.out.println(user);
 
         JwtTokenPair jwtTokenPair = userAuthService.generateTokens(user);
 
