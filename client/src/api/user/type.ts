@@ -16,18 +16,13 @@ export interface IUser {
 
 export type AccessToken = Pick<IUser, 'email' | 'name' | 'id'>
 
-export interface JwtTokenPair {
+export interface TokenResponse {
     accessToken: string;
-    refreshToken: string;
 }
 
 export interface LoginRequest {
     email: string;
     password: string;
-}
-
-export interface LogoutRequest {
-    refreshToken: JwtTokenPair['refreshToken'];
 }
 
 export interface CreateUserRequest {

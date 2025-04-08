@@ -1,10 +1,8 @@
-import {jwtDecode} from 'jwt-decode';
 import {action, computed, makeObservable, observable} from 'mobx';
-import {BaseStore} from '../BaseStore';
 import {getUser, logout, updateRefreshToken} from "../../api/user";
 import {message} from "antd";
-import {UserTokensStore} from "./UserTokensStore";
-import {AccessToken, IUser, JwtTokenPair} from "../../api/user/type";
+import {UserTokensStore} from "./UserTokensStore"
+import {TokenResponse} from "../../api/user/type";
 
 class UserStore extends UserTokensStore {
   @observable isAuth = false;
@@ -41,10 +39,9 @@ class UserStore extends UserTokensStore {
   @action
   async checkAuth() {
     try {
-      const response = await updateRefreshToken({ refreshToken: this.refreshToken });
+      const response = await updateRefreshToken();
       const accessToken = response.accessToken;
       this.setAccessToken(accessToken);
-      this.setRefreshToken(response.refreshToken);
       this.setIsAuth(true);
     } catch (e) {
       this.setIsAuth(false);
@@ -55,18 +52,16 @@ class UserStore extends UserTokensStore {
   @action
   async logout() {
     try {
-      await logout({refreshToken: this.refreshToken});
+      await logout();
       this.removeAccessToken();
-      this.removeRefreshToken();
       this.setIsAuth(false);
     } catch (e) {
       message.error('Произошла ошибка')
     }
   }
 
-  @action login(tokens: JwtTokenPair) {
+  @action login(tokens: TokenResponse) {
     this.setAccessToken(tokens.accessToken);
-    this.setRefreshToken(tokens.refreshToken);
     this.setIsAuth(true);
   }
 }

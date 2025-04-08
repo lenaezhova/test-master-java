@@ -1,5 +1,5 @@
 import $api from "../index";
-import {CreateUserRequest, IUser, JwtTokenPair, LoginRequest, LogoutRequest} from "./type";
+import {CreateUserRequest, IUser, LoginRequest, TokenResponse} from "./type";
 import axios from "axios";
 import {API_URL} from "../../utils/const";
 
@@ -10,23 +10,19 @@ export const getUser = async (values: { id: string }): Promise<IUser> => {
   return data;
 };
 
-export const updateRefreshToken = async (values: { refreshToken: string }): Promise<JwtTokenPair> => {
-  const {data} = await $api.post(userApiPrefix + `/auth/refresh`, values);
+export const updateRefreshToken = async (): Promise<TokenResponse> => {
+  const {data} = await $api.post(userApiPrefix + `/auth/refresh`);
   return data;
 };
 
-export const login = async (values: LoginRequest): Promise<{
-  data: JwtTokenPair,
-}> => {
+export const login = async (values: LoginRequest): Promise<{ data: TokenResponse }> => {
   return await $api.post(userApiPrefix + `/auth/login`, values);
 };
 
-export const logout = async (values: LogoutRequest) => {
-  return await $api.post(userApiPrefix + `/auth/logout`, values);
+export const logout = async () => {
+  return await $api.post(userApiPrefix + `/auth/logout`);
 };
 
-export const registration = async (values: CreateUserRequest): Promise<{
-  data: JwtTokenPair,
-}> => {
+export const registration = async (values: CreateUserRequest): Promise<{ data: TokenResponse }> => {
   return await $api.post(userApiPrefix + `/auth/registration`, values);
 };

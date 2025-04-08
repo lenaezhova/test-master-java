@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {getAccessToken, getRefreshToken, removeAccessToken, setAccessToken} from "../utils/tokens";
+import {removeAccessToken} from "../utils/tokens";
 import {UserStore} from "../stores/UserStore/UserStore";
 import {API_URL} from "../utils/const";
 type AuthResponse = any;

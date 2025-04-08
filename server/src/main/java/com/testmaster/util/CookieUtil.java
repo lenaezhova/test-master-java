@@ -8,13 +8,14 @@ public class CookieUtil {
 
     private static final String REFRESH_TOKEN_NAME = "refreshToken";
     private static final int REFRESH_TOKEN_EXPIRATION = 30 * 24 * 60 * 60; // 30 дней
+    private static final String PATH = (System.getenv("CLIENT_COOKIE_PATH"));
 
     public static void addRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
         Cookie refreshCookie = new Cookie(REFRESH_TOKEN_NAME, refreshToken);
         refreshCookie.setHttpOnly(true);
         refreshCookie.setSecure(true);
         refreshCookie.setMaxAge(REFRESH_TOKEN_EXPIRATION);
-        refreshCookie.setPath("/");
+        refreshCookie.setPath(PATH);
         response.addCookie(refreshCookie);
     }
 
@@ -23,7 +24,7 @@ public class CookieUtil {
         deleteCookie.setHttpOnly(true);
         deleteCookie.setSecure(true);
         deleteCookie.setMaxAge(0);
-        deleteCookie.setPath("/");
+        deleteCookie.setPath(PATH);
         response.addCookie(deleteCookie);
     }
 
@@ -33,9 +34,6 @@ public class CookieUtil {
         }
 
         for (Cookie cookie : request.getCookies()) {
-            System.out.println("----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-            System.out.println(name);
-            System.out.println(cookie.getValue());
             if (name.equals(cookie.getName())) {
                 return cookie.getValue();
             }
