@@ -17,6 +17,16 @@ public class CookieUtil {
         refreshCookie.setMaxAge(REFRESH_TOKEN_EXPIRATION);
         refreshCookie.setPath("/");
         refreshCookie.setDomain(DOMAIN);
+
+        String cookieHeader = String.format(
+                "%s=%s; Max-Age=%d; Path=/; Domain=%s; Secure; HttpOnly; SameSite=None",
+                REFRESH_TOKEN_NAME,
+                refreshToken,
+                REFRESH_TOKEN_EXPIRATION,
+                DOMAIN
+        );
+        response.setHeader("Set-Cookie", cookieHeader);
+
         response.addCookie(refreshCookie);
     }
 
@@ -27,6 +37,14 @@ public class CookieUtil {
         deleteCookie.setMaxAge(0);
         deleteCookie.setPath("/");
         deleteCookie.setDomain(DOMAIN);
+
+        String cookieHeader = String.format(
+                "%s=; Max-Age=0; Path=/; Domain=%s; Secure; HttpOnly; SameSite=None",
+                REFRESH_TOKEN_NAME,
+                DOMAIN
+        );
+        response.setHeader("Set-Cookie", cookieHeader);
+
         response.addCookie(deleteCookie);
     }
 

@@ -69,6 +69,7 @@ public class SecurityConfig {
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of(System.getenv("CLIENT_URL")));
         config.setAllowedOriginPatterns(List.of(System.getenv("CLIENT_URL")));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of(
