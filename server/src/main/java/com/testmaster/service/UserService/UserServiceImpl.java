@@ -106,7 +106,6 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public JwtTokenPair refresh(String refreshToken) {
         UserModel user = this.getUserByRefresh(refreshToken);
-        System.out.println(user);
 
         JwtTokenPair jwtTokenPair = userAuthService.generateTokens(user);
 
