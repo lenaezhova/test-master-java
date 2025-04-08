@@ -10,7 +10,7 @@ import com.testmaster.exeption.ClientException;
 import com.testmaster.model.TokenModel;
 import com.testmaster.model.UserModel;
 import com.testmaster.repository.UserRepository;
-import com.testmaster.service.AuthService.UserAuthService;
+import com.testmaster.service.AuthService.AuthService;
 import com.testmaster.service.MailService;
 import com.testmaster.service.validation.PasswordValidationService;
 import com.testmaster.service.validation.UserValidationService;
@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final UserAuthService userAuthService;
+    private final AuthService userAuthService;
 
     private final MailService mailService;
 

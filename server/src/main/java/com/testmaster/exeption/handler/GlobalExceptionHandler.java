@@ -1,5 +1,7 @@
 package com.testmaster.exeption.handler;
 
+import com.auth0.jwt.exceptions.JWTDecodeException;
+import com.auth0.jwt.exceptions.SignatureVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.testmaster.exeption.AuthException;
 import com.testmaster.exeption.ClientException;
@@ -26,7 +28,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(500).body(body);
     }
 
-    @ExceptionHandler({AuthException.class, AuthorizationDeniedException.class})
+    @ExceptionHandler({AuthException.class, AuthorizationDeniedException.class, SignatureVerificationException.class, JWTDecodeException.class})
     public ResponseEntity<Map<String, Object>> handleAuthException(Exception ex) {
         Map<String, Object> body = this.getBody(
                 HttpStatus.UNAUTHORIZED.value(),

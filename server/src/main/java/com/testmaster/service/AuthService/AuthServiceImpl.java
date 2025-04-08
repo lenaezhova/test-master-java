@@ -26,7 +26,7 @@ import java.time.Duration;
 
 @Service
 @RequiredArgsConstructor
-public class AuthServiceImpl implements TokenAuthService, UserAuthService {
+public class AuthServiceImpl implements AuthService {
     private final AuthProperties authProperties;
 
     private final UserRepository userRepository;

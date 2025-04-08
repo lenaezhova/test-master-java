@@ -1,4 +1,4 @@
-package com.testmaster.service.UserService;
+package com.testmaster.config.user;
 
 import com.testmaster.model.UserModel;
 import com.testmaster.repository.UserRepository;

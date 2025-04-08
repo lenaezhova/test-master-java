@@ -6,6 +6,7 @@ import com.testmasterapi.domain.user.request.RefreshTokenRequest;
 import com.testmaster.dto.UserDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,19 +17,19 @@ public interface UserApi {
 
     @PostMapping("/auth/registration")
     @Operation(summary = "Регистрация")
-    ResponseEntity<Object> registration(@RequestBody CreateUserRequest request);
+    ResponseEntity<Object> registration(@RequestBody CreateUserRequest request, HttpServletResponse response);
 
     @PostMapping("/auth/login")
     @Operation(summary = "Войти в систему с помощью пароля")
-    ResponseEntity<Object> login(@RequestBody LoginRequest request);
+    ResponseEntity<Object> login(@RequestBody LoginRequest request, HttpServletResponse response);
 
     @PostMapping("/auth/logout")
     @Operation(summary = "Выйти из системы")
-    ResponseEntity<Object> logout(@RequestBody RefreshTokenRequest request);
+    ResponseEntity<Object> logout(@RequestBody RefreshTokenRequest request, HttpServletResponse response);
 
     @PostMapping("/auth/refresh")
     @Operation(summary = "Обновить рефреш токен")
-    ResponseEntity<Object> refresh(@RequestBody RefreshTokenRequest request,
+    ResponseEntity<Object> refresh(HttpServletRequest request,
                                  HttpServletResponse response);
 
     @GetMapping("/auth/activate/{link}")

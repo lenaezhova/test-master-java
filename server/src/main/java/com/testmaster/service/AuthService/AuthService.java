@@ -8,7 +8,9 @@ import com.testmaster.model.UserModel;
 import java.time.Duration;
 import java.util.Optional;
 
-public interface UserAuthService {
+public interface AuthService {
+
+    String login(String token);
 
     String createJWT(UserModel user, String secret, Duration expiration);
 
