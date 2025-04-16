@@ -27,8 +27,7 @@ public class UserAnswerModel extends BaseEntity {
     @JoinColumn(name = "user_id")
     private UserModel user;
 
-    @Column(nullable = false)
-    @JoinColumn(name = "user_value")
+    @Column(nullable = false, name = "user_value")
     private String userValue;
 
     @Column(name = "is_correct")
