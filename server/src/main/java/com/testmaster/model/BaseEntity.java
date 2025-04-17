@@ -3,7 +3,7 @@ package com.testmaster.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Embeddable
+@MappedSuperclass
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
