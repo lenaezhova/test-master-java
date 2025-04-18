@@ -1,6 +1,6 @@
 package com.testmaster.service.validation;
 
-import com.testmasterapi.domain.user.request.CreateUserRequest;
+import com.testmasterapi.domain.user.request.UserCreateRequest;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ public class UserValidationService {
 
     private static final String INVALID_EMAIL = "Invalid email format!";
 
-    public void validate(CreateUserRequest data) {
+    public void validate(UserCreateRequest data) {
         if (!hasText(data.email())) {
             throw UnprocessableEntity(EMPTY_EMAIL);
         }

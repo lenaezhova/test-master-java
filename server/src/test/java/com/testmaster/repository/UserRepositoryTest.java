@@ -1,7 +1,8 @@
 package com.testmaster.repository;
 
+import com.testmaster.repository.UserRepository.UserRepository;
 import com.testmasterapi.domain.user.UserRoles;
-import com.testmaster.model.UserModel;
+import com.testmaster.model.User.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -23,7 +24,7 @@ public class UserRepositoryTest {
 
     @Test
     public void testSaveUser() {
-        UserModel user = new UserModel(
+        User user = new User(
                 false,
                 "Иван Иванов",
                 "ivan@example.com",
@@ -35,7 +36,7 @@ public class UserRepositoryTest {
                 LocalDateTime.now()
         );
 
-        UserModel savedUser = userRepository.save(user);
+        User savedUser = userRepository.save(user);
 
         assertNotNull(savedUser.getId());
         assertEquals("Иван Иванов", savedUser.getName());
@@ -45,7 +46,7 @@ public class UserRepositoryTest {
 
     @Test
     public void testFindUser() {
-        UserModel user = new UserModel(
+        User user = new User(
                 false,
                 "Иван Иванов",
                 "ivan@example.com",
@@ -57,13 +58,13 @@ public class UserRepositoryTest {
                 LocalDateTime.now()
         );
 
-        UserModel persisted = entityManager.persist(user);
+        User persisted = entityManager.persist(user);
 
-        Optional<UserModel> foundUserOpt = userRepository.findById(persisted.getId());
+        Optional<User> foundUserOpt = userRepository.findById(persisted.getId());
 
         assertTrue(foundUserOpt.isPresent());
 
-        UserModel foundUser = foundUserOpt.get();
+        User foundUser = foundUserOpt.get();
         assertEquals("Иван Иванов", foundUser.getName());
         assertEquals("ivan@example.com", foundUser.getEmail());
         assertFalse(foundUser.getIsActivate());

@@ -1,11 +1,12 @@
 package com.testmaster.mapper;
 
 import com.testmasterapi.domain.user.JwtClaimNames;
+import com.testmasterapi.domain.user.data.UserData;
 import com.testmasterapi.domain.user.UserRoles;
-import com.testmasterapi.domain.user.request.CreateUserRequest;
+import com.testmasterapi.domain.user.data.UserOwnerData;
+import com.testmasterapi.domain.user.request.UserCreateRequest;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.testmaster.dto.UserDto;
-import com.testmaster.model.UserModel;
+import com.testmaster.model.User.User;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -13,8 +14,8 @@ import java.util.List;
 
 @Component
 public final class UserMapper {
-    public UserDto toDto(UserModel user) {
-        return new UserDto(
+    public UserData toUserData(User user) {
+        return new UserData(
                 user.getId(),
                 user.getName(),
                 user.getEmail(),
@@ -26,9 +27,17 @@ public final class UserMapper {
         );
     }
 
-    public static UserModel map(CreateUserRequest request, String activationLink) {
+    public UserOwnerData toOwner(User user) {
+        return new UserOwnerData(
+                user.getId(),
+                user.getName(),
+                user.getEmail()
+        );
+    }
+
+    public static User map(UserCreateRequest request, String activationLink) {
         LocalDateTime now = LocalDateTime.now();
-        UserModel user = new UserModel();
+        User user = new User();
 
         user.setEmail(request.email());
         user.setName(request.name());
@@ -41,9 +50,9 @@ public final class UserMapper {
         return user;
     }
 
-    public static UserModel map(DecodedJWT jwt) {
+    public static User map(DecodedJWT jwt) {
         LocalDateTime now = LocalDateTime.now();
-        UserModel user = new UserModel();
+        User user = new User();
 
         user.setEmail(jwt.getClaim(JwtClaimNames.EMAIL).asString());
         user.setCreatedAt(now);

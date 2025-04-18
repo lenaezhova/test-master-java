@@ -2,10 +2,9 @@ package com.testmaster.repository;
 
 import com.testmasterapi.domain.user.UserRoles;
 import com.testmaster.model.*;
-        import com.testmaster.model.TestModel;
+        import com.testmaster.model.Test;
 import com.testmasterapi.domain.test.TestStatus;
-import com.testmaster.model.UserModel;
-import org.junit.jupiter.api.Test;
+import com.testmaster.model.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
@@ -25,9 +24,9 @@ public class UserAnswerRepositoryTest {
     @Autowired
     private UserAnswerRepository userAnswerRepository;
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testSaveUserAnswerModel() {
-        UserModel user = new UserModel(
+        User user = new User(
                 false,
                 "Иван Иванов",
                 "ivan@example.com",
@@ -40,7 +39,7 @@ public class UserAnswerRepositoryTest {
         );
         entityManager.persist(user);
 
-        TestModel test = new TestModel(
+        Test test = new Test(
                 user,
                 "Тест по географии",
                 TestStatus.CLOSED,
@@ -48,12 +47,12 @@ public class UserAnswerRepositoryTest {
         );
         entityManager.persist(test);
 
-        TypeQuestionModel type = new TypeQuestionModel(
+        TypeQuestion type = new TypeQuestion(
                 "Открытый вопрос"
         );
         entityManager.persist(type);
 
-        QuestionModel question = new QuestionModel(
+        Question question = new Question(
                 test,
                 type,
                 LocalDateTime.now(),
@@ -61,7 +60,7 @@ public class UserAnswerRepositoryTest {
         );
         entityManager.persist(question);
 
-        UserAnswerModel answer = new UserAnswerModel(
+        UserAnswer answer = new UserAnswer(
                 question,
                 test,
                 user,
@@ -70,7 +69,7 @@ public class UserAnswerRepositoryTest {
                 1,
                 LocalDateTime.now()
         );
-        UserAnswerModel saved = userAnswerRepository.save(answer);
+        UserAnswer saved = userAnswerRepository.save(answer);
 
         assertNotNull(saved.getId());
         assertEquals("Париж", saved.getUserValue());
@@ -78,9 +77,9 @@ public class UserAnswerRepositoryTest {
         assertEquals(1, saved.getCountPoints());
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testSaveAndFindUserAnswerModel() {
-        UserModel user = new UserModel(
+        User user = new User(
                 false,
                 "Пётр Петров",
                 "petr@example.com",
@@ -93,7 +92,7 @@ public class UserAnswerRepositoryTest {
         );
         entityManager.persist(user);
 
-        TestModel test = new TestModel(
+        Test test = new Test(
                 user,
                 "Тест по истории",
                 TestStatus.CLOSED,
@@ -101,12 +100,12 @@ public class UserAnswerRepositoryTest {
         );
         entityManager.persist(test);
 
-        TypeQuestionModel type = new TypeQuestionModel(
+        TypeQuestion type = new TypeQuestion(
                 "Открытый вопрос"
         );
         entityManager.persist(type);
 
-        QuestionModel question = new QuestionModel(
+        Question question = new Question(
                 test,
                 type,
                 LocalDateTime.now(),
@@ -114,7 +113,7 @@ public class UserAnswerRepositoryTest {
         );
         entityManager.persist(question);
 
-        UserAnswerModel answer = new UserAnswerModel(
+        UserAnswer answer = new UserAnswer(
                 question,
                 test,
                 user,
@@ -126,11 +125,11 @@ public class UserAnswerRepositoryTest {
 
         entityManager.persist(answer);
 
-        Optional<UserAnswerModel> foundOpt = userAnswerRepository.findById(answer.getId());
+        Optional<UserAnswer> foundOpt = userAnswerRepository.findById(answer.getId());
 
         assertTrue(foundOpt.isPresent());
 
-        UserAnswerModel found = foundOpt.get();
+        UserAnswer found = foundOpt.get();
         assertEquals("Берлин", found.getUserValue());
         assertFalse(found.getIsCorrect());
         assertEquals(0, found.getCountPoints());

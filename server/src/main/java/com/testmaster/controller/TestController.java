@@ -1,13 +1,14 @@
 package com.testmaster.controller;
 
+import com.testmaster.service.TestService.TestService;
 import com.testmasterapi.api.TestApi;
-import com.testmaster.dto.TestDto;
-import com.testmaster.mapper.TestMapper;
+import com.testmasterapi.domain.test.data.TestData;
+import com.testmasterapi.domain.test.request.TestCreateRequest;
+import com.testmasterapi.domain.test.request.TestUpdateRequest;
 import lombok.RequiredArgsConstructor;
-import com.testmaster.model.TestModel;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.testmaster.service.TestService;
 
 import java.util.List;
 
@@ -15,46 +16,34 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping(TestApi.PATH)
 public class TestController implements TestApi {
-    private final TestMapper testMapper;
-
     private final TestService testService;
 
     @Override
-    public ResponseEntity<List<TestDto>> all() {
-
-        return ResponseEntity.ok(
-                testService.getAll()
-                        .stream()
-                        .map(testMapper::toDto)
-                        .toList()
-        );
+    public List<TestData> all() {
+        return testService.getAll();
     }
 
     @Override
-    public ResponseEntity<TestDto> one(@PathVariable Long id) {
-        TestModel model = testService.getOne(id);
-
-        return ResponseEntity.ok(testMapper.toDto(model));
+    public TestData one(@PathVariable Long id) {
+        return testService.getOne(id);
     }
 
     @Override
-    public ResponseEntity<Object> create(@RequestBody TestModel test) {
-        testService.addTest(test.getTitle(), test.getDescription());
+    public ResponseEntity<Void> create(TestCreateRequest createRequest) {
+        TestData testData = testService.create(createRequest);
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @Override
-    public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody TestModel test) {
-        testService.updateTest(id, test);
-
-        return ResponseEntity.ok().build();
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update(Long id, TestUpdateRequest updateRequest) {
+        testService.update(id, updateRequest);
     }
 
     @Override
-    public ResponseEntity<Object> delete(@PathVariable Long id) {
-        testService.deleteTest(id);
-
-        return ResponseEntity.ok().build();
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(Long id) {
+        testService.delete(id);
     }
 }

@@ -10,11 +10,9 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import com.testmaster.config.properties.AuthProperties;
 import com.testmaster.exeption.AuthException;
-import com.testmaster.mapper.UserMapper;
-import com.testmaster.model.TokenModel;
-import com.testmaster.model.UserModel;
+import com.testmaster.model.Token;
+import com.testmaster.model.User.User;
 import com.testmaster.repository.TokenRepository;
-import com.testmaster.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -46,7 +44,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String createJWT(UserModel user, String secret, Duration expiration) {
+    public String createJWT(User user, String secret, Duration expiration) {
         Instant now = Instant.now();
         return JWT.create()
                 .withIssuedAt(now)
@@ -62,7 +60,7 @@ public class AuthServiceImpl implements AuthService {
 
 
     @Override
-    public JwtTokenPair generateTokens(UserModel user) {
+    public JwtTokenPair generateTokens(User user) {
         String accessToken = this.createJWT(user, authProperties.jwtAccessSecret(), Duration.ofDays(authProperties.jwtAccessLifeDuration()));
         String refreshToken = this.createJWT(user, authProperties.jwtRefreshSecret(), Duration.ofDays(authProperties.jwtRefreshLifeDuration()));
 
@@ -80,14 +78,14 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public TokenModel saveToken(UserModel user, String refreshToken) {
+    public Token saveToken(User user, String refreshToken) {
         return tokenRepository.findByUser(user)
                 .map(existing -> {
                     existing.setRefreshToken(refreshToken);
                     return tokenRepository.save(existing);
                 })
                 .orElseGet(() -> {
-                    TokenModel newToken = new TokenModel();
+                    Token newToken = new Token();
                     newToken.setUser(user);
                     newToken.setRefreshToken(refreshToken);
                     return tokenRepository.save(newToken);
@@ -102,7 +100,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public Optional<TokenModel> findToken(String refreshToken) {
+    public Optional<Token> findToken(String refreshToken) {
         return tokenRepository.findByRefreshToken(refreshToken);
     }
 

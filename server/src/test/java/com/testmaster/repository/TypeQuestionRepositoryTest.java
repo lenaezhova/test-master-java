@@ -1,6 +1,6 @@
 package com.testmaster.repository;
 
-import com.testmaster.model.TypeQuestionModel;
+import com.testmaster.model.TypeQuestion;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -21,11 +21,11 @@ public class TypeQuestionRepositoryTest {
 
     @Test
     public void testSaveTypeQuestionModel() {
-        TypeQuestionModel type = new TypeQuestionModel(
+        TypeQuestion type = new TypeQuestion(
                 "Открытый вопрос"
         );
 
-        TypeQuestionModel saved = typeQuestionRepository.save(type);
+        TypeQuestion saved = typeQuestionRepository.save(type);
 
         assertNotNull(saved.getId());
         assertEquals("Открытый вопрос", saved.getTitle());
@@ -33,13 +33,13 @@ public class TypeQuestionRepositoryTest {
 
     @Test
     public void testFindById() {
-        TypeQuestionModel type = new TypeQuestionModel(
+        TypeQuestion type = new TypeQuestion(
                 "Множественный выбор"
         );
 
         entityManager.persist(type);
 
-        Optional<TypeQuestionModel> foundOpt = typeQuestionRepository.findById(type.getId());
+        Optional<TypeQuestion> foundOpt = typeQuestionRepository.findById(type.getId());
 
         assertTrue(foundOpt.isPresent());
         assertEquals("Множественный выбор", foundOpt.get().getTitle());

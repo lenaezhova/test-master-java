@@ -2,12 +2,11 @@ package com.testmaster.repository;
 
 import com.testmasterapi.domain.user.UserRoles;
 import com.testmaster.model.AnswerVariantModel;
-import com.testmaster.model.TestModel;
+import com.testmaster.model.Test;
 import com.testmasterapi.domain.test.TestStatus;
-import com.testmaster.model.TypeQuestionModel;
-import com.testmaster.model.QuestionModel;
-import com.testmaster.model.UserModel;
-import org.junit.jupiter.api.Test;
+import com.testmaster.model.TypeQuestion;
+import com.testmaster.model.Question;
+import com.testmaster.model.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
@@ -27,9 +26,9 @@ public class AnswerVariantRepositoryTest {
     @Autowired
     private AnswerVariantRepository answerVariantRepository;
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testSaveAnswerVariantModel() {
-        UserModel user = new UserModel(
+        User user = new User(
                 false,
                 "Пётр Петров",
                 "petr@example.com",
@@ -42,7 +41,7 @@ public class AnswerVariantRepositoryTest {
         );
         entityManager.persist(user);
 
-        TestModel test = new TestModel(
+        Test test = new Test(
                 user,
                 "Тест по математике",
                 TestStatus.CLOSED,
@@ -50,12 +49,12 @@ public class AnswerVariantRepositoryTest {
         );
         entityManager.persist(test);
 
-        TypeQuestionModel type = new TypeQuestionModel(
+        TypeQuestion type = new TypeQuestion(
                 "Один выбор"
         );
         entityManager.persist(type);
 
-        QuestionModel question = new QuestionModel(
+        Question question = new Question(
                 test,
                 type,
                 LocalDateTime.now(),
@@ -77,9 +76,9 @@ public class AnswerVariantRepositoryTest {
         assertEquals(1, saved.getCountPoints());
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testSaveAndFindAnswerVariantModel() {
-        UserModel user = new UserModel(
+        User user = new User(
                 false,
                 "Пётр Петров",
                 "petr@example.com",
@@ -92,7 +91,7 @@ public class AnswerVariantRepositoryTest {
         );
         entityManager.persist(user);
 
-        TestModel test = new TestModel(
+        Test test = new Test(
                 user,
                 "Тест по биологии",
                 TestStatus.CLOSED,
@@ -101,12 +100,12 @@ public class AnswerVariantRepositoryTest {
 
         entityManager.persist(test);
 
-        TypeQuestionModel type = new TypeQuestionModel(
+        TypeQuestion type = new TypeQuestion(
                 "Множественный выбор"
         );
         entityManager.persist(type);
 
-        QuestionModel question = new QuestionModel(
+        Question question = new Question(
                 test,
                 type,
                 LocalDateTime.now(),

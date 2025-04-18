@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 public class AnswerVariantModel extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "question_id")
-    private QuestionModel question;
+    private Question question;
 
     @Column(nullable = false)
     private String text;

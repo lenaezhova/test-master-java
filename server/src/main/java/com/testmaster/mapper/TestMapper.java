@@ -1,25 +1,26 @@
 package com.testmaster.mapper;
 
-import com.testmaster.dto.TestDto;
-import com.testmaster.model.TestModel;
-import org.mapstruct.*;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
+import com.testmaster.model.Test;
+import com.testmasterapi.domain.test.data.TestData;
+import org.mapstruct.Mapper;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Mapper(componentModel = "spring")
-public interface TestMapper {
-    TestDto toDto(TestModel test);
+public class TestMapper {
+    @Autowired
+    private UserMapper userMapper;
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void update(@MappingTarget TestModel target, TestModel source);
+    public TestData toTestData(Test test) {
+        var testData = new TestData();
+        fillGroup(testData, test);
+        return testData;
+    }
 
-    @AfterMapping
-    default void afterUpdate(@MappingTarget TestModel target, TestModel source) {
-        String title = source.getTitle();
-        if (title == null || title.trim().isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Поле title не может быть пустым");
-        }
-
-        target.setTitle(title);
+    private void fillGroup(TestData data, Test test) {
+        data.setId(test.getId());
+        data.setTitle(test.getTitle());
+        data.setDescription(test.getDescription());
+        data.setStatus(test.getStatus());
+        data.setOwner(userMapper.toOwner(test.getOwner()));
     }
 }
