@@ -5,13 +5,12 @@ import com.testmaster.exeption.AuthException;
 import com.testmaster.exeption.NotFoundException;
 import com.testmaster.mapper.UserMapper;
 import com.testmaster.model.Token;
-import com.testmaster.model.User.User;
+import com.testmaster.model.User;
 import com.testmaster.repository.UserRepository.UserRepository;
 import com.testmaster.service.AuthService.AuthService;
 import com.testmaster.service.MailService;
 import com.testmaster.service.validation.PasswordValidationService;
 import com.testmaster.service.validation.UserValidationService;
-import com.testmasterapi.domain.test.request.TestUpdateRequest;
 import com.testmasterapi.domain.user.JwtTokenPair;
 import com.testmasterapi.domain.user.data.UserData;
 import com.testmasterapi.domain.user.request.UserCreateRequest;
@@ -24,7 +23,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static com.testmaster.exeption.ClientException.UnprocessableEntity;

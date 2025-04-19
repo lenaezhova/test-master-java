@@ -37,7 +37,7 @@ public interface TestApi {
     )
     TestData one(@PathVariable Long id);
 
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
     @PostMapping
     @Operation(
             summary = "Создать тест",
@@ -48,7 +48,7 @@ public interface TestApi {
     )
     ResponseEntity<Void> create(@RequestBody TestCreateRequest test);
 
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
     @PatchMapping("/{id}")
     @Operation(
             summary = "Обновить тест",
@@ -59,7 +59,7 @@ public interface TestApi {
     )
     void update(@PathVariable Long id, @RequestBody TestUpdateRequest test);
 
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
     @DeleteMapping("/{id}")
     @Operation(
             summary = "Удалить тест",

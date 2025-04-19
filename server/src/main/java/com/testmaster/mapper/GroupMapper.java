@@ -1,7 +1,7 @@
 package com.testmaster.mapper;
 import com.testmasterapi.domain.group.data.GroupData;
 import com.testmaster.model.Group.Group;
-import com.testmasterapi.domain.user.data.UserGroupsData;
+import com.testmasterapi.domain.group.data.GroupsUserData;
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -18,10 +18,10 @@ public class GroupMapper {
         return groupData;
     }
 
-    public UserGroupsData toUserGroupsData(Group group) {
-        var userGroupsData = new UserGroupsData();
-        userGroupsData.setId(group.getId());
-        userGroupsData.setTitle(group.getTitle());
-        return userGroupsData;
+    public GroupsUserData toGroupsUserData(Group group) {
+        var groupsUserData = new GroupsUserData();
+        groupsUserData.setId(group.getId());
+        groupsUserData.setTitle(group.getTitle());
+        return groupsUserData;
     }
 }

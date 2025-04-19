@@ -18,6 +18,6 @@ public class UserData {
     private Boolean isActivate;
     private String activationLink;
     private List<UserRoles> roles;
-    private LocalDateTime created_at;
-    private LocalDateTime updated_at;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

@@ -1,4 +1,4 @@
-package com.testmasterapi.domain.test;
+package com.testmasterapi.domain.group;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
@@ -11,7 +11,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TestGroupsId implements Serializable {
+public class GroupTestId implements Serializable {
     private Long testId;
     private Long groupId;
 }

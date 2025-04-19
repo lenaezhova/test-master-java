@@ -9,5 +9,7 @@
     <include file="db/changelog/changes/0.0.1_add_activation_fields_to_users.xml"/>
     <include file="db/changelog/changes/0.0.2_rename_value_column_to_user_value.xml"/>
     <include file="db/changelog/changes/0.0.3_migrate_on_field_roles.xml"/>
+    <include file="db/changelog/changes/0.0.4_rename_tests_groups.xml"/>
+    <include file="db/changelog/changes/0.0.5_rename_users_groups.xml"/>
 
 </databaseChangeLog>

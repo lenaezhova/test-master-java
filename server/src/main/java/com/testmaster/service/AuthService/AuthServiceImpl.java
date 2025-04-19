@@ -11,7 +11,7 @@ import com.auth0.jwt.interfaces.JWTVerifier;
 import com.testmaster.config.properties.AuthProperties;
 import com.testmaster.exeption.AuthException;
 import com.testmaster.model.Token;
-import com.testmaster.model.User.User;
+import com.testmaster.model.User;
 import com.testmaster.repository.TokenRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

@@ -4,7 +4,7 @@ import com.testmaster.repository.TestRepository.TestRepository;
 import com.testmasterapi.domain.user.UserRoles;
 import com.testmaster.model.Test;
 import com.testmasterapi.domain.test.TestStatus;
-import com.testmaster.model.User.User;
+import com.testmaster.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;

@@ -7,5 +7,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserGroupsData {
     private Long id;
-    private String title;
+    private String name;
+    private String email;
 }

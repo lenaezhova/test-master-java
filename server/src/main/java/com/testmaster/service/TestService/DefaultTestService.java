@@ -2,7 +2,7 @@ package com.testmaster.service.TestService;
 
 import com.testmaster.exeption.NotFoundException;
 import com.testmaster.mapper.TestMapper;
-import com.testmaster.model.User.User;
+import com.testmaster.model.User;
 import com.testmaster.repository.UserRepository.UserRepository;
 import com.testmasterapi.domain.test.data.TestData;
 import com.testmasterapi.domain.test.request.TestCreateRequest;

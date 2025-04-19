@@ -1,4 +1,4 @@
-package com.testmasterapi.api.UserApi;
+package com.testmasterapi.api;
 
 import com.testmasterapi.domain.user.data.UserData;
 import com.testmasterapi.domain.user.request.UserCreateRequest;

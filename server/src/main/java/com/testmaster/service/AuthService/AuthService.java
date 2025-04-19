@@ -3,7 +3,7 @@ package com.testmaster.service.AuthService;
 import com.testmasterapi.domain.user.JwtTokenPair;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.testmaster.model.Token;
-import com.testmaster.model.User.User;
+import com.testmaster.model.User;
 
 import java.time.Duration;
 import java.util.Optional;

@@ -1,50 +1,60 @@
-package com.testmaster.service.UserGroupsService;
+package com.testmaster.service.GroupUserService;
 
 import com.testmaster.exeption.ClientException;
 import com.testmaster.exeption.NotFoundException;
 import com.testmaster.mapper.GroupMapper;
+import com.testmaster.mapper.UserMapper;
 import com.testmaster.model.Group.Group;
-import com.testmaster.model.User.User;
-import com.testmaster.model.User.UserGroups;
+import com.testmaster.model.User;
+import com.testmaster.model.Group.GroupUser;
 import com.testmaster.repository.GroupRepository.GroupRepository;
-import com.testmaster.repository.UserGroupsRepository;
+import com.testmaster.repository.GroupUserRepository;
 import com.testmaster.repository.UserRepository.UserRepository;
-import com.testmasterapi.domain.user.CustomUserDetails;
-import com.testmasterapi.domain.user.UserGroupsId;
+import com.testmasterapi.domain.group.data.GroupsUserData;
+import com.testmasterapi.domain.group.request.GroupUsersAddRequest;
+import com.testmasterapi.domain.group.GroupUserId;
 import com.testmasterapi.domain.user.data.UserGroupsData;
-import com.testmasterapi.domain.user.request.UserGroupsAddRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class DefaultUserGroupsService implements UserGroupsService {
+public class DefaultGroupUserService implements GroupUserService {
+    private final UserMapper userMapper;
     private final GroupMapper groupMapper;
 
-    private final UserGroupsRepository userGroupsRepository;
+    private final GroupUserRepository groupUserRepository;
     private final UserRepository userRepository;
     private final GroupRepository groupRepository;
 
     @Override
-    public List<UserGroupsData> getAll() {
-        return userGroupsRepository
-                .findAllByUserId(this.getUserId())
+    public List<UserGroupsData> getAllUsersGroup(Long userId) {
+        return groupUserRepository
+                .findAllUsersByGroupId(userId)
                 .stream()
-                .map(groupMapper::toUserGroupsData)
+                .map(userMapper::toUserGroupsData)
                 .toList();
     }
 
     @Override
-    @Transactional
-    public UserGroupsData add(Long groupId) {
-        Long userId = this.getUserId();
+    public List<GroupsUserData> getAllGroupsUser(Long userId) {
+        return groupUserRepository
+                .findAllGroupsByUserId(userId)
+                .stream()
+                .map(groupMapper::toGroupsUserData)
+                .toList();
+    }
 
-        if (userGroupsRepository.existsByGroup_Id(groupId)) {
+    @Transactional
+    @Override
+    public void add(Long groupId, GroupUsersAddRequest request) {
+        Long userId = request.userId();
+
+        if (groupUserRepository.existsByUser_Id(userId)) {
             throw new ClientException("Пользователь уже состоит в группе", HttpStatus.CONFLICT.value());
         }
         Group group = groupRepository
@@ -55,32 +65,23 @@ public class DefaultUserGroupsService implements UserGroupsService {
                 .findById(userId)
                 .orElseThrow(NotFoundException::new);
 
-        UserGroupsId id = new UserGroupsId(
+        GroupUserId id = new GroupUserId(
                 user.getId(),
                 group.getId()
         );
 
-        UserGroups userGroups = new UserGroups();
+        GroupUser userGroups = new GroupUser();
         userGroups.setId(id);
         userGroups.setGroup(group);
         userGroups.setUser(user);
-        userGroupsRepository.save(userGroups);
-
-        System.out.println("6");
-
-        return groupMapper.toUserGroupsData(group);
+        groupUserRepository.save(userGroups);
     }
 
     @Override
-    public void delete(Long groupId) {
-        int deleted = userGroupsRepository.delete(this.getUserId(), groupId);
+    public void delete(Long groupId, Long userId) {
+        int deleted = groupUserRepository.deleteUserFromGroup(userId, groupId);
         if (deleted == 0) {
             throw new NotFoundException();
         }
-    }
-
-    private Long getUserId() {
-        CustomUserDetails customUserDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return customUserDetails.getId();
     }
 }

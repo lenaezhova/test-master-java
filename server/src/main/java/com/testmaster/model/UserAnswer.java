@@ -1,6 +1,5 @@
 package com.testmaster.model;
 
-import com.testmaster.model.User.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

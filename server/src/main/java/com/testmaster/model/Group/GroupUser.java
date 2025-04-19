@@ -1,25 +1,25 @@
 package com.testmaster.model.Group;
 
-import com.testmaster.model.Test;
-import com.testmasterapi.domain.test.TestGroupsId;
+import com.testmaster.model.User;
+import com.testmasterapi.domain.group.GroupUserId;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "tests_groups")
+@Table(name = "groups_users")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GroupTests {
+public class GroupUser {
     @EmbeddedId
-    private TestGroupsId id;
+    private GroupUserId id;
 
     @ManyToOne
-    @MapsId("testId")
-    @JoinColumn(name = "test_id")
-    private Test test;
+    @MapsId("userId")
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @ManyToOne
     @MapsId("groupId")

@@ -1,7 +1,7 @@
-package com.testmaster.controller.UserController;
+package com.testmaster.controller;
 
 import com.testmaster.util.CookieUtil;
-import com.testmasterapi.api.UserApi.UserApi;
+import com.testmasterapi.api.UserApi;
 import com.testmasterapi.domain.user.JwtTokenPair;
 import com.testmasterapi.domain.user.data.UserData;
 import com.testmasterapi.domain.user.request.UserCreateRequest;

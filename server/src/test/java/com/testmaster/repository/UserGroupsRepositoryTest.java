@@ -1,10 +1,10 @@
 package com.testmaster.repository;
 
-import com.testmaster.model.User.UserGroups;
+import com.testmaster.model.Group.GroupUser;
 import com.testmasterapi.domain.user.UserRoles;
 import com.testmaster.model.Group.Group;
-import com.testmasterapi.domain.user.UserGroupsId;
-import com.testmaster.model.User.User;
+import com.testmasterapi.domain.group.GroupUserId;
+import com.testmaster.model.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -23,7 +23,7 @@ public class UserGroupsRepositoryTest {
     private TestEntityManager entityManager;
 
     @Autowired
-    private UserGroupsRepository groupsUserRepository;
+    private GroupUserRepository groupsUserRepository;
 
     @Test
     public void testSaveGroupsUserModel() {
@@ -46,17 +46,17 @@ public class UserGroupsRepositoryTest {
         );
         entityManager.persist(group);
 
-        UserGroupsId id = new UserGroupsId(
+        GroupUserId id = new GroupUserId(
                 user.getId(),
                 group.getId()
         );
 
-        UserGroups link = new UserGroups(
+        GroupUser link = new GroupUser(
                 id,
                 user,
                 group
         );
-        UserGroups saved = groupsUserRepository.save(link);
+        GroupUser saved = groupsUserRepository.save(link);
 
         assertNotNull(saved.getId());
         assertEquals(user.getId(), saved.getUser().getId());
@@ -84,22 +84,22 @@ public class UserGroupsRepositoryTest {
         );
         entityManager.persist(group);
 
-        UserGroupsId id = new UserGroupsId(
+        GroupUserId id = new GroupUserId(
                 user.getId(),
                 group.getId()
         );
 
-        UserGroups link = new UserGroups(
+        GroupUser link = new GroupUser(
                 id,
                 user,
                 group
         );
         entityManager.persist(link);
 
-        Optional<UserGroups> foundOpt = groupsUserRepository.findById(id);
+        Optional<GroupUser> foundOpt = groupsUserRepository.findById(id);
 
         assertTrue(foundOpt.isPresent());
-        UserGroups found = foundOpt.get();
+        GroupUser found = foundOpt.get();
         assertEquals("Пётр Петров", found.getUser().getName());
         assertEquals("Группа B", found.getGroup().getTitle());
     }
