@@ -11,5 +11,9 @@
     <include file="db/changelog/changes/0.0.3_migrate_on_field_roles.xml"/>
     <include file="db/changelog/changes/0.0.4_rename_tests_groups.xml"/>
     <include file="db/changelog/changes/0.0.5_rename_users_groups.xml"/>
+    <include file="db/changelog/changes/0.0.6_rename_users_updated_at.xml"/>
+    <include file="db/changelog/changes/0.0.7_add_table_fields.xml"/>
+    <include file="db/changelog/changes/0.0.8_rename_type_questions.xml"/>
+    <include file="db/changelog/changes/0.0.9_add_columns_for_question-question_type.xml"/>
 
 </databaseChangeLog>

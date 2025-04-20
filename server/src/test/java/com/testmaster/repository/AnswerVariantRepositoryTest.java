@@ -1,10 +1,10 @@
 package com.testmaster.repository;
 
 import com.testmasterapi.domain.user.UserRoles;
-import com.testmaster.model.AnswerVariantModel;
+import com.testmaster.model.AnswerVariant;
 import com.testmaster.model.Test;
 import com.testmasterapi.domain.test.TestStatus;
-import com.testmaster.model.TypeQuestion;
+import com.testmaster.model.QuestionType;
 import com.testmaster.model.Question;
 import com.testmaster.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -35,43 +36,40 @@ public class AnswerVariantRepositoryTest {
                 "securepass",
                 "activation-key",
                 false,
-                List.of(UserRoles.USER),
+                Set.of(UserRoles.USER),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
         entityManager.persist(user);
 
-        Test test = new Test(
-                user,
-                "Тест по математике",
-                TestStatus.CLOSED,
-                "Описание"
-        );
+        Test test = new Test();
+        test.setOwner(user);
+        test.setTitle("Тест по математике");
+        test.setStatus(TestStatus.CLOSED);
+        test.setDescription("Описание");
+
         entityManager.persist(test);
 
-        TypeQuestion type = new TypeQuestion(
-                "Один выбор"
-        );
+        QuestionType type = new QuestionType();
+        type.setTitle("Один выбор");
         entityManager.persist(type);
 
-        Question question = new Question(
-                test,
-                type,
-                LocalDateTime.now(),
-                LocalDateTime.now()
-        );
+        Question question = new Question();
+        question.setTest(test);
+        question.setType(type);
+        question.setCreatedAt(LocalDateTime.now());
         entityManager.persist(question);
 
-        AnswerVariantModel variant = new AnswerVariantModel(
-                question,
-                "42",
-                true,
-                1
-        );
-        AnswerVariantModel saved = answerVariantRepository.save(variant);
+        AnswerVariant variant = new AnswerVariant();
+        variant.setQuestion(question);
+        variant.setTitle("42");
+        variant.setIsCorrect(true);
+        variant.setCountPoints(1);
+
+        AnswerVariant saved = answerVariantRepository.save(variant);
 
         assertNotNull(saved.getId());
-        assertEquals("42", saved.getText());
+        assertEquals("42", saved.getTitle());
         assertTrue(saved.getIsCorrect());
         assertEquals(1, saved.getCountPoints());
     }
@@ -85,48 +83,43 @@ public class AnswerVariantRepositoryTest {
                 "securepass",
                 "activation-key",
                 false,
-                List.of(UserRoles.USER),
+                Set.of(UserRoles.USER),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
         entityManager.persist(user);
 
-        Test test = new Test(
-                user,
-                "Тест по биологии",
-                TestStatus.CLOSED,
-                "Описание"
-        );
+        Test test = new Test();
+        test.setOwner(user);
+        test.setTitle("Тест по биологии");
+        test.setStatus(TestStatus.CLOSED);
+        test.setDescription("Описание");
 
         entityManager.persist(test);
 
-        TypeQuestion type = new TypeQuestion(
-                "Множественный выбор"
-        );
+        QuestionType type = new QuestionType();
+        type.setTitle("Множественный выбор");
         entityManager.persist(type);
 
-        Question question = new Question(
-                test,
-                type,
-                LocalDateTime.now(),
-                LocalDateTime.now()
-        );
+        Question question = new Question();
+        question.setTest(test);
+        question.setType(type);
+        question.setCreatedAt(LocalDateTime.now());
         entityManager.persist(question);
 
-        AnswerVariantModel variant = new AnswerVariantModel(
-                question,
-                "Клетка",
-                false,
-                0
-        );
+        AnswerVariant variant = new AnswerVariant();
+        variant.setQuestion(question);
+        variant.setTitle("Клетка");
+        variant.setIsCorrect(false);
+        variant.setCountPoints(0);
         entityManager.persist(variant);
 
-        Optional<AnswerVariantModel> foundOpt = answerVariantRepository.findById(variant.getId());
+        Optional<AnswerVariant> foundOpt = answerVariantRepository.findById(variant.getId());
 
         assertTrue(foundOpt.isPresent());
-        AnswerVariantModel found = foundOpt.get();
+        AnswerVariant found = foundOpt.get();
 
-        assertEquals("Клетка", found.getText());
+        assertEquals("Клетка", found.getTitle());
         assertFalse(found.getIsCorrect());
         assertEquals(0, found.getCountPoints());
         assertNotNull(found.getQuestion());

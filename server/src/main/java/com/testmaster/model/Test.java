@@ -7,6 +7,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "tests")
@@ -26,4 +28,12 @@ public class Test extends BaseEntity {
     private TestStatus status = TestStatus.CLOSED;
 
     private String description;
+
+    private Boolean deleted = false;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 }

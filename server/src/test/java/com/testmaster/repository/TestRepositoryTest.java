@@ -14,6 +14,7 @@ import org.springframework.test.context.TestPropertySource;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -37,20 +38,17 @@ public class TestRepositoryTest {
                 "password123",
                 "abc123-activation",
                 false,
-                List.of(UserRoles.USER),
+                Set.of(UserRoles.USER),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
         entityManager.persist(user);
 
-        Test test = new Test(
-                user,
-                "Название теста",
-                TestStatus.CLOSED,
-                "Описание теста"
-        );
+        Test test = new Test();
         test.setOwner(user);
+        test.setTitle("Название теста");
         test.setStatus(TestStatus.CLOSED);
+        test.setDescription("Описание теста");
 
         Test savedTest = testRepository.save(test);
 
@@ -68,25 +66,25 @@ public class TestRepositoryTest {
                 "password123",
                 "abc123-activation",
                 false,
-                List.of(UserRoles.USER),
+                Set.of(UserRoles.USER),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
 
         entityManager.persist(user);
 
-        Test test = new Test(
-                user,
-                "Название теста",
-                TestStatus.CLOSED,
-                "Описание теста"
-        );
+        Test test = new Test();
+        test.setOwner(user);
+        test.setTitle("Название теста");
+        test.setStatus(TestStatus.CLOSED);
+        test.setDescription("Описание теста");
+
         test.setOwner(user);
         test.setStatus(TestStatus.OPEN);
 
         Test persistedTest = entityManager.persist(test);
 
-        Optional<Test> foundOpt = testRepository.findById(persistedTest.getId());
+        Optional<Test> foundOpt = testRepository.findTestById(persistedTest.getId());
 
         assertTrue(foundOpt.isPresent());
 

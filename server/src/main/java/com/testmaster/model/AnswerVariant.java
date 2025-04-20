@@ -12,13 +12,14 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AnswerVariantModel extends BaseEntity {
+public class AnswerVariant extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "question_id")
     private Question question;
 
-    @Column(nullable = false)
-    private String text;
+    private String title;
+
+    private String description;
 
     @Column(name = "is_correct")
     private Boolean isCorrect;

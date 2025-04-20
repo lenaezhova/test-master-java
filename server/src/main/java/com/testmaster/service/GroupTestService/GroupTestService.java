@@ -13,7 +13,7 @@ public interface GroupTestService {
     /**
      * Метод для получения всех тестов группы.
      *
-     * @return Все пользователи группы
+     * @return Все тесты группы
      */
     List<TestGroupsData> getAllTestsGroup(Long groupId);
 

@@ -49,7 +49,7 @@ public interface GroupApi {
     ResponseEntity<Void> create(@RequestBody GroupCreateRequest request);
 
     @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
-    @PatchMapping(path = "/{id}")
+    @PatchMapping("/{id}")
     @Operation(
             summary = "Обновить информацию о группе",
             responses = {

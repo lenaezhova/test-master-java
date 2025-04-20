@@ -31,7 +31,7 @@ public class DefaultTestService implements TestService {
     @Override
     public List<TestData> getAll() {
         return testRepository
-                .findAll()
+                .findAllTests()
                 .stream()
                 .map(testMapper::toTestData)
                 .toList();
@@ -40,7 +40,7 @@ public class DefaultTestService implements TestService {
     @Override
     public TestData getOne(Long id) {
         Test test = testRepository
-                .findById(id)
+                .findTestById(id)
                 .orElseThrow(NotFoundException::new);
 
         return testMapper.toTestData(test);
@@ -49,19 +49,12 @@ public class DefaultTestService implements TestService {
     @NotNull
     @Transactional
     @Override
-    public TestData create(TestCreateRequest createRequest) {
-        CustomUserDetails customUserDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long userId = customUserDetails.getId();
-
-        Test test = new Test();
-        test.setTitle(createRequest.title());
-        test.setDescription(createRequest.description());
-
+    public TestData create(@NotNull TestCreateRequest request) {
         User user = userRepository
-                .findById(userId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Пользователь с таким идентификатором не найден"));
+                .findUserById(this.getUserId())
+                .orElseThrow(NotFoundException::new);
 
-        test.setOwner(user);
+        Test test = testMapper.toEntity(request, user);
         testRepository.save(test);
 
         return testMapper.toTestData(test);
@@ -76,12 +69,8 @@ public class DefaultTestService implements TestService {
         }
     }
 
-    @Override
-    @Transactional
-    public void delete(Long id) {
-        int deleted = testRepository.delete(id);
-        if (deleted == 0) {
-            throw new NotFoundException();
-        }
+    private Long getUserId() {
+        CustomUserDetails customUserDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return customUserDetails.getId();
     }
 }

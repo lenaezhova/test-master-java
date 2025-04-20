@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Component
 public final class UserMapper {
@@ -30,7 +31,7 @@ public final class UserMapper {
     }
 
     public UserOwnerData toOwner(User user) {
-        UserOwnerData data = new UserOwnerData();
+        var data = new UserOwnerData();
         data.setId(user.getId());
         data.setName(user.getName());
         data.setEmail(user.getEmail());
@@ -39,7 +40,7 @@ public final class UserMapper {
     }
 
     public UserGroupsData toUserGroupsData(User user) {
-        UserGroupsData data = new UserGroupsData();
+        var data = new UserGroupsData();
         data.setId(user.getId());
         data.setName(user.getName());
         data.setEmail(user.getEmail());
@@ -47,28 +48,26 @@ public final class UserMapper {
         return data;
     }
 
-    public static User map(UserCreateRequest request, String activationLink) {
+    public User toEntity(UserCreateRequest request, String activationLink) {
         LocalDateTime now = LocalDateTime.now();
-        User user = new User();
+        var entity = new User();
 
-        user.setEmail(request.email());
-        user.setName(request.name());
-        user.setPassword(request.password());
-        user.setActivationLink(activationLink);
-        user.setIsActivate(false);
-        user.setRoles(List.of(UserRoles.USER));
-        user.setCreatedAt(now);
-        user.setUpdatedAt(now);
-        return user;
+        entity.setEmail(request.email());
+        entity.setName(request.name());
+        entity.setPassword(request.password());
+        entity.setActivationLink(activationLink);
+        entity.setIsActivate(false);
+        entity.setRoles(Set.of(UserRoles.USER));
+        entity.setCreatedAt(now);
+
+        return entity;
     }
 
     public static User map(DecodedJWT jwt) {
         LocalDateTime now = LocalDateTime.now();
-        User user = new User();
+        var user = new User();
 
         user.setEmail(jwt.getClaim(JwtClaimNames.EMAIL).asString());
-        user.setCreatedAt(now);
-        user.setUpdatedAt(now);
 
         return user;
     }

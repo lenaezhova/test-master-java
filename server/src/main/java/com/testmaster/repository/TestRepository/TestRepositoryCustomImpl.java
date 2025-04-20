@@ -6,6 +6,8 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+
 @Component
 public class TestRepositoryCustomImpl implements TestRepositoryCustom {
 
@@ -21,14 +23,20 @@ public class TestRepositoryCustomImpl implements TestRepositoryCustom {
         var query = """
                 update tests set title = coalesce(:title, title),
                                  description = coalesce(:description, description),
+                                 updated_at = coalesce(:updated_at, updated_at),
+                                 deleted = coalesce(:deleted, deleted),
                                  status = coalesce(:status, status)
-                where id = :tid
+                where id = :tid and deleted = false
                 """;
+        LocalDateTime now = LocalDateTime.now();
+
         var params = new MapSqlParameterSource()
                 .addValue("title", request.getTitle())
                 .addValue("description", request.getDescription())
                 .addValue("status", request.getStatus())
-                .addValue("tid", testId);;
+                .addValue("updated_at", now)
+                .addValue("deleted", request.getDeleted())
+                .addValue("tid", testId);
 
         return jdbcTemplate.update(query, params);
     }

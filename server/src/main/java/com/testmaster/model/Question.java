@@ -21,7 +21,11 @@ public class Question extends BaseEntity {
 
     @ManyToOne
     @JoinColumn(name = "type_id")
-    private TypeQuestion type;
+    private QuestionType type;
+
+    private String title;
+
+    private String description;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

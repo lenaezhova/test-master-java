@@ -45,12 +45,13 @@ public class DefaultGroupTestService implements GroupTestService {
         if (groupTestRepository.existsByTest_Id(testId)) {
             throw new ClientException("Тест уже находится в группе", HttpStatus.CONFLICT.value());
         }
-        Group group = groupRepository
-                .findById(groupId)
-                .orElseThrow(NotFoundException::new);
 
         Test test = testRepository
-                .findById(testId)
+                .findTestById(testId)
+                .orElseThrow(NotFoundException::new);
+
+        Group group = groupRepository
+                .findById(groupId)
                 .orElseThrow(NotFoundException::new);
 
         GroupTestId id = new GroupTestId(

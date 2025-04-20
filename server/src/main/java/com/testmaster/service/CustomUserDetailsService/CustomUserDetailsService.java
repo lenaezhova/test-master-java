@@ -22,11 +22,19 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        Optional<User> userOptional = userRepository.findByEmail(email);
+        Optional<User> userOptional = userRepository.findUserByEmail(email);
 
         User user = userOptional.orElseThrow(() ->
                 new UsernameNotFoundException("Пользователь с email: " + email + " не найден")
         );
+
+        if (!user.getIsActivate()) {
+            throw new UsernameNotFoundException("Пользователь не активирован");
+        }
+
+        if (user.getDeleted()) {
+            throw new UsernameNotFoundException("Пользователь удален");
+        }
 
         List<SimpleGrantedAuthority> authorities = user.getRoles().stream()
                 .map(role -> new SimpleGrantedAuthority("ROLE_" + role.name()))

@@ -25,6 +25,7 @@ public interface UserApi {
     @Operation(summary = "Получение списка пользователей")
     List<UserData> all();
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
     @Operation(
             summary = "Получить пользователя",

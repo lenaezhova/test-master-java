@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,31 +34,29 @@ public class UserAnswerRepositoryTest {
                 "password123",
                 "activation-code",
                 false,
-                List.of(UserRoles.USER),
+                Set.of(UserRoles.USER),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
         entityManager.persist(user);
 
-        Test test = new Test(
-                user,
-                "Тест по географии",
-                TestStatus.CLOSED,
-                "Описание"
-        );
+        Test test = new Test();
+        test.setOwner(user);
+        test.setTitle("Тест по географии");
+        test.setStatus(TestStatus.CLOSED);
+        test.setDescription("Описание теста");
+
         entityManager.persist(test);
 
-        TypeQuestion type = new TypeQuestion(
-                "Открытый вопрос"
-        );
+        QuestionType type = new QuestionType();
+        type.setTitle("Открытый вопрос");
         entityManager.persist(type);
 
-        Question question = new Question(
-                test,
-                type,
-                LocalDateTime.now(),
-                LocalDateTime.now()
-        );
+        Question question = new Question();
+        question.setTest(test);
+        question.setType(type);
+        question.setCreatedAt(LocalDateTime.now());
+
         entityManager.persist(question);
 
         UserAnswer answer = new UserAnswer(
@@ -86,31 +85,28 @@ public class UserAnswerRepositoryTest {
                 "securepass",
                 "activation-key",
                 false,
-                List.of(UserRoles.USER),
+                Set.of(UserRoles.USER),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
         entityManager.persist(user);
 
-        Test test = new Test(
-                user,
-                "Тест по истории",
-                TestStatus.CLOSED,
-                "Описание"
-        );
+        Test test = new Test();
+        test.setOwner(user);
+        test.setTitle("Тест по истории");
+        test.setStatus(TestStatus.CLOSED);
+        test.setDescription("Описание теста");
         entityManager.persist(test);
 
-        TypeQuestion type = new TypeQuestion(
-                "Открытый вопрос"
-        );
+        QuestionType type = new QuestionType();
+        type.setTitle("Открытый вопрос");
         entityManager.persist(type);
 
-        Question question = new Question(
-                test,
-                type,
-                LocalDateTime.now(),
-                LocalDateTime.now()
-        );
+        Question question = new Question();
+        question.setTest(test);
+        question.setType(type);
+        question.setCreatedAt(LocalDateTime.now());
+
         entityManager.persist(question);
 
         UserAnswer answer = new UserAnswer(

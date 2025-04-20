@@ -12,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,7 +34,7 @@ public class GroupRepositoryTest {
                 "password123",
                 "activation-code",
                 false,
-                List.of(UserRoles.USER),
+                Set.of(UserRoles.USER),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
@@ -60,7 +61,7 @@ public class GroupRepositoryTest {
                 "securepass",
                 "activation-key",
                 false,
-                List.of(UserRoles.USER),
+                Set.of(UserRoles.USER),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );

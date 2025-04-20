@@ -44,6 +44,8 @@ public class TestController implements TestApi {
     @Override
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(Long id) {
-        testService.delete(id);
+        var request = new TestUpdateRequest();
+        request.setDeleted(true);
+        testService.update(id, request);
     }
 }

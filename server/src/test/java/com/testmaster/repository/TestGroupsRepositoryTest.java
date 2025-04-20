@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -35,18 +36,18 @@ public class TestGroupsRepositoryTest {
                 "password123",
                 "activation-code",
                 false,
-                List.of(UserRoles.USER),
+                Set.of(UserRoles.USER),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
         entityManager.persist(user);
 
-        Test test = new Test(
-                user,
-                "Тест A",
-                TestStatus.CLOSED,
-                "Описание"
-        );
+        Test test = new Test();
+        test.setOwner(user);
+        test.setTitle("Тест A");
+        test.setStatus(TestStatus.CLOSED);
+        test.setDescription("Описание теста");
+
         entityManager.persist(test);
 
         Group group = new Group(
@@ -83,18 +84,18 @@ public class TestGroupsRepositoryTest {
                 "securepass",
                 "activation-key",
                 false,
-                List.of(UserRoles.USER),
+                Set.of(UserRoles.USER),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
         entityManager.persist(user);
 
-        Test test = new Test(
-                user,
-                "Тест B",
-                TestStatus.CLOSED,
-                "Описание"
-        );
+        Test test = new Test();
+        test.setOwner(user);
+        test.setTitle("Тест B");
+        test.setStatus(TestStatus.CLOSED);
+        test.setDescription("Описание теста");
+
         entityManager.persist(test);
 
         Group group = new Group(

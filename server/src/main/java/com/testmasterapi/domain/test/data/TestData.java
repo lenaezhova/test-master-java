@@ -5,6 +5,8 @@ import com.testmasterapi.domain.user.data.UserData;
 import com.testmasterapi.domain.user.data.UserOwnerData;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 public class TestData {
@@ -13,4 +15,6 @@ public class TestData {
     private String title;
     private TestStatus status;
     private String description;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

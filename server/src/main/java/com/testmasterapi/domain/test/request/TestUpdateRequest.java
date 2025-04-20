@@ -8,4 +8,5 @@ public class TestUpdateRequest {
     private TestStatus status;
     private String title;
     private String description;
+    private Boolean deleted;
 }

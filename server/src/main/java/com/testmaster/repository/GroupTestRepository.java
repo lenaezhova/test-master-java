@@ -17,12 +17,12 @@ import java.util.List;
 public interface GroupTestRepository extends JpaRepository<GroupTest, GroupTestId> {
     boolean existsByTest_Id(Long testId);
 
-    @Query("select gt.test from GroupTest gt where gt.id.groupId = :groupId")
+    @Query("select gt.test from GroupTest gt where gt.id.groupId = :groupId and gt.test.deleted = false")
     List<Test> findAllTestsByGroupId(@Param("groupId") Long groupId);
 
     @Transactional
     @Modifying
-    @Query("delete from GroupTest groupTest where groupTest.id.testId = :testId and groupTest.id.groupId = :groupId")
+    @Query("delete from GroupTest gt where gt.id.testId = :testId and gt.id.groupId = :groupId and gt.test.deleted = false")
     int delete(
             @Param("testId") Long testId,
             @Param("groupId") Long groupId

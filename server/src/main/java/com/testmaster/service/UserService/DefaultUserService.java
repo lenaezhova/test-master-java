@@ -22,11 +22,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
 import static com.testmaster.exeption.ClientException.UnprocessableEntity;
-import static com.testmaster.mapper.UserMapper.map;
 import static org.springframework.util.StringUtils.hasText;
 
 @Service
@@ -48,7 +48,7 @@ public class DefaultUserService implements UserService {
     @Override
     public List<UserData> getAll() {
         return userRepository
-                .findAll()
+                .findAllUsers()
                 .stream()
                 .map(userMapper::toUserData)
                 .toList();
@@ -57,7 +57,7 @@ public class DefaultUserService implements UserService {
     @Override
     public UserData getOne(Long id) {
         User user = userRepository
-                .findById(id)
+                .findUserById(id)
                 .orElseThrow(NotFoundException::new);
 
         return userMapper.toUserData(user);
@@ -69,16 +69,18 @@ public class DefaultUserService implements UserService {
         userValidationService.validate(createUserRequest);
         passwordValidationService.validate(createUserRequest);
 
-        if (userRepository.existsByEmail(createUserRequest.email())) {
+        if (userRepository.findUserByEmail(createUserRequest.email()).isPresent()) {
             throw UnprocessableEntity("Email уже используется!");
         }
 
         String activationLink = UUID.randomUUID().toString();
+        LocalDateTime now = LocalDateTime.now();
 
-        User user = map(createUserRequest, activationLink);
-        UserUpdateRequest userUpdateRequest = new UserUpdateRequest();
-        userUpdateRequest.setPassword(passwordEncoder.encode(user.getPassword()));
-        this.update(user.getId(), userUpdateRequest);
+        User user = userMapper.toEntity(createUserRequest, activationLink);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setCreatedAt(now);
+
+        userRepository.save(user);
 
         JwtTokenPair jwtTokenPair = userAuthService.generateTokens(user);
         userAuthService.saveToken(user, jwtTokenPair.refreshToken());
@@ -97,7 +99,7 @@ public class DefaultUserService implements UserService {
         }
 
         User user = userRepository
-                .findByEmail(loginRequest.email())
+                .findUserByEmail(loginRequest.email())
                 .orElseThrow(() -> new AuthException("Неверный email или пароль!"));
 
         if (!passwordEncoder.matches(loginRequest.password(), user.getPassword())) {
@@ -147,7 +149,7 @@ public class DefaultUserService implements UserService {
     @Transactional
     public void activate(String link) {
         User user = userRepository
-                .findByActivationLink(link)
+                .findUserByActivationLink(link)
                 .orElseThrow(() -> new AuthException("Неккоректная ссылка активации"));
 
         UserUpdateRequest userUpdate = new UserUpdateRequest();

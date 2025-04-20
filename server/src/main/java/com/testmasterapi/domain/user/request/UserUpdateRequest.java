@@ -3,7 +3,7 @@ package com.testmasterapi.domain.user.request;
 import com.testmasterapi.domain.user.UserRoles;
 import lombok.Data;
 
-import java.util.List;
+import java.util.Set;
 
 @Data
 public class UserUpdateRequest {
@@ -12,6 +12,6 @@ public class UserUpdateRequest {
     private Boolean deleted;
     private Boolean isActivate;
     private String activationLink;
-    private List<UserRoles> roles;
+    private Set<UserRoles> roles;
 }
 

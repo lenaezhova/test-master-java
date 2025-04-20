@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -38,11 +39,11 @@ public class User extends BaseEntity {
     @Convert(converter = RoleListConverter.class)
     @Column(columnDefinition = "text[]")
     @Enumerated(EnumType.STRING)
-    private List<UserRoles> roles;
+    private Set<UserRoles> roles;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    @Column(name = "update_at")
+    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 }

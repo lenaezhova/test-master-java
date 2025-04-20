@@ -1,0 +1,32 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="0.0.9_add_columns_for_question-question_type" author="elena">
+
+        <addColumn tableName="questions">
+            <column name="title" type="text"/>
+            <column name="description" type="text"/>
+        </addColumn>
+
+        <addColumn tableName="answer_variants">
+            <column name="description" type="text"/>
+        </addColumn>
+
+        <renameColumn
+                tableName="answer_variants"
+                oldColumnName="text"
+                newColumnName="title"
+                columnDataType="text"/>
+
+<!--        <addColumn tableName="questions_types">-->
+<!--            <column name="types" type="text[]"/>-->
+<!--        </addColumn>-->
+
+        <sql>
+            ALTER TABLE questions_types ADD types TEXT ARRAY NOT NULL;
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

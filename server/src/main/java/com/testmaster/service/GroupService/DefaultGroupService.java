@@ -49,18 +49,14 @@ public class DefaultGroupService implements GroupService {
     @NotNull
     @Transactional
     @Override
-    public GroupData create(@NotNull GroupCreateRequest createGroupRequest) {
-        CustomUserDetails customUserDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long userId = customUserDetails.getId();
-
-        Group group = new Group();
-        group.setTitle(createGroupRequest.title());
+    public GroupData create(@NotNull GroupCreateRequest request) {
+        var userId = this.getUserId();
 
         User user = userRepository
-                .findById(userId)
+                .findUserById(userId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Пользователь с таким идентификатором не найден"));
 
-        group.setOwner(user);
+        Group group = groupMapper.toEntity(request, user);
         groupRepository.save(group);
         return groupMapper.toGroupData(group);
     }
@@ -81,5 +77,10 @@ public class DefaultGroupService implements GroupService {
         if (deleted == 0) {
             throw new NotFoundException();
         }
+    }
+
+    private Long getUserId() {
+        CustomUserDetails customUserDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return customUserDetails.getId();
     }
 }

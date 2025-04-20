@@ -1,7 +1,9 @@
 package com.testmaster.mapper;
+import com.testmaster.model.User;
 import com.testmasterapi.domain.group.data.GroupData;
 import com.testmaster.model.Group.Group;
 import com.testmasterapi.domain.group.data.GroupsUserData;
+import com.testmasterapi.domain.group.request.GroupCreateRequest;
 import org.mapstruct.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -16,6 +18,15 @@ public class GroupMapper {
         groupData.setTitle(group.getTitle());
         groupData.setOwner(userMapper.toOwner(group.getOwner()));
         return groupData;
+    }
+
+    public Group toEntity(GroupCreateRequest request, User user) {
+        var entity = new Group();
+
+        entity.setTitle(request.title());
+        entity.setOwner(user);
+
+        return entity;
     }
 
     public GroupsUserData toGroupsUserData(Group group) {

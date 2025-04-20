@@ -37,13 +37,6 @@ public interface TestService {
     TestData create(@NotNull TestCreateRequest request);
 
     /**
-     * Метод для удаления теста.
-     *
-     * @param testId Идентификатор теста
-     */
-    void delete(Long testId);
-
-    /**
      * Обновить тест.
      *
      * @param testId Идентификатор теста

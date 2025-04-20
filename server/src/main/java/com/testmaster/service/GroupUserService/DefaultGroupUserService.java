@@ -62,7 +62,7 @@ public class DefaultGroupUserService implements GroupUserService {
                 .orElseThrow(NotFoundException::new);
 
         User user = userRepository
-                .findById(userId)
+                .findUserById(userId)
                 .orElseThrow(NotFoundException::new);
 
         GroupUserId id = new GroupUserId(
