@@ -37,3 +37,6 @@ liquibase-clear-checksums:
 liquibase-drop-all:
 	source .env && ./mvnw liquibase:dropAll
 
+liquibase-clear-check-sums:
+	source .env && ./mvnw liquibase:clearCheckSums
+

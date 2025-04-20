@@ -1,6 +1,7 @@
 package com.testmaster.repository.TestRepository;
 
 import com.testmasterapi.domain.test.request.TestUpdateRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -10,12 +11,8 @@ import java.time.LocalDateTime;
 
 @Component
 public class TestRepositoryCustomImpl implements TestRepositoryCustom {
-
-    private final NamedParameterJdbcTemplate jdbcTemplate;
-
-    public TestRepositoryCustomImpl(NamedParameterJdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
+    @Autowired
+    private NamedParameterJdbcTemplate jdbcTemplate;
 
     @Override
     @Transactional

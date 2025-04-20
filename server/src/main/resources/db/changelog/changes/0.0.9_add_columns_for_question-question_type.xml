@@ -20,10 +20,6 @@
                 newColumnName="title"
                 columnDataType="text"/>
 
-<!--        <addColumn tableName="questions_types">-->
-<!--            <column name="types" type="text[]"/>-->
-<!--        </addColumn>-->
-
         <sql>
             ALTER TABLE questions_types ADD types TEXT ARRAY NOT NULL;
         </sql>

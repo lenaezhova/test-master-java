@@ -2,6 +2,7 @@ package com.testmaster.repository.UserRepository;
 
 import com.testmasterapi.domain.test.request.TestUpdateRequest;
 import com.testmasterapi.domain.user.request.UserUpdateRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -11,12 +12,8 @@ import java.time.LocalDateTime;
 
 @Component
 public class UserRepositoryCustomImpl implements UserRepositoryCustom {
-
-    private final NamedParameterJdbcTemplate jdbcTemplate;
-
-    public UserRepositoryCustomImpl(NamedParameterJdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
+    @Autowired
+    private NamedParameterJdbcTemplate jdbcTemplate;
 
     @Override
     @Transactional

@@ -1,5 +1,6 @@
 package com.testmaster.repository;
 
+import com.testmasterapi.domain.question.QuestionTypes;
 import com.testmasterapi.domain.user.UserRoles;
 import com.testmaster.model.AnswerVariant;
 import com.testmaster.model.Test;
@@ -52,9 +53,11 @@ public class AnswerVariantRepositoryTest {
 
         QuestionType type = new QuestionType();
         type.setTitle("Один выбор");
+        type.setTypes(Set.of(QuestionTypes.SINGLE));
         entityManager.persist(type);
 
         Question question = new Question();
+        question.setSavedType(QuestionTypes.TEXT);
         question.setTest(test);
         question.setType(type);
         question.setCreatedAt(LocalDateTime.now());
@@ -99,9 +102,11 @@ public class AnswerVariantRepositoryTest {
 
         QuestionType type = new QuestionType();
         type.setTitle("Множественный выбор");
+        type.setTypes(Set.of(QuestionTypes.MULTIPLE));
         entityManager.persist(type);
 
         Question question = new Question();
+        question.setSavedType(QuestionTypes.TEXT);
         question.setTest(test);
         question.setType(type);
         question.setCreatedAt(LocalDateTime.now());

@@ -1,5 +1,6 @@
 package com.testmaster.model;
 
+import com.testmasterapi.domain.question.QuestionTypes;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,6 +16,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Question extends BaseEntity {
+    private String title;
+
+    private String description;
+
+    @Column(name = "saved_type")
+    @Enumerated(EnumType.STRING)
+    private QuestionTypes savedType;
+
     @OneToOne
     @JoinColumn(name = "test_id")
     private Test test;
@@ -22,10 +31,6 @@ public class Question extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "type_id")
     private QuestionType type;
-
-    private String title;
-
-    private String description;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

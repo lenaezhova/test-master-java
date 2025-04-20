@@ -41,7 +41,7 @@ public class DefaultTestService implements TestService {
     public TestData getOne(Long id) {
         Test test = testRepository
                 .findTestById(id)
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(() -> new NotFoundException("Тест не найден"));
 
         return testMapper.toTestData(test);
     }
@@ -52,7 +52,7 @@ public class DefaultTestService implements TestService {
     public TestData create(@NotNull TestCreateRequest request) {
         User user = userRepository
                 .findUserById(this.getUserId())
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
 
         Test test = testMapper.toEntity(request, user);
         testRepository.save(test);
@@ -65,7 +65,7 @@ public class DefaultTestService implements TestService {
     public void update(Long id, TestUpdateRequest updateRequest) {
         int updated = testRepository.update(id, updateRequest);
         if (updated == 0) {
-            throw new NotFoundException();
+            throw new NotFoundException("Тест не найден");
         }
     }
 

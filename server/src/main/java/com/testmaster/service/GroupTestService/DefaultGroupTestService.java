@@ -48,11 +48,11 @@ public class DefaultGroupTestService implements GroupTestService {
 
         Test test = testRepository
                 .findTestById(testId)
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(() -> new NotFoundException("Тест не найден"));
 
         Group group = groupRepository
                 .findById(groupId)
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(() -> new NotFoundException("Группа не найдена"));
 
         GroupTestId id = new GroupTestId(
                 test.getId(),
@@ -70,7 +70,7 @@ public class DefaultGroupTestService implements GroupTestService {
     public void delete(Long groupId, Long testId) {
         int deleted = groupTestRepository.delete(testId, groupId);
         if (deleted == 0) {
-            throw new NotFoundException();
+            throw new NotFoundException("Группа (тест) не найдены");
         }
     }
 }

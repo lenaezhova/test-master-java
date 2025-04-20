@@ -58,7 +58,7 @@ public class DefaultUserService implements UserService {
     public UserData getOne(Long id) {
         User user = userRepository
                 .findUserById(id)
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
 
         return userMapper.toUserData(user);
     }
@@ -141,7 +141,7 @@ public class DefaultUserService implements UserService {
     public void update(Long userId, UserUpdateRequest updateRequest) {
         int updated = userRepository.update(userId, updateRequest);
         if (updated == 0) {
-            throw new NotFoundException();
+            throw new NotFoundException("Пользователь не найден");
         }
     }
 

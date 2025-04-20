@@ -34,7 +34,7 @@ public class DefaultQuestionTypeService implements QuestionTypeService {
     public QuestionTypeData getOne(Long id) {
         var questionType = questionTypeRepository
                         .findById(id)
-                        .orElseThrow(NotFoundException::new);
+                        .orElseThrow(() -> new NotFoundException("Вопрос не найден"));
 
         return questionTypeMapper.toQuestionTypeData(questionType);
     }
@@ -52,11 +52,9 @@ public class DefaultQuestionTypeService implements QuestionTypeService {
     @Override
     @Transactional
     public void update(Long typeId, QuestionTypeUpdateRequest request) {
-        System.out.println("------------------------------------------------------------");
-        System.out.println(request);
         int updated = questionTypeRepository.update(typeId, request);
         if (updated == 0) {
-            throw new NotFoundException();
+            throw new NotFoundException("Тип вопроса не найден");
         }
     }
 
@@ -65,7 +63,7 @@ public class DefaultQuestionTypeService implements QuestionTypeService {
     public void delete(Long typeId) {
         int deleted = questionTypeRepository.delete(typeId);
         if (deleted == 0) {
-            throw new NotFoundException();
+            throw new NotFoundException("Тип вопроса не найден");
         }
     }
 }

@@ -59,11 +59,11 @@ public class DefaultGroupUserService implements GroupUserService {
         }
         Group group = groupRepository
                 .findById(groupId)
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(() -> new NotFoundException("Группа не найдена"));
 
         User user = userRepository
                 .findUserById(userId)
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
 
         GroupUserId id = new GroupUserId(
                 user.getId(),
@@ -81,7 +81,7 @@ public class DefaultGroupUserService implements GroupUserService {
     public void delete(Long groupId, Long userId) {
         int deleted = groupUserRepository.deleteUserFromGroup(userId, groupId);
         if (deleted == 0) {
-            throw new NotFoundException();
+            throw new NotFoundException("Пользователь (группа) не найдена");
         }
     }
 }

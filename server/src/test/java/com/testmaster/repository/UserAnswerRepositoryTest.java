@@ -1,5 +1,6 @@
 package com.testmaster.repository;
 
+import com.testmasterapi.domain.question.QuestionTypes;
 import com.testmasterapi.domain.user.UserRoles;
 import com.testmaster.model.*;
         import com.testmaster.model.Test;
@@ -50,9 +51,12 @@ public class UserAnswerRepositoryTest {
 
         QuestionType type = new QuestionType();
         type.setTitle("Открытый вопрос");
+        type.setTypes(Set.of(QuestionTypes.TEXT));
+
         entityManager.persist(type);
 
         Question question = new Question();
+        question.setSavedType(QuestionTypes.TEXT);
         question.setTest(test);
         question.setType(type);
         question.setCreatedAt(LocalDateTime.now());
@@ -100,9 +104,12 @@ public class UserAnswerRepositoryTest {
 
         QuestionType type = new QuestionType();
         type.setTitle("Открытый вопрос");
+        type.setTypes(Set.of(QuestionTypes.TEXT));
+
         entityManager.persist(type);
 
         Question question = new Question();
+        question.setSavedType(QuestionTypes.TEXT);
         question.setTest(test);
         question.setType(type);
         question.setCreatedAt(LocalDateTime.now());

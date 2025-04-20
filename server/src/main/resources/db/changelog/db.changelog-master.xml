@@ -15,5 +15,6 @@
     <include file="db/changelog/changes/0.0.7_add_table_fields.xml"/>
     <include file="db/changelog/changes/0.0.8_rename_type_questions.xml"/>
     <include file="db/changelog/changes/0.0.9_add_columns_for_question-question_type.xml"/>
+    <include file="db/changelog/changes/0.0.10_add_saved_type.xml"/>
 
 </databaseChangeLog>

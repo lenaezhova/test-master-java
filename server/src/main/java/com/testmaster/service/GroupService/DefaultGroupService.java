@@ -41,7 +41,7 @@ public class DefaultGroupService implements GroupService {
     public GroupData getOne(Long id) {
         Group groupModel = groupRepository
                 .findById(id)
-                .orElseThrow(NotFoundException::new);
+                .orElseThrow(() -> new NotFoundException("Группа не найдена"));
 
         return groupMapper.toGroupData(groupModel);
     }
@@ -66,7 +66,7 @@ public class DefaultGroupService implements GroupService {
     public void update(Long groupId, GroupUpdateRequest request) {
         int updated = groupRepository.update(groupId, request);
         if (updated == 0) {
-            throw new NotFoundException();
+            throw new NotFoundException("Группа не найдена");
         }
     }
 
@@ -75,7 +75,7 @@ public class DefaultGroupService implements GroupService {
     public void delete(Long groupId) {
         int deleted = groupRepository.delete(groupId);
         if (deleted == 0) {
-            throw new NotFoundException();
+            throw new NotFoundException("Группа не найдена");
         }
     }
 

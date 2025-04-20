@@ -1,5 +1,7 @@
 package com.testmaster.repository;
 
+import com.testmaster.repository.QuestionRepository.QuestionRepository;
+import com.testmasterapi.domain.question.QuestionTypes;
 import com.testmasterapi.domain.user.UserRoles;
 import com.testmaster.model.Test;
 import com.testmasterapi.domain.test.TestStatus;
@@ -11,7 +13,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -51,9 +52,11 @@ public class QuestionRepositoryTest {
 
         QuestionType type = new QuestionType();
         type.setTitle("Открытый вопрос");
+        type.setTypes(Set.of(QuestionTypes.TEXT));
         entityManager.persist(type);
 
         Question question = new Question();
+        question.setSavedType(QuestionTypes.TEXT);
         question.setTest(test);
         question.setType(type);
         question.setCreatedAt(LocalDateTime.now());
@@ -91,9 +94,11 @@ public class QuestionRepositoryTest {
 
         QuestionType type = new QuestionType();
         type.setTitle("Множественный выбор");
+        type.setTypes(Set.of(QuestionTypes.MULTIPLE));
         entityManager.persist(type);
 
         Question question = new Question();
+        question.setSavedType(QuestionTypes.TEXT);
         question.setTest(test);
         question.setType(type);
         question.setCreatedAt(LocalDateTime.now());
