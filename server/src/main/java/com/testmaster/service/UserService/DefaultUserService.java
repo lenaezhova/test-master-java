@@ -5,12 +5,13 @@ import com.testmaster.exeption.AuthException;
 import com.testmaster.exeption.NotFoundException;
 import com.testmaster.mapper.UserMapper;
 import com.testmaster.model.Token;
-import com.testmaster.model.User.User;
+import com.testmaster.model.User;
 import com.testmaster.repository.UserRepository.UserRepository;
 import com.testmaster.service.AuthService.AuthService;
 import com.testmaster.service.MailService;
 import com.testmaster.service.validation.PasswordValidationService;
 import com.testmaster.service.validation.UserValidationService;
+import com.testmasterapi.domain.user.CustomUserDetails;
 import com.testmasterapi.domain.user.JwtTokenPair;
 import com.testmasterapi.domain.user.data.UserData;
 import com.testmasterapi.domain.user.request.UserCreateRequest;
@@ -19,6 +20,7 @@ import com.testmasterapi.domain.user.request.UserUpdateRequest;
 import jakarta.annotation.Nonnull;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -58,6 +60,16 @@ public class DefaultUserService implements UserService {
     public UserData getOne(Long id) {
         User user = userRepository
                 .findUserById(id)
+                .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
+
+        return userMapper.toUserData(user);
+    }
+
+    @Override
+    public UserData getCurrent() {
+        var currentUser = this.getCurrentUser();
+        User user = userRepository
+                .findUserById(currentUser.getId())
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
 
         return userMapper.toUserData(user);
@@ -170,5 +182,9 @@ public class DefaultUserService implements UserService {
         }
 
         return tokenFromDB.getUser();
+    }
+
+    private CustomUserDetails getCurrentUser() {
+        return (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

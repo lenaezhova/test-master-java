@@ -31,6 +31,14 @@ public interface UserService {
     UserData getOne(Long userId);
 
     /**
+     * Метод для получения текущего авторизованного пользователя.
+     *
+     * @param userId Идентификатор пользователь
+     * @return Один пользователь
+     */
+    UserData getCurrent();
+
+    /**
      * Обновить информациб о пользователе.
      *
      * @param userId Идентификатор пользователя

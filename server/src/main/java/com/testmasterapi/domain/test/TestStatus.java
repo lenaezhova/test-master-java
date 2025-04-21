@@ -1,6 +1,6 @@
 package com.testmasterapi.domain.test;
 
 public enum TestStatus {
-    OPEN,
+    OPENED,
     CLOSED,
 }

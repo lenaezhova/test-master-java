@@ -13,7 +13,7 @@ public class CustomUserDetails extends User {
     private final Set<UserRoles> roles;
 
     public CustomUserDetails(
-            com.testmaster.model.User.User user,
+            com.testmaster.model.User user,
             Collection<? extends GrantedAuthority> authorities
     ) {
         super( user.getEmail(), user.getPassword(), authorities );

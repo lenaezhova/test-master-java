@@ -7,7 +7,7 @@ import com.testmasterapi.domain.user.data.UserGroupsData;
 import com.testmasterapi.domain.user.data.UserOwnerData;
 import com.testmasterapi.domain.user.request.UserCreateRequest;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.testmaster.model.User.User;
+import com.testmaster.model.User;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;

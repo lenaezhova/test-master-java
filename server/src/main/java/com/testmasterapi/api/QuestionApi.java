@@ -6,6 +6,7 @@ import com.testmasterapi.domain.question.request.QuestionUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -16,10 +17,15 @@ import java.util.List;
 public interface QuestionApi {
     String PATH = "/api/questions";
 
-    @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping
     @Operation(summary = "Получение списка всех вопросов")
     List<QuestionData> all();
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/tests/{testId}")
+    @Operation(summary = "Получение всех вопросов теста")
+    List<QuestionData> allQuestionsByTestId(@PathVariable("testId") Long testId);
 
     @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
     @GetMapping("/{id}")
@@ -27,15 +33,17 @@ public interface QuestionApi {
     QuestionData one(@PathVariable Long id);
 
     @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
-    @PostMapping
+    @PostMapping("/tests/{testId}")
     @Operation(
             summary = "Создать вопрос",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Вопрос создан"),
-                    @ApiResponse(responseCode = "400", description = "Ошибка при создании вопроса")
+                    @ApiResponse(responseCode = "400", description = "Ошибка при создании вопроса"),
+                    @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста"),
+                    @ApiResponse(responseCode = "409", description = "Для редактирования теста необходимо его закрыть"),
             }
     )
-    ResponseEntity<Void> create(@RequestBody QuestionCreateRequest request);
+    ResponseEntity<Void> create(@PathVariable Long testId, @RequestBody QuestionCreateRequest request);
 
     @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
     @PatchMapping("/{id}")
@@ -43,7 +51,9 @@ public interface QuestionApi {
             summary = "Обновить информацию о вопросе",
             responses = {
                     @ApiResponse(responseCode = "204", description = "Информация о вопросе обновлена"),
-                    @ApiResponse(responseCode = "404", description = "Вопрос с таким идентификатором не найден")
+                    @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста"),
+                    @ApiResponse(responseCode = "404", description = "Вопрос с таким идентификатором не найден"),
+                    @ApiResponse(responseCode = "409", description = "Для редактирования теста необходимо его закрыть"),
             }
     )
     void update(@PathVariable Long id, @RequestBody QuestionUpdateRequest request);
@@ -54,8 +64,22 @@ public interface QuestionApi {
             summary = "Удалить вопрос",
             responses = {
                     @ApiResponse(responseCode = "204", description = "Вопрос удален"),
-                    @ApiResponse(responseCode = "404", description = "Вопрос с таким идентификатором не найден")
+                    @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста"),
+                    @ApiResponse(responseCode = "404", description = "Вопрос с таким идентификатором не найден"),
+                    @ApiResponse(responseCode = "409", description = "Для редактирования теста необходимо его закрыть"),
             }
     )
     void delete(@PathVariable Long id);
+
+    @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
+    @DeleteMapping("/tests/{testId}")
+    @Operation(
+            summary = "Удалить все вопросы теста",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "Вопросы удалены"),
+                    @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста"),
+                    @ApiResponse(responseCode = "409", description = "Для редактирования теста необходимо его закрыть"),
+            }
+    )
+    void deleteAllQuestion(@PathVariable Long testId);
 }

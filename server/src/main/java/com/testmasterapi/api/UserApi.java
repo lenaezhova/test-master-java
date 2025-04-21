@@ -31,14 +31,21 @@ public interface UserApi {
             summary = "Получить пользователя",
             responses = {
                     @ApiResponse(responseCode = "200"),
-                    @ApiResponse(
-                            responseCode = "404",
-                            description = "Пользователь с таким идентификатором не найден",
-                            content = @Content()
-                    )
+                    @ApiResponse(responseCode = "404", description = "Пользователь с таким идентификатором не найден", content = @Content())
             }
     )
     UserData one(@PathVariable Long id);
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/current")
+    @Operation(
+            summary = "Получить авторизованного пользователя",
+            responses = {
+                    @ApiResponse(responseCode = "200"),
+                    @ApiResponse(responseCode = "404", description = "Пользователь с таким идентификатором не найден", content = @Content())
+            }
+    )
+    UserData current();
 
     @PreAuthorize("isAuthenticated()")
     @PatchMapping("/{id}")

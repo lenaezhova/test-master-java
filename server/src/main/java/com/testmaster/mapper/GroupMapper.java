@@ -1,5 +1,5 @@
 package com.testmaster.mapper;
-import com.testmaster.model.User.User;
+import com.testmaster.model.User;
 import com.testmasterapi.domain.group.data.GroupData;
 import com.testmaster.model.Group.Group;
 import com.testmasterapi.domain.group.data.GroupsUserData;

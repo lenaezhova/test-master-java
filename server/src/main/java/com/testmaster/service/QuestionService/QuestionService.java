@@ -19,6 +19,13 @@ public interface QuestionService {
      * @return Все вопросы
      */
     List<QuestionData> getAll();
+
+    /**
+     * Метод для получения всех вопросов по test id.
+     *
+     * @return Все вопросы теста
+     */
+    List<QuestionData> getAllQuestionsByTestId(Long testId);
     /**
      * Метод для получения одного вопроса.
      *
@@ -33,7 +40,7 @@ public interface QuestionService {
      * @return Созданный вопрос
      */
     @NotNull
-    QuestionData create(@NotNull QuestionCreateRequest request);
+    QuestionData create(Long testId, @NotNull QuestionCreateRequest request);
 
     /**
      * Обновить вопрос.
@@ -44,9 +51,8 @@ public interface QuestionService {
     void update(Long questionId, QuestionUpdateRequest request);
 
     /**
-     * Метод для удаления вопроса.
+     * Метод для удаления всех вопросов у теста.
      *
-     * @param questionId Идентификатор вопроса
      */
-    void delete(Long questionId);
+    void deleteAllQuestion(Long testId);
 }

@@ -1,6 +1,6 @@
 package com.testmaster.service.CustomUserDetailsService;
 
-import com.testmaster.model.User.User;
+import com.testmaster.model.User;
 import com.testmaster.repository.UserRepository.UserRepository;
 import com.testmasterapi.domain.user.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;

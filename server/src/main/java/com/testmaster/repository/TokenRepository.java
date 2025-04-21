@@ -1,7 +1,7 @@
 package com.testmaster.repository;
 
 import com.testmaster.model.Token;
-import com.testmaster.model.User.User;
+import com.testmaster.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

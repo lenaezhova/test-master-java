@@ -5,9 +5,8 @@ import com.testmasterapi.domain.question.QuestionTypes;
 import com.testmasterapi.domain.user.UserRoles;
 import com.testmaster.model.Test;
 import com.testmasterapi.domain.test.TestStatus;
-import com.testmaster.model.QuestionType;
 import com.testmaster.model.Question;
-import com.testmaster.model.User.User;
+import com.testmaster.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
@@ -50,22 +49,15 @@ public class QuestionRepositoryTest {
 
         entityManager.persist(test);
 
-        QuestionType type = new QuestionType();
-        type.setTitle("Открытый вопрос");
-        type.setTypes(Set.of(QuestionTypes.TEXT));
-        entityManager.persist(type);
-
         Question question = new Question();
-        question.setSavedType(QuestionTypes.TEXT);
+        question.setType(QuestionTypes.TEXT);
         question.setTest(test);
-        question.setType(type);
         question.setCreatedAt(LocalDateTime.now());
         entityManager.persist(question);
 
         Question saved = questionRepository.save(question);
 
         assertNotNull(saved.getId());
-        assertEquals("Открытый вопрос", saved.getType().getTitle());
         assertEquals("Тест по истории", saved.getTest().getTitle());
     }
 
@@ -92,15 +84,9 @@ public class QuestionRepositoryTest {
 
         entityManager.persist(test);
 
-        QuestionType type = new QuestionType();
-        type.setTitle("Множественный выбор");
-        type.setTypes(Set.of(QuestionTypes.MULTIPLE));
-        entityManager.persist(type);
-
         Question question = new Question();
-        question.setSavedType(QuestionTypes.TEXT);
+        question.setType(QuestionTypes.TEXT);
         question.setTest(test);
-        question.setType(type);
         question.setCreatedAt(LocalDateTime.now());
         entityManager.persist(question);
 
@@ -109,7 +95,6 @@ public class QuestionRepositoryTest {
         assertTrue(foundOpt.isPresent());
         Question found = foundOpt.get();
 
-        assertEquals("Множественный выбор", found.getType().getTitle());
         assertEquals("Тест по географии", found.getTest().getTitle());
     }
 }

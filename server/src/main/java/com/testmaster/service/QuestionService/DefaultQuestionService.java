@@ -4,13 +4,15 @@ import com.testmaster.exeption.NotFoundException;
 import com.testmaster.mapper.QuestionMapper;
 import com.testmaster.model.Question;
 import com.testmaster.repository.QuestionRepository.QuestionRepository;
-import com.testmaster.repository.QuestionTypeRepository.QuestionTypeRepository;
 import com.testmaster.repository.TestRepository.TestRepository;
 import com.testmasterapi.domain.question.data.QuestionData;
 import com.testmasterapi.domain.question.request.QuestionCreateRequest;
 import com.testmasterapi.domain.question.request.QuestionUpdateRequest;
+import com.testmasterapi.domain.user.CustomUserDetails;
+import com.testmasterapi.domain.user.UserRoles;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,43 +25,45 @@ public class DefaultQuestionService implements QuestionService {
 
     private final QuestionRepository questionRepository;
     private final TestRepository testRepository;
-    private final QuestionTypeRepository questionTypeRepository;
+
+    private final String notFoundExQuestion = "Вопрос не найден";
 
     @Override
     public List<QuestionData> getAll() {
-        return questionRepository
-                .findAll()
+        return questionRepository.findAllQuestions()
                 .stream()
-                .map(questionMapper::toQuestionData)
+                .map(this::mapQuestionData)
+                .toList();
+    }
+
+    @Override
+    public List<QuestionData> getAllQuestionsByTestId(Long testId) {
+        return questionRepository.findAllQuestionsByTestId(testId)
+                .stream()
+                .map(this::mapQuestionData)
                 .toList();
     }
 
     @Override
     public QuestionData getOne(Long id) {
-        var data = questionRepository
-                .findById(id)
-                .orElseThrow(() -> new NotFoundException("Вопрос не найден"));
+        var data = questionRepository.findQuestionById(id)
+                .orElseThrow(() -> new NotFoundException(notFoundExQuestion));
 
-        return questionMapper.toQuestionData(data);
+        return this.mapQuestionData(data);
     }
 
     @NotNull
     @Transactional
     @Override
-    public QuestionData create(@NotNull QuestionCreateRequest request) {
+    public QuestionData create(Long testId, @NotNull QuestionCreateRequest request) {
 
-        var test = testRepository
-                .findById(request.testId())
+        var test = testRepository.findTestById(testId)
                 .orElseThrow(() -> new NotFoundException("Тест не найден"));
 
-        var questionType = questionTypeRepository
-                .findById(request.typeId())
-                .orElseThrow(() -> new NotFoundException("Тип вопроса не найден"));
-
-        Question question = questionMapper.toEntity(request, test, questionType);
+        Question question = questionMapper.toEntity(request, test);
 
         questionRepository.save(question);
-        return questionMapper.toQuestionData(question);
+        return this.mapQuestionData(question);
     }
 
     @Override
@@ -67,16 +71,27 @@ public class DefaultQuestionService implements QuestionService {
     public void update(Long questionId, QuestionUpdateRequest request) {
         int updated = questionRepository.update(questionId, request);
         if (updated == 0) {
-            throw new NotFoundException("Вопрос не найден");
+            throw new NotFoundException(notFoundExQuestion);
         }
     }
 
     @Override
     @Transactional
-    public void delete(Long questionId) {
-        int deleted = questionRepository.delete(questionId);
+    public void deleteAllQuestion(Long testId) {
+        int deleted = questionRepository.deleteAllQuestionByTestId(testId);
         if (deleted == 0) {
-            throw new NotFoundException("Вопрос не найден");
+            throw new NotFoundException(notFoundExQuestion);
         }
+    }
+
+    private QuestionData mapQuestionData(Question question) {
+        var currentUser = this.getCurrentUser();
+        return currentUser.getRoles().contains(UserRoles.USER)
+                ? questionMapper.toPublic(question)
+                : questionMapper.toPrivate(question);
+    }
+
+    private CustomUserDetails getCurrentUser() {
+        return (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

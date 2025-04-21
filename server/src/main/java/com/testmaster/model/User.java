@@ -1,6 +1,5 @@
-package com.testmaster.model.User;
+package com.testmaster.model;
 
-import com.testmaster.model.BaseEntity;
 import com.testmasterapi.domain.user.UserRoles;
 import com.testmasterapi.domain.user.converter.RoleListConverter;
 import jakarta.persistence.*;

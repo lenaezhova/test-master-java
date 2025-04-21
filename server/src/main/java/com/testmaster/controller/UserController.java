@@ -41,6 +41,11 @@ public class UserController implements UserApi {
     }
 
     @Override
+    public UserData current() {
+        return userService.getCurrent();
+    }
+
+    @Override
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
     public void update(Long userId, UserUpdateRequest updateRequest) {
         userService.update(userId, updateRequest);

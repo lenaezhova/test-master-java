@@ -6,7 +6,7 @@ import com.testmaster.model.Group.Group;
 import com.testmasterapi.domain.group.GroupTestId;
 import com.testmaster.model.Test;
 import com.testmasterapi.domain.test.TestStatus;
-import com.testmaster.model.User.User;
+import com.testmaster.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;

@@ -27,10 +27,12 @@ public class TestRepositoryCustomImpl implements TestRepositoryCustom {
                 """;
         LocalDateTime now = LocalDateTime.now();
 
+        var status = request.getStatus();
+
         var params = new MapSqlParameterSource()
                 .addValue("title", request.getTitle())
                 .addValue("description", request.getDescription())
-                .addValue("status", request.getStatus())
+                .addValue("status", status != null ? status.name() : null)
                 .addValue("updated_at", now)
                 .addValue("deleted", request.getDeleted())
                 .addValue("tid", testId);

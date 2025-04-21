@@ -1,5 +1,6 @@
 package com.testmaster.controller;
 
+import com.testmaster.annotations.CheckTestOwner.CheckAvailableEditTest;
 import com.testmaster.service.QuestionService.QuestionService;
 import com.testmasterapi.api.QuestionApi;
 import com.testmasterapi.domain.question.data.QuestionData;
@@ -26,26 +27,43 @@ public class QuestionController implements QuestionApi {
     }
 
     @Override
+    public List<QuestionData> allQuestionsByTestId(Long testId) {
+        return questionService.getAllQuestionsByTestId(testId);
+    }
+
+    @Override
     public QuestionData one(Long id) {
         return questionService.getOne(id);
     }
 
     @Override
-    public ResponseEntity<Void> create(QuestionCreateRequest request) {
-        questionService.create(request);
+    @CheckAvailableEditTest(testId = "testId")
+    public ResponseEntity<Void> create(Long testId, QuestionCreateRequest request) {
+        questionService.create(testId, request);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @Override
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @CheckAvailableEditTest(questionId = "id")
     public void update(Long id, QuestionUpdateRequest updateRequest) {
         questionService.update(id, updateRequest);
     }
 
     @Override
     @ResponseStatus(HttpStatus.NO_CONTENT)
+    @CheckAvailableEditTest(questionId = "id")
     public void delete(Long id) {
-        questionService.delete(id);
+        var data = new QuestionUpdateRequest();
+        data.setSoftDeleted(true);
+        questionService.update(id, data);
+    }
+
+    @Override
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @CheckAvailableEditTest(testId = "testId")
+    public void deleteAllQuestion(Long testId) {
+        questionService.deleteAllQuestion(testId);
     }
 }

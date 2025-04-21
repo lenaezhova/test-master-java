@@ -3,6 +3,7 @@ package com.testmasterapi.api;
 import com.testmasterapi.domain.test.data.TestData;
 import com.testmasterapi.domain.test.request.TestCreateRequest;
 import com.testmasterapi.domain.test.request.TestUpdateRequest;
+import com.testmasterapi.domain.test.request.TestUpdateStatusRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -54,10 +55,25 @@ public interface TestApi {
             summary = "Обновить тест",
             responses = {
                     @ApiResponse(responseCode = "204", description = "Тест обновлен"),
-                    @ApiResponse(responseCode = "404", description = "Тест с таким идентификатором не найден")
+                    @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста"),
+                    @ApiResponse(responseCode = "404", description = "Тест с таким идентификатором не найден"),
+                    @ApiResponse(responseCode = "409", description = "Для редактирования теста необходимо его закрыть"),
             }
     )
     void update(@PathVariable Long id, @RequestBody TestUpdateRequest test);
+
+    @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
+    @PatchMapping("/{id}/status")
+    @Operation(
+            summary = "Обновить статус теста",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "Статус теста обновлен"),
+                    @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста"),
+                    @ApiResponse(responseCode = "404", description = "Тест с таким идентификатором не найден"),
+                    @ApiResponse(responseCode = "409", description = "Для редактирования теста необходимо его закрыть"),
+            }
+    )
+    void updateStatus(@PathVariable Long id, @RequestBody TestUpdateStatusRequest status);
 
     @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
     @DeleteMapping("/{id}")
@@ -65,7 +81,9 @@ public interface TestApi {
             summary = "Удалить тест",
             responses = {
                     @ApiResponse(responseCode = "204", description = "Тест удален"),
-                    @ApiResponse(responseCode = "404", description = "Тест с таким идентификатором не найден")
+                    @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста"),
+                    @ApiResponse(responseCode = "404", description = "Тест с таким идентификатором не найден"),
+                    @ApiResponse(responseCode = "409", description = "Для редактирования теста необходимо его закрыть"),
             }
     )
     void delete(@PathVariable Long id);

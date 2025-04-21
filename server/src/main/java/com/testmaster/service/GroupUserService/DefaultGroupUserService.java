@@ -5,7 +5,7 @@ import com.testmaster.exeption.NotFoundException;
 import com.testmaster.mapper.GroupMapper;
 import com.testmaster.mapper.UserMapper;
 import com.testmaster.model.Group.Group;
-import com.testmaster.model.User.User;
+import com.testmaster.model.User;
 import com.testmaster.model.Group.GroupUser;
 import com.testmaster.repository.GroupRepository.GroupRepository;
 import com.testmaster.repository.GroupUserRepository;

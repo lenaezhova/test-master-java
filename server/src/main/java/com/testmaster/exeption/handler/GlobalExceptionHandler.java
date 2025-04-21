@@ -32,10 +32,8 @@ public class GlobalExceptionHandler {
         LOG.error("Not found error", ex);
 
         var response = ResponseEntity.status(HttpStatus.NOT_FOUND);
-        if (StringUtils.isNotBlank(ex.getMessage())) {
-            return response.body(ex.getMessage());
-        }
-        return response.build();
+
+        return returnResponse(response, ex);
     }
 
     @ExceptionHandler({HttpMessageNotReadableException.class})
@@ -43,51 +41,52 @@ public class GlobalExceptionHandler {
         LOG.error("Bad request error", ex);
 
         var response = ResponseEntity.status(HttpStatus.BAD_REQUEST);
-        if (StringUtils.isNotBlank(ex.getMessage())) {
-            return response.body(ex.getMessage());
-        }
-        return response.build();
+
+        return returnResponse(response, ex);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, Object>> handleGenericException(Exception ex) {
+    public ResponseEntity<?> handleGenericException(Exception ex) {
         LOG.error("Internal server error", ex);
 
-        Map<String, Object> body = this.getBody(
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                "Internal server error"
-        );
         ex.printStackTrace();
-        return ResponseEntity.status(500).body(body);
+        var response = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        return returnResponse(response, ex);
     }
 
     @ExceptionHandler({AuthException.class, AuthorizationDeniedException.class, SignatureVerificationException.class, JWTDecodeException.class})
-    public ResponseEntity<Map<String, Object>> handleAuthException(Exception ex) {
+    public ResponseEntity<?> handleAuthException(Exception ex) {
         LOG.error("UNAUTHORIZED", ex);
 
-        Map<String, Object> body = this.getBody(
-                HttpStatus.UNAUTHORIZED.value(),
-                ex.getMessage()
-        );
-        return ResponseEntity.status(401).body(body);
+        var response = ResponseEntity.status(HttpStatus.UNAUTHORIZED);
+
+        return returnResponse(response, ex);
+    }
+
+    @ExceptionHandler({IllegalArgumentException.class, AccessDeniedException.class})
+    public ResponseEntity<?> handleIllegalArgumentException(Exception ex) {
+        LOG.error("FORBIDDEN", ex);
+
+        var response = ResponseEntity.status(HttpStatus.FORBIDDEN);
+
+        return returnResponse(response, ex);
     }
 
     @ExceptionHandler(ClientException.class)
-    public ResponseEntity<Map<String, Object>> handleClientException(ClientException ex) {
+    public ResponseEntity<?> handleClientException(ClientException ex) {
         LOG.error("Client exception", ex);
 
-        Map<String, Object> body = this.getBody(
-                ex.getStatusCode(),
-                ex.getMessage()
-        );
-        return ResponseEntity.status(ex.getStatusCode()).body(body);
+        var response = ResponseEntity.status(ex.getStatusCode());
+
+        return returnResponse(response, ex);
     }
 
-    private Map<String, Object> getBody(Number code, String message) {
-        Map<String, Object> body = new HashMap<>();
-        body.put("status", code);
-        body.put("message", message);
-        body.put("timestamp", Instant.now().toString());
-        return body;
+    private ResponseEntity<?> returnResponse(ResponseEntity.BodyBuilder response, Exception ex) {
+        if (StringUtils.isNotBlank(ex.getMessage())) {
+            return response.body(ex.getMessage());
+        }
+
+        return response.build();
     }
 }

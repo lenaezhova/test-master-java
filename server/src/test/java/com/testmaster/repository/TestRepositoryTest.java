@@ -4,7 +4,7 @@ import com.testmaster.repository.TestRepository.TestRepository;
 import com.testmasterapi.domain.user.UserRoles;
 import com.testmaster.model.Test;
 import com.testmasterapi.domain.test.TestStatus;
-import com.testmaster.model.User.User;
+import com.testmaster.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
@@ -79,7 +79,7 @@ public class TestRepositoryTest {
         test.setDescription("Описание теста");
 
         test.setOwner(user);
-        test.setStatus(TestStatus.OPEN);
+        test.setStatus(TestStatus.OPENED);
 
         Test persistedTest = entityManager.persist(test);
 
@@ -90,7 +90,7 @@ public class TestRepositoryTest {
         Test found = foundOpt.get();
         assertEquals("Название теста", found.getTitle());
         assertEquals("Описание теста", found.getDescription());
-        assertEquals(TestStatus.OPEN, found.getStatus());
+        assertEquals(TestStatus.OPENED, found.getStatus());
 
         assertNotNull(found.getOwner());
         assertEquals("Иван Иванов", found.getOwner().getName());

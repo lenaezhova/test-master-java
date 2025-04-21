@@ -1,7 +1,7 @@
 package com.testmaster.repository;
 
 import com.testmaster.model.Group.Group;
-import com.testmaster.model.User.User;
+import com.testmaster.model.User;
 import com.testmaster.model.Group.GroupUser;
 import com.testmasterapi.domain.group.GroupUserId;
 import jakarta.transaction.Transactional;
