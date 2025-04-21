@@ -6,12 +6,14 @@ import com.testmasterapi.domain.question.AnswerTemplate;
 import com.testmasterapi.domain.question.data.QuestionData;
 import com.testmasterapi.domain.question.request.QuestionCreateRequest;
 import org.mapstruct.Mapper;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public class QuestionMapper {
+    @Autowired
     private AnswerTemplateMapper answerTemplateMapper;
 
     public QuestionData toPrivate(Question question) {

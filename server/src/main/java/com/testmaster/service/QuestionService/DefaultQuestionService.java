@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -86,9 +87,10 @@ public class DefaultQuestionService implements QuestionService {
 
     private QuestionData mapQuestionData(Question question) {
         var currentUser = this.getCurrentUser();
-        return currentUser.getRoles().contains(UserRoles.USER)
-                ? questionMapper.toPublic(question)
-                : questionMapper.toPrivate(question);
+        var isOwnerTest = Objects.equals(currentUser.getId(), question.getTest().getOwner().getId());
+        return isOwnerTest
+                ? questionMapper.toPrivate(question)
+                : questionMapper.toPublic(question);
     }
 
     private CustomUserDetails getCurrentUser() {
