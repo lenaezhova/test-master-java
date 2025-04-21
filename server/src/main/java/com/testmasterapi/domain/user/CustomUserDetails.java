@@ -5,13 +5,19 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
 import java.util.Collection;
+import java.util.Set;
 
 @Getter
 public class CustomUserDetails extends User {
     private final Long id;
+    private final Set<UserRoles> roles;
 
-    public CustomUserDetails(Long id, String email, String password, Collection<? extends GrantedAuthority> authorities) {
-        super( email, password, authorities );
-        this.id = id;
+    public CustomUserDetails(
+            com.testmaster.model.User.User user,
+            Collection<? extends GrantedAuthority> authorities
+    ) {
+        super( user.getEmail(), user.getPassword(), authorities );
+        this.id = user.getId();
+        this.roles = user.getRoles();
     }
 }

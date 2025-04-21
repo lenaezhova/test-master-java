@@ -2,7 +2,6 @@ package com.testmaster.repository;
 
 import com.testmaster.model.Group.GroupTest;
 import com.testmaster.model.Test;
-import com.testmaster.model.User;
 import com.testmasterapi.domain.group.GroupTestId;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;

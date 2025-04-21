@@ -4,7 +4,7 @@ import com.testmaster.exeption.NotFoundException;
 import com.testmasterapi.domain.group.data.GroupData;
 import com.testmaster.mapper.GroupMapper;
 import com.testmaster.model.Group.Group;
-import com.testmaster.model.User;
+import com.testmaster.model.User.User;
 import com.testmaster.repository.GroupRepository.GroupRepository;
 import com.testmaster.repository.UserRepository.UserRepository;
 import com.testmasterapi.domain.group.request.GroupCreateRequest;

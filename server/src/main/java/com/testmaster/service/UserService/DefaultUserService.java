@@ -5,7 +5,7 @@ import com.testmaster.exeption.AuthException;
 import com.testmaster.exeption.NotFoundException;
 import com.testmaster.mapper.UserMapper;
 import com.testmaster.model.Token;
-import com.testmaster.model.User;
+import com.testmaster.model.User.User;
 import com.testmaster.repository.UserRepository.UserRepository;
 import com.testmaster.service.AuthService.AuthService;
 import com.testmaster.service.MailService;

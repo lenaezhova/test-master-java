@@ -18,12 +18,6 @@ import java.time.LocalDateTime;
 public class Question extends BaseEntity {
     private String title;
 
-    private String description;
-
-    @Column(name = "saved_type")
-    @Enumerated(EnumType.STRING)
-    private QuestionTypes savedType;
-
     @OneToOne
     @JoinColumn(name = "test_id")
     private Test test;
@@ -31,6 +25,12 @@ public class Question extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "type_id")
     private QuestionType type;
+
+    private String description;
+
+    @Column(name = "saved_type")
+    @Enumerated(EnumType.STRING)
+    private QuestionTypes savedType;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

@@ -1,17 +1,17 @@
 package com.testmaster.repository;
 
+import com.testmaster.model.User.UserAnswer;
 import com.testmasterapi.domain.question.QuestionTypes;
 import com.testmasterapi.domain.user.UserRoles;
 import com.testmaster.model.*;
         import com.testmaster.model.Test;
 import com.testmasterapi.domain.test.TestStatus;
-import com.testmaster.model.User;
+import com.testmaster.model.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -67,7 +67,6 @@ public class UserAnswerRepositoryTest {
                 question,
                 test,
                 user,
-                "Париж",
                 true,
                 1,
                 LocalDateTime.now()
@@ -75,7 +74,6 @@ public class UserAnswerRepositoryTest {
         UserAnswer saved = userAnswerRepository.save(answer);
 
         assertNotNull(saved.getId());
-        assertEquals("Париж", saved.getUserValue());
         assertTrue(saved.getIsCorrect());
         assertEquals(1, saved.getCountPoints());
     }
@@ -120,7 +118,6 @@ public class UserAnswerRepositoryTest {
                 question,
                 test,
                 user,
-                "Берлин",
                 false,
                 0,
                 LocalDateTime.now()
@@ -133,7 +130,6 @@ public class UserAnswerRepositoryTest {
         assertTrue(foundOpt.isPresent());
 
         UserAnswer found = foundOpt.get();
-        assertEquals("Берлин", found.getUserValue());
         assertFalse(found.getIsCorrect());
         assertEquals(0, found.getCountPoints());
         assertEquals("Пётр Петров", found.getUser().getName());

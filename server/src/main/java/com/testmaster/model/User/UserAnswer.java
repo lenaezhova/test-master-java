@@ -1,5 +1,9 @@
-package com.testmaster.model;
+package com.testmaster.model.User;
 
+import com.testmaster.model.BaseEntity;
+import com.testmaster.model.Question;
+import com.testmaster.model.Test;
+import com.testmasterapi.converter.StringSetConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,6 +11,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -23,12 +28,13 @@ public class UserAnswer extends BaseEntity {
     @JoinColumn(name = "test_id")
     private Test test;
 
+    @Convert(converter = StringSetConverter.class)
+    @Column(name = "answer_variants")
+    private Set<String> answerVariants;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-    @Column(nullable = false, name = "user_value")
-    private String userValue;
 
     @Column(name = "is_correct")
     private Boolean isCorrect = false;

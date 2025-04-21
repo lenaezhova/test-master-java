@@ -1,0 +1,40 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="0.0.11_add_text_selected_for_answer_variants_user_answers" author="elena">
+
+        <addColumn tableName="answer_variants">
+            <column name="text" type="text"/>
+        </addColumn>
+
+        <renameColumn
+                tableName="user_answers"
+                oldColumnName="user_value"
+                newColumnName="text"
+                columnDataType="TEXT"/>
+
+        <sql>
+            ALTER TABLE user_answers ADD answer_variants TEXT ARRAY NOT NULL;
+        </sql>
+
+        <dropColumn tableName="questions_types" columnName="types"/>
+
+        <addColumn tableName="questions_types">
+            <column name="type" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deleted" type="BOOLEAN" defaultValueBoolean="false"/>
+        </addColumn>
+
+<!--        <addColumn tableName="questions">-->
+<!--            <column name=""></column>-->
+<!--        </addColumn>-->
+
+<!--        <dropTable tableName="answer_variants"/>-->
+
+<!--        <dropTable tableName="questions_types"/>-->
+    </changeSet>
+
+</databaseChangeLog>

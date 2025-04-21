@@ -1,7 +1,7 @@
 package com.testmaster.mapper;
 
 import com.testmaster.model.Test;
-import com.testmaster.model.User;
+import com.testmaster.model.User.User;
 import com.testmasterapi.domain.test.data.TestData;
 import com.testmasterapi.domain.test.data.TestGroupsData;
 import com.testmasterapi.domain.test.request.TestCreateRequest;
@@ -9,7 +9,6 @@ import org.mapstruct.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Mapper(componentModel = "spring")
 public class TestMapper {

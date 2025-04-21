@@ -1,5 +1,6 @@
 package com.testmaster.repository;
 
+import com.testmaster.repository.AnswerVariantRepository.AnswerVariantRepository;
 import com.testmasterapi.domain.question.QuestionTypes;
 import com.testmasterapi.domain.user.UserRoles;
 import com.testmaster.model.AnswerVariant;
@@ -7,13 +8,12 @@ import com.testmaster.model.Test;
 import com.testmasterapi.domain.test.TestStatus;
 import com.testmaster.model.QuestionType;
 import com.testmaster.model.Question;
-import com.testmaster.model.User;
+import com.testmaster.model.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 

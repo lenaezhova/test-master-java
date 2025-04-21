@@ -1,8 +1,5 @@
 package com.testmaster.service.QuestionService;
 
-import com.testmasterapi.domain.group.data.GroupData;
-import com.testmasterapi.domain.group.request.GroupCreateRequest;
-import com.testmasterapi.domain.group.request.GroupUpdateRequest;
 import com.testmasterapi.domain.question.data.QuestionData;
 import com.testmasterapi.domain.question.request.QuestionCreateRequest;
 import com.testmasterapi.domain.question.request.QuestionUpdateRequest;

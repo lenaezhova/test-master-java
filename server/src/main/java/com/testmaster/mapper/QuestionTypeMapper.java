@@ -9,20 +9,16 @@ import org.mapstruct.Mapper;
 public class QuestionTypeMapper {
     public QuestionTypeData toQuestionTypeData(QuestionType questionType) {
         var data = new QuestionTypeData();
-        fillComponent(data, questionType);
+        data.setId(questionType.getId());
+        data.setTitle(questionType.getTitle());
+        data.setType(questionType.getType());
         return data;
     }
 
     public QuestionType toEntity(QuestionTypeCreateRequest request) {
         var entity = new QuestionType();
         entity.setTitle(request.getTitle());
-        entity.setTypes(request.getTypes());
+        entity.setType(request.getType());
         return entity;
-    }
-
-    private void fillComponent(QuestionTypeData data, QuestionType entity) {
-        data.setId(entity.getId());
-        data.setTitle(entity.getTitle());
-        data.setTypes(entity.getTypes());
     }
 }

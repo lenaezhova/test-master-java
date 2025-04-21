@@ -1,5 +1,6 @@
-package com.testmaster.model;
+package com.testmaster.model.User;
 
+import com.testmaster.model.BaseEntity;
 import com.testmasterapi.domain.user.UserRoles;
 import com.testmasterapi.domain.user.converter.RoleListConverter;
 import jakarta.persistence.*;
@@ -9,7 +10,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 @EqualsAndHashCode(callSuper = true)

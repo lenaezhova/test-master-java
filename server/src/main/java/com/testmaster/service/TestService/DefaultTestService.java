@@ -2,7 +2,7 @@ package com.testmaster.service.TestService;
 
 import com.testmaster.exeption.NotFoundException;
 import com.testmaster.mapper.TestMapper;
-import com.testmaster.model.User;
+import com.testmaster.model.User.User;
 import com.testmaster.repository.UserRepository.UserRepository;
 import com.testmasterapi.domain.test.data.TestData;
 import com.testmasterapi.domain.test.request.TestCreateRequest;
@@ -12,11 +12,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import com.testmaster.model.Test;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import com.testmaster.repository.TestRepository.TestRepository;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
