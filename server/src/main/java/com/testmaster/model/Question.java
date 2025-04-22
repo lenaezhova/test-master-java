@@ -1,8 +1,6 @@
 package com.testmaster.model;
 
-import com.testmasterapi.domain.question.AnswerTemplate;
 import com.testmasterapi.domain.question.QuestionTypes;
-import com.testmasterapi.domain.question.converter.AnswerTemplateListConverter;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +8,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -28,10 +25,6 @@ public class Question extends BaseEntity {
     private String title;
 
     private String description;
-
-    @Convert(converter = AnswerTemplateListConverter.class)
-    @Column(name = "answer_templates")
-    private List<AnswerTemplate> answerTemplates;
 
     @Column(name = "soft_deleted")
     private boolean softDeleted;

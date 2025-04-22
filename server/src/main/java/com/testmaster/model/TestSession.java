@@ -1,6 +1,6 @@
 package com.testmaster.model;
 
-import com.testmasterapi.domain.testSession.SessionTestStatus;
+import com.testmasterapi.domain.testSession.TestSessionStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,13 +25,16 @@ public class TestSession extends BaseEntity {
     private User user;
 
     @Column(name = "status")
-    private SessionTestStatus status = SessionTestStatus.STARTED;
+    private TestSessionStatus status = TestSessionStatus.OPENED;
 
     @Column(name = "count_points")
     private Integer countPoints = 0;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
     @Column(name = "closed_at")
     private LocalDateTime closedAt;

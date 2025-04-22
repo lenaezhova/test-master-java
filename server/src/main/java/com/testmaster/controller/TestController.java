@@ -1,6 +1,6 @@
 package com.testmaster.controller;
 
-import com.testmaster.annotations.CheckTestOwner.CheckAvailableEditTest;
+import com.testmaster.annotations.CheckTest.CheckTest;
 import com.testmaster.service.TestService.TestService;
 import com.testmasterapi.api.TestApi;
 import com.testmasterapi.domain.test.TestStatus;
@@ -40,14 +40,14 @@ public class TestController implements TestApi {
 
     @Override
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @CheckAvailableEditTest(testId = "id")
+    @CheckTest(testId = "id", checkOwner = true, status = TestStatus.OPENED)
     public void update(Long id, TestUpdateRequest updateRequest) {
         testService.update(id, updateRequest);
     }
 
     @Override
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @CheckAvailableEditTest(testId = "id", checkTestIsOpen = false)
+    @CheckTest(testId = "id", checkOwner = true, status = TestStatus.OPENED)
     public void updateStatus(Long id, TestUpdateStatusRequest request) {
         var data = new TestUpdateRequest();
         data.setStatus(request.getStatus());
@@ -56,7 +56,7 @@ public class TestController implements TestApi {
 
     @Override
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @CheckAvailableEditTest(testId = "id")
+    @CheckTest(testId = "id", checkOwner = true, status = TestStatus.CLOSED)
     public void delete(Long id) {
         var request = new TestUpdateRequest();
         request.setDeleted(true);

@@ -57,7 +57,7 @@ public interface TestApi {
                     @ApiResponse(responseCode = "204", description = "Тест обновлен"),
                     @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста"),
                     @ApiResponse(responseCode = "404", description = "Тест с таким идентификатором не найден"),
-                    @ApiResponse(responseCode = "409", description = "Для редактирования теста необходимо его закрыть"),
+                    @ApiResponse(responseCode = "409", description = "Тест открыт для прохождения"),
             }
     )
     void update(@PathVariable Long id, @RequestBody TestUpdateRequest test);
@@ -70,7 +70,7 @@ public interface TestApi {
                     @ApiResponse(responseCode = "204", description = "Статус теста обновлен"),
                     @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста"),
                     @ApiResponse(responseCode = "404", description = "Тест с таким идентификатором не найден"),
-                    @ApiResponse(responseCode = "409", description = "Для редактирования теста необходимо его закрыть"),
+                    @ApiResponse(responseCode = "409", description = "Тест открыт для прохождения"),
             }
     )
     void updateStatus(@PathVariable Long id, @RequestBody TestUpdateStatusRequest status);
@@ -83,7 +83,7 @@ public interface TestApi {
                     @ApiResponse(responseCode = "204", description = "Тест удален"),
                     @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста"),
                     @ApiResponse(responseCode = "404", description = "Тест с таким идентификатором не найден"),
-                    @ApiResponse(responseCode = "409", description = "Для редактирования теста необходимо его закрыть"),
+                    @ApiResponse(responseCode = "409", description = "Тест открыт для прохождения"),
             }
     )
     void delete(@PathVariable Long id);

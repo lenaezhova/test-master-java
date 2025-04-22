@@ -35,7 +35,7 @@ public interface QuestionService {
     QuestionData getOne(Long questionId);
     /**
      * Метод для создания нового вопроса.
-     *
+     * @param testId Идентификатор теста
      * @param request Запрос
      * @return Созданный вопрос
      */

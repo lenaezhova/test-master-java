@@ -4,5 +4,5 @@ import com.testmasterapi.domain.question.request.QuestionUpdateRequest;
 
 public interface QuestionRepositoryCustom {
 
-    int update(Long question, QuestionUpdateRequest request);
+    int update(Long questionId, QuestionUpdateRequest request);
 }

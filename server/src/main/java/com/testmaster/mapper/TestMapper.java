@@ -3,6 +3,7 @@ package com.testmaster.mapper;
 import com.testmaster.model.Test;
 import com.testmaster.model.User;
 import com.testmasterapi.domain.test.data.TestData;
+import com.testmasterapi.domain.test.data.TestForSessionData;
 import com.testmasterapi.domain.test.data.TestGroupsData;
 import com.testmasterapi.domain.test.request.TestCreateRequest;
 import org.mapstruct.Mapper;
@@ -25,19 +26,33 @@ public class TestMapper {
         data.setCreatedAt(test.getCreatedAt());
         data.setUpdatedAt(test.getUpdatedAt());
         data.setOwner(userMapper.toOwner(test.getOwner()));
+
         return data;
     }
 
     public TestGroupsData toTestGroupsData(Test test) {
         var data = new TestGroupsData();
+
         data.setId(test.getId());
         data.setTitle(test.getTitle());
+
+        return data;
+    }
+
+    public TestForSessionData toSessionData(Test test) {
+        var data = new TestForSessionData();
+
+        data.setId(test.getId());
+        data.setTitle(test.getTitle());
+        data.setDescription(test.getDescription());
+        data.setDeleted(test.getDeleted());
+
         return data;
     }
 
     public Test toEntity(TestCreateRequest request, User user) {
-        LocalDateTime now = LocalDateTime.now();
         var entity = new Test();
+        LocalDateTime now = LocalDateTime.now();
 
         entity.setDescription(request.description());
         entity.setTitle(request.title());

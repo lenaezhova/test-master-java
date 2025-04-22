@@ -1,0 +1,58 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="0.0.11_update_questions_logic" author="elena">
+        <dropColumn tableName="questions" columnName="answer_templates"/>
+
+        <dropColumn tableName="answers" columnName="answer_variants"/>
+
+        <createTable tableName="answers_templates">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="question_id" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
+
+            <column name="description" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="text" type="TEXT"/>
+
+            <column name="is_correct" type="BOOLEAN"/>
+
+            <column name="count_points" type="INTEGER"/>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="answers_templates"
+                baseColumnNames="question_id"
+                constraintName="fk_answers_templates_question"
+                referencedTableName="questions"
+                referencedColumnNames="id"/>
+
+        <addColumn tableName="answers">
+            <column name="text" type="TEXT"/>
+            <column name="answer_template_id" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
+        <addForeignKeyConstraint
+                baseTableName="answers"
+                baseColumnNames="answer_template_id"
+                constraintName="fk_answers_answer_template"
+                referencedTableName="answers_templates"
+                referencedColumnNames="id"/>
+
+        <addColumn tableName="tests_sessions">
+            <column name="updated_at" type="TIMESTAMP"/>
+        </addColumn>
+
+    </changeSet>
+
+</databaseChangeLog>

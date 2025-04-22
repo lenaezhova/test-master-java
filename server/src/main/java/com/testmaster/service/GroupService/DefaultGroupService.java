@@ -54,7 +54,7 @@ public class DefaultGroupService implements GroupService {
 
         User user = userRepository
                 .findUserById(userId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Пользователь с таким идентификатором не найден"));
+                .orElseThrow(() -> new NotFoundException("Пользователь с таким идентификатором не найден"));
 
         Group group = groupMapper.toEntity(request, user);
         groupRepository.save(group);

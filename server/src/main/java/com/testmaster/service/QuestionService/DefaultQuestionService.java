@@ -9,7 +9,6 @@ import com.testmasterapi.domain.question.data.QuestionData;
 import com.testmasterapi.domain.question.request.QuestionCreateRequest;
 import com.testmasterapi.domain.question.request.QuestionUpdateRequest;
 import com.testmasterapi.domain.user.CustomUserDetails;
-import com.testmasterapi.domain.user.UserRoles;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,7 +26,7 @@ public class DefaultQuestionService implements QuestionService {
     private final QuestionRepository questionRepository;
     private final TestRepository testRepository;
 
-    private final String notFoundExQuestion = "Вопрос не найден";
+    private final String notFoundQuestionMessage = "Вопрос не найден";
 
     @Override
     public List<QuestionData> getAll() {
@@ -48,7 +47,7 @@ public class DefaultQuestionService implements QuestionService {
     @Override
     public QuestionData getOne(Long id) {
         var data = questionRepository.findQuestionById(id)
-                .orElseThrow(() -> new NotFoundException(notFoundExQuestion));
+                .orElseThrow(() -> new NotFoundException(notFoundQuestionMessage));
 
         return this.mapQuestionData(data);
     }
@@ -72,7 +71,7 @@ public class DefaultQuestionService implements QuestionService {
     public void update(Long questionId, QuestionUpdateRequest request) {
         int updated = questionRepository.update(questionId, request);
         if (updated == 0) {
-            throw new NotFoundException(notFoundExQuestion);
+            throw new NotFoundException(notFoundQuestionMessage);
         }
     }
 
@@ -81,7 +80,7 @@ public class DefaultQuestionService implements QuestionService {
     public void deleteAllQuestion(Long testId) {
         int deleted = questionRepository.deleteAllQuestionByTestId(testId);
         if (deleted == 0) {
-            throw new NotFoundException(notFoundExQuestion);
+            throw new NotFoundException(notFoundQuestionMessage);
         }
     }
 

@@ -1,4 +1,6 @@
-package com.testmaster.annotations.CheckTestOwner;
+package com.testmaster.annotations.CheckTest;
+
+import com.testmasterapi.domain.test.TestStatus;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,8 +9,11 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface CheckAvailableEditTest {
+public @interface CheckTest {
     String testId() default "";
     String questionId() default "";
-    boolean checkTestIsOpen() default true;
+    String answerTemplateId() default "";
+    String answerId() default "";
+    boolean checkOwner() default false;
+    TestStatus status() default TestStatus.OPENED;
 }

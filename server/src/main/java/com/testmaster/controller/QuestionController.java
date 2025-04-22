@@ -1,11 +1,12 @@
 package com.testmaster.controller;
 
-import com.testmaster.annotations.CheckTestOwner.CheckAvailableEditTest;
+import com.testmaster.annotations.CheckTest.CheckTest;
 import com.testmaster.service.QuestionService.QuestionService;
 import com.testmasterapi.api.QuestionApi;
 import com.testmasterapi.domain.question.data.QuestionData;
 import com.testmasterapi.domain.question.request.QuestionCreateRequest;
 import com.testmasterapi.domain.question.request.QuestionUpdateRequest;
+import com.testmasterapi.domain.test.TestStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +38,7 @@ public class QuestionController implements QuestionApi {
     }
 
     @Override
-    @CheckAvailableEditTest(testId = "testId")
+    @CheckTest(testId = "testId", checkOwner = true, status = TestStatus.CLOSED)
     public ResponseEntity<Void> create(Long testId, QuestionCreateRequest request) {
         questionService.create(testId, request);
 
@@ -46,14 +47,14 @@ public class QuestionController implements QuestionApi {
 
     @Override
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @CheckAvailableEditTest(questionId = "id")
+    @CheckTest(questionId = "id", checkOwner = true, status = TestStatus.CLOSED)
     public void update(Long id, QuestionUpdateRequest updateRequest) {
         questionService.update(id, updateRequest);
     }
 
     @Override
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @CheckAvailableEditTest(questionId = "id")
+    @CheckTest(questionId = "id", checkOwner = true, status = TestStatus.CLOSED)
     public void delete(Long id) {
         var data = new QuestionUpdateRequest();
         data.setSoftDeleted(true);
@@ -62,7 +63,7 @@ public class QuestionController implements QuestionApi {
 
     @Override
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @CheckAvailableEditTest(testId = "testId")
+    @CheckTest(testId = "testId", checkOwner = true, status = TestStatus.CLOSED)
     public void deleteAllQuestion(Long testId) {
         questionService.deleteAllQuestion(testId);
     }

@@ -2,40 +2,36 @@ package com.testmaster.mapper;
 
 import com.testmaster.model.Question;
 import com.testmaster.model.Test;
-import com.testmasterapi.domain.question.AnswerTemplate;
+import com.testmasterapi.domain.question.data.QuestionAnswerData;
 import com.testmasterapi.domain.question.data.QuestionData;
 import com.testmasterapi.domain.question.request.QuestionCreateRequest;
 import org.mapstruct.Mapper;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Mapper(componentModel = "spring")
 public class QuestionMapper {
-    @Autowired
-    private AnswerTemplateMapper answerTemplateMapper;
 
     public QuestionData toPrivate(Question question) {
         var questionData = new QuestionData();
         fillQuestion(questionData, question);
-        questionData.setAnswerTemplates(question.getAnswerTemplates());
+//        questionData.setAnswerTemplates(question.getAnswerTemplates());
 
         return questionData;
     }
 
     public QuestionData toPublic(Question question) {
         var questionData = new QuestionData();
-        var questionAnswerTemplates = question.getAnswerTemplates();
-
-        List<AnswerTemplate> publicAnswerTemplates =
-                questionAnswerTemplates
-                        .stream()
-                        .map(answerTemplateMapper::toPublic)
-                        .toList();
+//        var questionAnswerTemplates = question.getAnswerTemplates();
+//
+//        List<AnswerTemplate> publicAnswerTemplates =
+//                questionAnswerTemplates
+//                        .stream()
+//                        .map(answerTemplateMapper::toPublic)
+//                        .toList();
 
         fillQuestion(questionData, question);
-        questionData.setAnswerTemplates(publicAnswerTemplates);
+//        questionData.setAnswerTemplates(publicAnswerTemplates);
 
         return questionData;
     }
@@ -46,12 +42,22 @@ public class QuestionMapper {
 
         entity.setTitle(request.title());
         entity.setDescription(request.description());
-        entity.setAnswerTemplates(request.answerTemplates());
+//        entity.setAnswerTemplates(request.answerTemplates());
         entity.setCreatedAt(now);
         entity.setTest(test);
         entity.setType(request.type());
 
         return entity;
+    }
+
+    public QuestionAnswerData toAnswer(Question question) {
+        var data = new QuestionAnswerData();
+        data.setDescription(question.getDescription());
+        data.setSoftDeleted(question.isSoftDeleted());
+        data.setId(question.getId());
+        data.setTitle(question.getTitle());
+
+        return data;
     }
 
     private void fillQuestion(QuestionData data, Question question) {

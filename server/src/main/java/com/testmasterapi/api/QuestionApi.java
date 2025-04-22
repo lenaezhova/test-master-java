@@ -40,7 +40,7 @@ public interface QuestionApi {
                     @ApiResponse(responseCode = "201", description = "Вопрос создан"),
                     @ApiResponse(responseCode = "400", description = "Ошибка при создании вопроса"),
                     @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста"),
-                    @ApiResponse(responseCode = "409", description = "Для редактирования теста необходимо его закрыть"),
+                    @ApiResponse(responseCode = "409", description = "Тест открыт для прохождения"),
             }
     )
     ResponseEntity<Void> create(@PathVariable Long testId, @RequestBody QuestionCreateRequest request);
@@ -53,7 +53,7 @@ public interface QuestionApi {
                     @ApiResponse(responseCode = "204", description = "Информация о вопросе обновлена"),
                     @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста"),
                     @ApiResponse(responseCode = "404", description = "Вопрос с таким идентификатором не найден"),
-                    @ApiResponse(responseCode = "409", description = "Для редактирования теста необходимо его закрыть"),
+                    @ApiResponse(responseCode = "409", description = "Тест открыт для прохождения"),
             }
     )
     void update(@PathVariable Long id, @RequestBody QuestionUpdateRequest request);
@@ -66,7 +66,7 @@ public interface QuestionApi {
                     @ApiResponse(responseCode = "204", description = "Вопрос удален"),
                     @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста"),
                     @ApiResponse(responseCode = "404", description = "Вопрос с таким идентификатором не найден"),
-                    @ApiResponse(responseCode = "409", description = "Для редактирования теста необходимо его закрыть"),
+                    @ApiResponse(responseCode = "409", description = "Тест открыт для прохождения"),
             }
     )
     void delete(@PathVariable Long id);
@@ -78,7 +78,7 @@ public interface QuestionApi {
             responses = {
                     @ApiResponse(responseCode = "204", description = "Вопросы удалены"),
                     @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста"),
-                    @ApiResponse(responseCode = "409", description = "Для редактирования теста необходимо его закрыть"),
+                    @ApiResponse(responseCode = "409", description = "Тест открыт для прохождения"),
             }
     )
     void deleteAllQuestion(@PathVariable Long testId);
