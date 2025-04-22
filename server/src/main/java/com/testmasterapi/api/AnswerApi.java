@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "Вопросы", description = "API для работы c вопросами")
+@Tag(name = "Ответы", description = "API для работы c ответами")
 public interface AnswerApi {
     String PATH = "/api/answers";
 
