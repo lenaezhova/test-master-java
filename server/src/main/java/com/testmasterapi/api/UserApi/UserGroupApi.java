@@ -3,6 +3,7 @@ package com.testmasterapi.api.UserApi;
 import com.testmasterapi.api.GroupApi.GroupApi;
 import com.testmasterapi.domain.group.data.GroupsUserData;
 import com.testmasterapi.domain.group.request.UserGroupsAddRequest;
+import com.testmasterapi.domain.group.response.GroupsUsersResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,13 +20,13 @@ public interface UserGroupApi {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping
-    @Operation(summary = "Получение списка всех групп")
-    List<GroupsUserData> allGroups(@PathVariable("userId") Long userId);
+    @Operation(summary = "Получение списка всех групп пользователя")
+    GroupsUsersResponse allGroups(@PathVariable("userId") Long userId);
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/{groupId}")
     @Operation(
-            summary = "Добавить группу",
+            summary = "Добавить пользователя в группу",
             responses = {
                     @ApiResponse(responseCode = "204", description = "Пользователь добавлен в группу"),
                     @ApiResponse(responseCode = "404", description = "Группа (пользователь) с таким идентификатором не найдена"),
@@ -41,7 +42,7 @@ public interface UserGroupApi {
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{groupId}")
     @Operation(
-            summary = "Удалить группу",
+            summary = "Удалить пользователя из группы",
             responses = {
                     @ApiResponse(responseCode = "204", description = "Пользователен удален из группы"),
                     @ApiResponse(responseCode = "404", description = "Группа (пользователь) с таким идентификатором не найдена")

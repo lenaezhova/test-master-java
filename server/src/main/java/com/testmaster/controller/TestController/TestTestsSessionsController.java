@@ -7,6 +7,7 @@ import com.testmasterapi.api.TestApi.TestTestsSessionsApi;
 import com.testmasterapi.domain.test.TestStatus;
 import com.testmasterapi.domain.testSession.data.TestSessionData;
 import com.testmasterapi.domain.testSession.request.TestSessionCreateRequest;
+import com.testmasterapi.domain.testSession.response.TestsSessionsResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +23,8 @@ public class TestTestsSessionsController implements TestTestsSessionsApi {
     private final TestTestsSessionsService testTestsSessionsService;
 
     @Override
-    public List<TestSessionData> allSessions(Long id) {
-        return testTestsSessionsService.getAllSessions(id);
+    public TestsSessionsResponse allSessions(Long id) {
+        return new TestsSessionsResponse(testTestsSessionsService.getAllSessions(id));
     }
 
     @Override

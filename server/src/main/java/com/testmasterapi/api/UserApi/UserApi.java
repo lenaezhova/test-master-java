@@ -2,10 +2,12 @@ package com.testmasterapi.api.UserApi;
 
 import com.testmasterapi.api.TestSessionApi;
 import com.testmasterapi.domain.testSession.data.TestSessionData;
+import com.testmasterapi.domain.testSession.response.TestsSessionsResponse;
 import com.testmasterapi.domain.user.data.UserData;
 import com.testmasterapi.domain.user.request.UserCreateRequest;
 import com.testmasterapi.domain.user.request.UserLoginRequest;
 import com.testmasterapi.domain.user.request.UserUpdateRequest;
+import com.testmasterapi.domain.user.response.UsersResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -26,12 +28,12 @@ public interface UserApi {
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     @Operation(summary = "Получение списка пользователей")
-    List<UserData> all();
+    UsersResponse all();
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}" + TestSessionApi.BASE_PATH)
     @Operation(summary = "Получение всех сессий тестов пользователя")
-    List<TestSessionData> allSessions(@PathVariable("id") Long id);
+    TestsSessionsResponse allSessions(@PathVariable("id") Long id);
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
@@ -47,7 +49,7 @@ public interface UserApi {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/current")
     @Operation(
-            summary = "Получить авторизованного пользователя",
+            summary = "Получить текущего авторизованного пользователя",
             responses = {
                     @ApiResponse(responseCode = "200"),
                     @ApiResponse(responseCode = "404", description = "Пользователь с таким идентификатором не найден", content = @Content())

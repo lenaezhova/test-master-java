@@ -16,7 +16,7 @@ public class TestMapper {
     @Autowired
     private UserMapper userMapper;
 
-    public TestData toTestData(Test test) {
+    public TestData toData(Test test) {
         var data = new TestData();
 
         data.setId(test.getId());
@@ -30,7 +30,7 @@ public class TestMapper {
         return data;
     }
 
-    public TestGroupsData toTestGroupsData(Test test) {
+    public TestGroupsData toTestGroups(Test test) {
         var data = new TestGroupsData();
 
         data.setId(test.getId());
@@ -39,7 +39,7 @@ public class TestMapper {
         return data;
     }
 
-    public TestForSessionData toSessionData(Test test) {
+    public TestForSessionData toSession(Test test) {
         var data = new TestForSessionData();
 
         data.setId(test.getId());

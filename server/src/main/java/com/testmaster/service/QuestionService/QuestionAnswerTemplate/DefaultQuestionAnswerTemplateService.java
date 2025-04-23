@@ -13,56 +13,69 @@ import com.testmaster.service.QuestionService.QuestionService;
 import com.testmasterapi.domain.answer.data.AnswerData;
 import com.testmasterapi.domain.answerTemplate.data.AnswerTemplateData;
 import com.testmasterapi.domain.answerTemplate.request.AnswerTemplateCreateRequest;
+import com.testmasterapi.domain.answerTemplate.request.AnswerTemplateQuestionUpdateRequest;
 import com.testmasterapi.domain.question.data.QuestionData;
+import com.testmasterapi.domain.question.data.QuestionWithTemplatesData;
 import com.testmasterapi.domain.question.request.QuestionUpdateRequest;
+import com.testmasterapi.domain.question.request.QuestionUpdateWithAnswersTemplatesRequest;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class DefaultQuestionAnswerTemplateService implements QuestionAnswerTemplatesService {
     private final QuestionMapper questionMapper;
     private final AnswerTemplateMapper answerTemplateMapper;
-    private final AnswerMapper answerMapper;
 
     private final QuestionRepository questionRepository;
     private final AnswerTemplateRepository answerTemplateRepository;
-    private final AnswerRepository answerRepository;
 
     private final String notFoundQuestionMessage = "Вопрос не найден";
 
-    @Override
-    public List<AnswerTemplateData> getAllAnswerTemplate(Long questionId) {
-        return answerTemplateRepository.findAllByQuestionId(questionId)
-                .stream()
-                .map(answerTemplateMapper::toData)
-                .toList();
-    }
-
-    @NotNull
-    @Transactional
-    @Override
-    public AnswerTemplateData createAnswerTemplate(Long questionId, @NotNull AnswerTemplateCreateRequest request) {
+    public QuestionWithTemplatesData getOneWithTemplates(Long questionId) {
         var question = this.getQuestion(questionId);
+        var answerTemplates = answerTemplateRepository.findAllByQuestionId(questionId);
 
-        AnswerTemplate entity = answerTemplateMapper.toEntity(request, question);
-
-        answerTemplateRepository.save(entity);
-        return answerTemplateMapper.toData(entity);
+        return questionMapper.toDataWithTemplate(question, answerTemplates);
     }
 
     @Override
     @Transactional
-    public void deleteAllAnswerTemplate(Long questionId) {
-        int deleted = answerTemplateRepository.deleteAllByQuestionId(questionId);
-        if (deleted == 0) {
+    public void updateWithTemplates(Long questionId, @NotNull QuestionUpdateWithAnswersTemplatesRequest request) {
+        int updated = questionRepository.update(questionId, request);
+        if (updated == 0) {
             throw new NotFoundException(notFoundQuestionMessage);
         }
+
+        Question question = new Question();
+        question.setId(questionId);
+
+        List<AnswerTemplateQuestionUpdateRequest> newTemplates = new ArrayList<>();
+
+        for (var template : request.getAnswerTemplates()) {
+            if (template.getId() != null) {
+                answerTemplateRepository.update(template.getId(), template);
+            } else {
+                newTemplates.add(template);
+            }
+        }
+
+        if (!newTemplates.isEmpty()) {
+            List<AnswerTemplate> answerTemplates = newTemplates
+                    .stream()
+                    .map(template -> answerTemplateMapper.toEntityFromUpdateQuestion(template, question))
+                    .collect(Collectors.toList());
+
+            answerTemplateRepository.saveAll(answerTemplates);
+        }
     }
+
     private Question getQuestion(Long questionId) {
         return questionRepository.findById(questionId)
                 .orElseThrow(() -> new NotFoundException(notFoundQuestionMessage));

@@ -4,6 +4,7 @@ import com.testmaster.model.AnswerTemplate;
 import com.testmaster.model.Question;
 import com.testmasterapi.domain.answerTemplate.data.AnswerTemplateData;
 import com.testmasterapi.domain.answerTemplate.request.AnswerTemplateCreateRequest;
+import com.testmasterapi.domain.answerTemplate.request.AnswerTemplateQuestionUpdateRequest;
 import com.testmasterapi.domain.user.CustomUserDetails;
 import org.mapstruct.Mapper;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,6 +31,18 @@ public class AnswerTemplateMapper {
         entity.setCountPoints(request.countPoints());
         entity.setIsCorrect(request.isCorrect());
         entity.setDescription(request.description());
+
+        return entity;
+    }
+
+    public AnswerTemplate toEntityFromUpdateQuestion(AnswerTemplateQuestionUpdateRequest request, Question question) {
+        var entity = new AnswerTemplate();
+
+        entity.setText(request.getText());
+        entity.setQuestion(question);
+        entity.setCountPoints(request.getCountPoints());
+        entity.setIsCorrect(request.getIsCorrect());
+        entity.setDescription(request.getDescription());
 
         return entity;
     }

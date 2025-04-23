@@ -17,6 +17,7 @@ public interface QuestionService {
      * @return Все вопросы
      */
     List<QuestionData> getAll();
+
     /**
      * Метод для получения одного вопроса.
      *
@@ -32,4 +33,5 @@ public interface QuestionService {
      * @param request Запрос
      */
     void update(Long questionId, QuestionUpdateRequest request);
+
 }

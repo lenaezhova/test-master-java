@@ -1,6 +1,8 @@
 package com.testmasterapi.domain.answer.request;
 
-public record AnswerCreateRequest(
-        String text
-) {
+import lombok.Data;
+
+@Data
+public class AnswerCreateRequest {
+    private String text;
 }

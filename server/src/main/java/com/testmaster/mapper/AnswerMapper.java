@@ -32,7 +32,7 @@ public class AnswerMapper {
         entity.setQuestion(question);
         entity.setTestSession(testSession);
         entity.setAnswerTemplate(answerTemplate);
-        entity.setText(answerTemplate.getText());
+        entity.setText(request.getText());
         entity.setCreatedAt(now);
 
         return entity;

@@ -5,8 +5,11 @@ import com.testmasterapi.api.UserApi.UserApi;
 import com.testmasterapi.domain.group.data.GroupData;
 import com.testmasterapi.domain.group.request.GroupCreateRequest;
 import com.testmasterapi.domain.group.request.GroupUpdateRequest;
+import com.testmasterapi.domain.group.response.GroupsResponse;
 import com.testmasterapi.domain.test.data.TestGroupsData;
+import com.testmasterapi.domain.test.response.TestsGroupsResponse;
 import com.testmasterapi.domain.user.data.UserGroupsData;
+import com.testmasterapi.domain.user.response.UsersGroupsResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -24,17 +27,17 @@ public interface GroupApi {
     @PreAuthorize("isAuthenticated()")
     @GetMapping
     @Operation(summary = "Получение списка групп")
-    List<GroupData> all();
+    GroupsResponse all();
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}" + UserApi.BASE_PATH)
     @Operation(summary = "Получение списка всех пользователей группы")
-    List<UserGroupsData> allUsers(@PathVariable("id") Long groupId);
+    UsersGroupsResponse allUsers(@PathVariable("id") Long groupId);
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}" + TestApi.BASE_PATH)
     @Operation(summary = "Получение списка всех тестов группы")
-    List<TestGroupsData> allTests(@PathVariable("id") Long id);
+    TestsGroupsResponse allTests(@PathVariable("id") Long id);
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")

@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Группы теста")
+@Tag(name = "Тесты группы")
 @RequestMapping(value = TestApi.PATH + "/{testId}" + GroupApi.BASE_PATH)
 public interface TestGroupApi {
     String PATH = TestApi.PATH + "/{testId}" + GroupApi.BASE_PATH;

@@ -4,6 +4,7 @@ import com.testmaster.annotations.CheckTest.CheckTest;
 import com.testmaster.service.QuestionService.QuestionAnswerService.QuestionAnswerService;
 import com.testmasterapi.api.QuestionApi.QuestionAnswersApi;
 import com.testmasterapi.domain.answer.data.AnswerData;
+import com.testmasterapi.domain.answer.response.AnswersResponse;
 import com.testmasterapi.domain.test.TestStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,8 +21,8 @@ public class QuestionAnswersController implements QuestionAnswersApi {
     private final QuestionAnswerService questionAnswerService;
 
     @Override
-    public List<AnswerData> allAnswers(Long questionId) {
-        return questionAnswerService.getAllAnswers(questionId);
+    public AnswersResponse allAnswers(Long questionId) {
+        return new AnswersResponse(questionAnswerService.getAllAnswers(questionId));
     }
 
     @Override

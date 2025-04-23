@@ -1,19 +1,10 @@
 package com.testmasterapi.api.TestApi;
 
-import com.testmasterapi.api.GroupApi.GroupApi;
-import com.testmasterapi.api.QuestionApi.QuestionApi;
 import com.testmasterapi.api.TestSessionApi;
-import com.testmasterapi.api.UserApi.UserApi;
-import com.testmasterapi.domain.question.data.QuestionData;
-import com.testmasterapi.domain.question.request.QuestionCreateRequest;
-import com.testmasterapi.domain.test.data.TestData;
-import com.testmasterapi.domain.test.request.TestCreateRequest;
-import com.testmasterapi.domain.test.request.TestUpdateRequest;
-import com.testmasterapi.domain.test.request.TestUpdateStatusRequest;
 import com.testmasterapi.domain.testSession.data.TestSessionData;
 import com.testmasterapi.domain.testSession.request.TestSessionCreateRequest;
+import com.testmasterapi.domain.testSession.response.TestsSessionsResponse;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
@@ -27,10 +18,10 @@ import java.util.List;
 public interface TestTestsSessionsApi {
     String PATH = TestApi.PATH + "/{testId}" + TestSessionApi.BASE_PATH;
 
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     @Operation(summary = "Получение всех сессий теста")
-    List<TestSessionData> allSessions(@PathVariable("testId") Long testId);
+    TestsSessionsResponse allSessions(@PathVariable("testId") Long testId);
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping

@@ -8,9 +8,10 @@ import com.testmaster.repository.AnswerRepository.AnswerRepository;
 import com.testmaster.repository.AnswerTemplateRepository.AnswerTemplateRepository;
 import com.testmaster.repository.QuestionRepository.QuestionRepository;
 import com.testmaster.repository.TestSessionRepository.TestSessionRepository;
-import com.testmasterapi.domain.answer.data.AnswerData;
-import com.testmasterapi.domain.answer.request.AnswerCreateRequest;
+import com.testmasterapi.domain.question.QuestionTypes;
 import com.testmasterapi.domain.testSession.data.TestSessionData;
+import com.testmasterapi.domain.testSession.request.TestSessionAddAnswerRequest;
+import com.testmasterapi.domain.testSession.request.TestSessionAddTestAnswerRequest;
 import com.testmasterapi.domain.testSession.request.TestSessionUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -18,7 +19,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +38,7 @@ public class DefaultTestSessionService implements TestSessionService {
     private final AnswerRepository answerRepository;
 
     private final String notFoundTestSessionMessage = "Сессия теста не найдена";
+    private final String notFoundAnswerTemplateMessage = "Шаблон ответа не найден";
 
     @Override
     public List<TestSessionData> getAll() {
@@ -46,23 +53,78 @@ public class DefaultTestSessionService implements TestSessionService {
         return testSessionMapper.toData(this.getTestSession(testSessionId));
     }
 
-    @NotNull
-    @Transactional
     @Override
-    public AnswerData createAnswer(
-            Long testSessionId,
-            Long questionId,
-            Long answerTemplateId,
-            @NotNull AnswerCreateRequest request
+    public void createTestAnswer(@NotNull Long testSessionId,
+                                 @NotNull TestSessionAddTestAnswerRequest request
     ) {
-        var testSession = this.getTestSession(testSessionId);
+        request.getAnswers().forEach(answer ->
+            this.createQuestionAnswer(
+                    testSessionId,
+                    answer.getQuestionId(),
+                    answer.getAnswer()
+            )
+        );
+    }
+
+    @Override
+    public void updateTestAnswer(@NotNull Long testSessionId,
+                                 @NotNull TestSessionAddTestAnswerRequest request
+    ) {
+        answerRepository.deleteAllByTestSessionId(testSessionId);
+        this.createTestAnswer(testSessionId, request);
+    }
+
+    @Override
+    public void createQuestionAnswer(@NotNull Long testSessionId,
+                             @NotNull Long questionId,
+                             @NotNull TestSessionAddAnswerRequest request
+    ) {
         var question = this.getQuestion(questionId);
-        var answerTemplate = this.getAnswerTemplate(answerTemplateId);
+        var testSession = this.getTestSession(testSessionId);
+        Set<Long> answerIds = request.getAnswerIds();
 
-        var entity = answerMapper.toEntity(request, testSession, question, answerTemplate);
+        // если тип вопроса текстовый, то ищем шаблон ответа,
+        // у которого совпадает айди вопроса и тип вопроса текстовый.
+        if (question.getType() == QuestionTypes.TEXT && answerIds.isEmpty()) {
+            var answerTemplate = answerTemplateRepository
+                    .findByQuestionIdAndQuestionType(questionId, QuestionTypes.TEXT)
+                    .orElseThrow(() -> new NotFoundException(notFoundAnswerTemplateMessage));
 
-        answerRepository.save(entity);
-        return answerMapper.toData(entity);
+            var answer = answerMapper.toEntity(request, testSession, question, answerTemplate);
+            answerRepository.save(answer);
+            return;
+        }
+
+        // если тип вопроса с выбором, то ищем все шаблоны ответа с переданными answerIds
+        var questionTypesSelected = new ArrayList<>(List.of(
+                QuestionTypes.SINGLE, QuestionTypes.MULTIPLE
+        ));
+        if (questionTypesSelected.contains(question.getType()) && !answerIds.isEmpty()) {
+            Map<Long, AnswerTemplate> templateMap = answerTemplateRepository.findAllById(answerIds)
+                    .stream()
+                    .collect(Collectors.toMap(AnswerTemplate::getId, Function.identity()));
+
+            List<Answer> answers = answerIds.stream()
+                    .map(answerId -> {
+                        var answerTemplate = templateMap.get(answerId);
+                        if (answerTemplate == null) {
+                            throw new NotFoundException(notFoundAnswerTemplateMessage);
+                        }
+                        return answerMapper.toEntity(request, testSession, question, answerTemplate);
+                    })
+                    .collect(Collectors.toList());
+
+            answerRepository.saveAll(answers);
+        }
+    }
+
+    @Override
+    public void updateQuestionAnswer(@NotNull Long testSessionId,
+                                     @NotNull Long questionId,
+                                     @NotNull TestSessionAddAnswerRequest request
+    ) {
+        answerRepository.deleteAllByQuestionIdAndTestSessionId(testSessionId, questionId);
+        this.createQuestionAnswer(testSessionId, questionId, request);
     }
 
     @Override
@@ -98,10 +160,5 @@ public class DefaultTestSessionService implements TestSessionService {
     private Question getQuestion(Long questionId) {
         return questionRepository.findById(questionId)
                 .orElseThrow(() -> new NotFoundException("Вопрос не найден"));
-    }
-
-    private AnswerTemplate getAnswerTemplate(Long answerTemplateId) {
-        return answerTemplateRepository.findById(answerTemplateId)
-                .orElseThrow(() -> new NotFoundException("Шаблон ответа не найден"));
     }
 }

@@ -8,6 +8,7 @@ import com.testmaster.repository.AnswerRepository.AnswerRepository;
 import com.testmaster.repository.AnswerTemplateRepository.AnswerTemplateRepository;
 import com.testmaster.repository.QuestionRepository.QuestionRepository;
 import com.testmaster.repository.TestRepository.TestRepository;
+import com.testmaster.repository.TestSessionRepository.TestSessionRepository;
 import com.testmasterapi.domain.test.TestStatus;
 import com.testmasterapi.domain.user.CustomUserDetails;
 import com.testmasterapi.domain.user.UserRoles;
@@ -29,6 +30,7 @@ public class CheckTestAspect {
     private final QuestionRepository questionRepository;
     private final AnswerTemplateRepository answerTemplateRepository;
     private final AnswerRepository answerRepository;
+    private final TestSessionRepository testSessionRepository;
 
     @Around("@annotation(checkTest)")
     public Object checkTest(ProceedingJoinPoint joinPoint, CheckTest checkTest) throws Throwable {
@@ -39,6 +41,8 @@ public class CheckTestAspect {
         String paramsQuestionId = checkTest.questionId();
         String paramsAnswerTemplateId = checkTest.answerTemplateId();
         String paramsAnswerId = checkTest.answerId();
+        String paramsTestSessionId = checkTest.testSessionId();
+        boolean skipCheckStatusForOwner = checkTest.skipCheckStatusForOwner();
         boolean checkOwner = checkTest.checkOwner();
         TestStatus status = checkTest.status();
 
@@ -61,30 +65,37 @@ public class CheckTestAspect {
             var answer = this.getAnswer(answerId);
             var question = answer.getQuestion();
             test = question.getTest();
+        } else if (!paramsTestSessionId.isEmpty()) {
+            var testSessionId = getParamByName(paramNames, args, paramsTestSessionId);
+            var testSession = this.getTestSession(testSessionId);
+            test = testSession.getTest();
         }
 
         if (test == null) {
             throw new IllegalArgumentException("Не удалось определить testId || questionId || answerTemplateId из аннотации");
         }
 
-        if (checkOwner) {
-            checkTestOwner(test.getOwner());
-        }
+        var isOwner = checkTestOwner(test.getOwner(), checkOwner);
 
-        if (status != null) {
+        if (status != null && (!skipCheckStatusForOwner || !isOwner)) {
             checkTestStatus(test, status);
         }
 
         return joinPoint.proceed();
     }
 
-    private void checkTestOwner(User user) {
+    private boolean checkTestOwner(User user, boolean throwError) {
         var currentUser = this.getCurrentUser();
         Long ownerId = user.getId();
 
         if (!ownerId.equals(currentUser.getId()) && !currentUser.getRoles().contains(UserRoles.ADMIN)) {
-            throw new IllegalArgumentException("Вы не являетесь владельцем теста");
+            if (throwError) {
+                throw new IllegalArgumentException("Вы не являетесь владельцем теста");
+            }
+            return false;
         }
+
+        return true;
     }
 
     private void checkTestStatus(Test test, TestStatus status) {
@@ -99,33 +110,26 @@ public class CheckTestAspect {
     }
 
     private Test getTest(Long testId) {
-        if (testId == null) {
-            throw new IllegalArgumentException("test id не передан");
-        }
         return testRepository.findById(testId)
                 .orElseThrow(() -> new IllegalArgumentException("Тест не найден"));
     }
 
     private Question getQuestion(Long questionId) {
-        if (questionId == null) {
-            throw new IllegalArgumentException("question id не передан");
-        }
         return questionRepository.findById(questionId)
                 .orElseThrow(() -> new IllegalArgumentException("Вопрос не найден"));
     }
 
+    private TestSession getTestSession(Long testSessionId) {
+        return testSessionRepository.findById(testSessionId)
+                .orElseThrow(() -> new IllegalArgumentException("Сессия теста не найдена"));
+    }
+
     private AnswerTemplate getAnswerTemplate(Long answerTemplateId) {
-        if (answerTemplateId == null) {
-            throw new IllegalArgumentException("answer template id не передан");
-        }
         return answerTemplateRepository.findById(answerTemplateId)
                 .orElseThrow(() -> new IllegalArgumentException("Шаблон ответа не найден"));
     }
 
     private Answer getAnswer(Long answerId) {
-        if (answerId == null) {
-            throw new IllegalArgumentException("answer id не передан");
-        }
         return answerRepository.findById(answerId)
                 .orElseThrow(() -> new IllegalArgumentException("Ответ не найден"));
     }

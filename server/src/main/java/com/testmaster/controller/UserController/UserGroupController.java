@@ -4,6 +4,7 @@ import com.testmaster.service.UserService.UserGroupService.UserGroupService;
 import com.testmasterapi.api.UserApi.UserGroupApi;
 import com.testmasterapi.domain.group.data.GroupsUserData;
 import com.testmasterapi.domain.group.request.UserGroupsAddRequest;
+import com.testmasterapi.domain.group.response.GroupsUsersResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +20,8 @@ import java.util.List;
 public class UserGroupController implements UserGroupApi {
     private final UserGroupService groupUsersService;
     @Override
-    public List<GroupsUserData> allGroups(Long userId) {
-        return groupUsersService.getAllGroups(userId);
+    public GroupsUsersResponse allGroups(Long userId) {
+        return new GroupsUsersResponse(groupUsersService.getAllGroups(userId));
     }
 
     @Override

@@ -1,15 +1,9 @@
 package com.testmasterapi.api.TestApi;
 
-import com.testmasterapi.api.QuestionApi.QuestionApi;
-import com.testmasterapi.api.TestSessionApi;
-import com.testmasterapi.domain.question.data.QuestionData;
-import com.testmasterapi.domain.question.request.QuestionCreateRequest;
 import com.testmasterapi.domain.test.data.TestData;
 import com.testmasterapi.domain.test.request.TestCreateRequest;
 import com.testmasterapi.domain.test.request.TestUpdateRequest;
-import com.testmasterapi.domain.test.request.TestUpdateStatusRequest;
-import com.testmasterapi.domain.testSession.data.TestSessionData;
-import com.testmasterapi.domain.testSession.request.TestSessionCreateRequest;
+import com.testmasterapi.domain.test.response.TestsResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -28,7 +22,7 @@ public interface TestApi {
     @PreAuthorize("isAuthenticated()")
     @GetMapping
     @Operation(summary = "Получение списка всех тестов")
-    List<TestData> all();
+    TestsResponse all();
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
@@ -70,17 +64,28 @@ public interface TestApi {
     void update(@PathVariable Long id, @RequestBody TestUpdateRequest test);
 
     @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
-    @PatchMapping("/{id}/status")
+    @PatchMapping("/{id}:open")
     @Operation(
-            summary = "Обновить статус теста",
+            summary = "Открыть тест для прохождения",
             responses = {
-                    @ApiResponse(responseCode = "204", description = "Статус теста обновлен"),
+                    @ApiResponse(responseCode = "204", description = "Тест открыт для прохождения"),
                     @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста"),
                     @ApiResponse(responseCode = "404", description = "Тест с таким идентификатором не найден"),
-                    @ApiResponse(responseCode = "409", description = "Тест открыт для прохождения"),
             }
     )
-    void updateStatus(@PathVariable Long id, @RequestBody TestUpdateStatusRequest status);
+    void open(@PathVariable Long id);
+
+    @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
+    @PatchMapping("/{id}:close")
+    @Operation(
+            summary = "Закрыть тест для прохождения",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "Тест закрыт для прохождения"),
+                    @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста"),
+                    @ApiResponse(responseCode = "404", description = "Тест с таким идентификатором не найден"),
+            }
+    )
+    void close(@PathVariable Long id);
 
     @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
     @DeleteMapping("/{id}")

@@ -22,7 +22,7 @@ public class TestSessionMapper {
         data.setId(testSession.getId());
         data.setStatus(testSession.getStatus());
         data.setCountPoints(testSession.getCountPoints());
-        data.setTest(testMapper.toSessionData(testSession.getTest()));
+        data.setTest(testMapper.toSession(testSession.getTest()));
         data.setClosedAt(testSession.getClosedAt());
         data.setCreatedAt(testSession.getCreatedAt());
 

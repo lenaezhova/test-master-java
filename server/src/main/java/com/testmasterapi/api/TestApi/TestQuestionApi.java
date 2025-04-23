@@ -1,15 +1,13 @@
 package com.testmasterapi.api.TestApi;
 
+import com.testmasterapi.api.AnswerTemplateApi;
 import com.testmasterapi.api.QuestionApi.QuestionApi;
-import com.testmasterapi.api.TestSessionApi;
 import com.testmasterapi.domain.question.data.QuestionData;
+import com.testmasterapi.domain.question.reponse.QuestionsResponse;
 import com.testmasterapi.domain.question.request.QuestionCreateRequest;
-import com.testmasterapi.domain.test.data.TestData;
-import com.testmasterapi.domain.test.request.TestCreateRequest;
-import com.testmasterapi.domain.test.request.TestUpdateRequest;
-import com.testmasterapi.domain.test.request.TestUpdateStatusRequest;
+import com.testmasterapi.domain.question.request.QuestionCreateWithAnswersTemplatesRequest;
+import com.testmasterapi.domain.question.request.QuestionUpdateWithAnswersTemplatesRequest;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +24,7 @@ public interface TestQuestionApi {
     @PreAuthorize("isAuthenticated()")
     @GetMapping
     @Operation(summary = "Получение всех вопросов теста")
-    List<QuestionData> allQuestions(@PathVariable Long testId);
+    QuestionsResponse allQuestions(@PathVariable Long testId);
 
     @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
     @PostMapping
@@ -41,6 +39,20 @@ public interface TestQuestionApi {
             }
     )
     ResponseEntity<Void> createQuestion(@PathVariable Long testId, @RequestBody QuestionCreateRequest request);
+
+    @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
+    @PostMapping(AnswerTemplateApi.BASE_PATH)
+    @Operation(
+            summary = "Создать вопрос с шаблонами ответов",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Вопрос создан"),
+                    @ApiResponse(responseCode = "400", description = "Ошибка при создании вопроса"),
+                    @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста"),
+                    @ApiResponse(responseCode = "404", description = "Тест с таким идентификатором не найден"),
+                    @ApiResponse(responseCode = "409", description = "Тест открыт для прохождения"),
+            }
+    )
+    ResponseEntity<Void> createQuestionWithTemplates(@PathVariable Long testId, @RequestBody QuestionCreateWithAnswersTemplatesRequest request);
 
     @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
     @DeleteMapping

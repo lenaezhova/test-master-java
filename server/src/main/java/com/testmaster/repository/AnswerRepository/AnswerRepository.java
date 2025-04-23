@@ -12,20 +12,41 @@ import java.util.List;
 
 @Repository
 public interface AnswerRepository extends JpaRepository<Answer, Long>, AnswerRepositoryCustom {
-    @Modifying
-    @Query("delete from Answer a where a.id = :id")
-    int delete(@Param("id") Long id);
-
     @Query("""
         select a from Answer a
-        where a.question.id = :questionId and a.question.softDeleted = false
+        where a.question.id = :questionId
     """)
     List<Answer> findAllByQuestionId(@Param("questionId") Long questionId);
 
     @Modifying
+    @Query("delete from Answer a where a.id = :id")
+    int delete(@Param("id") Long id);
+
+    @Modifying
     @Query("""
         delete from Answer a
-        where a.question.id = :questionId and a.question.softDeleted = false
+        where a.testSession.id = :testSessionId
+    """)
+    int deleteAllByTestSessionId(@Param("testSessionId") Long testSessionId);
+
+    @Modifying
+    @Query("""
+        delete from Answer a
+        where a.question.id = :questionId and a.testSession.id = :testSessionId
+    """)
+    int deleteAllByQuestionIdAndTestSessionId(@Param("testSessionId") Long testSessionId, @Param("questionId") Long questionId);
+
+    @Modifying
+    @Query("""
+        delete from Answer a
+        where a.question.id = :questionId
     """)
     int deleteAllByQuestionId(@Param("questionId") Long questionId);
+
+    @Modifying
+    @Query("""
+        delete from Answer a
+        where a.question.id in :ids
+    """)
+    void deleteAllByQuestionIds(@Param("ids") List<Long> ids);
 }

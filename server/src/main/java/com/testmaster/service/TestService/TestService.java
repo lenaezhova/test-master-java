@@ -1,13 +1,8 @@
 package com.testmaster.service.TestService;
 
-import com.testmasterapi.domain.group.data.GroupData;
-import com.testmasterapi.domain.question.data.QuestionData;
-import com.testmasterapi.domain.question.request.QuestionCreateRequest;
 import com.testmasterapi.domain.test.data.TestData;
 import com.testmasterapi.domain.test.request.TestCreateRequest;
 import com.testmasterapi.domain.test.request.TestUpdateRequest;
-import com.testmasterapi.domain.testSession.data.TestSessionData;
-import com.testmasterapi.domain.testSession.request.TestSessionCreateRequest;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -41,6 +36,7 @@ public interface TestService {
      */
     @NotNull
     TestData create(@NotNull TestCreateRequest request);
+
     /**
      * Обновить тест.
      *
@@ -48,4 +44,11 @@ public interface TestService {
      * @param request Запрос
      */
     void update(Long testId, TestUpdateRequest request);
+
+    /**
+     * Удалить тест.
+     *
+     * @param testId Идентификатор теста
+     */
+    void delete(Long testId);
 }

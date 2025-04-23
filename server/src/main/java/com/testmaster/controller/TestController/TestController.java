@@ -3,15 +3,11 @@ package com.testmaster.controller.TestController;
 import com.testmaster.annotations.CheckTest.CheckTest;
 import com.testmaster.service.TestService.TestService;
 import com.testmasterapi.api.TestApi.TestApi;
-import com.testmasterapi.domain.question.data.QuestionData;
-import com.testmasterapi.domain.question.request.QuestionCreateRequest;
 import com.testmasterapi.domain.test.TestStatus;
 import com.testmasterapi.domain.test.data.TestData;
 import com.testmasterapi.domain.test.request.TestCreateRequest;
 import com.testmasterapi.domain.test.request.TestUpdateRequest;
-import com.testmasterapi.domain.test.request.TestUpdateStatusRequest;
-import com.testmasterapi.domain.testSession.data.TestSessionData;
-import com.testmasterapi.domain.testSession.request.TestSessionCreateRequest;
+import com.testmasterapi.domain.test.response.TestsResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,8 +22,8 @@ public class TestController implements TestApi {
     private final TestService testService;
 
     @Override
-    public List<TestData> all() {
-        return testService.getAll();
+    public TestsResponse all() {
+        return new TestsResponse(testService.getAll());
     }
 
     @Override
@@ -51,10 +47,19 @@ public class TestController implements TestApi {
 
     @Override
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @CheckTest(testId = "id", checkOwner = true, status = TestStatus.OPENED)
-    public void updateStatus(Long id, TestUpdateStatusRequest request) {
+    @CheckTest(testId = "id", checkOwner = true)
+    public void open(Long id) {
         var data = new TestUpdateRequest();
-        data.setStatus(request.getStatus());
+        data.setStatus(TestStatus.OPENED);
+        testService.update(id, data);
+    }
+
+    @Override
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @CheckTest(testId = "id", checkOwner = true)
+    public void close(Long id) {
+        var data = new TestUpdateRequest();
+        data.setStatus(TestStatus.CLOSED);
         testService.update(id, data);
     }
 
@@ -62,8 +67,6 @@ public class TestController implements TestApi {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @CheckTest(testId = "id", checkOwner = true, status = TestStatus.CLOSED)
     public void delete(Long id) {
-        var request = new TestUpdateRequest();
-        request.setDeleted(true);
-        testService.update(id, request);
+        testService.delete(id);
     }
 }

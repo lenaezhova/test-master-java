@@ -4,7 +4,10 @@ import com.testmaster.annotations.CheckTest.CheckTest;
 import com.testmaster.service.QuestionService.QuestionService;
 import com.testmasterapi.api.QuestionApi.QuestionApi;
 import com.testmasterapi.domain.question.data.QuestionData;
+import com.testmasterapi.domain.question.data.QuestionWithTemplatesData;
+import com.testmasterapi.domain.question.reponse.QuestionsResponse;
 import com.testmasterapi.domain.question.request.QuestionUpdateRequest;
+import com.testmasterapi.domain.question.request.QuestionUpdateWithAnswersTemplatesRequest;
 import com.testmasterapi.domain.test.TestStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,8 +24,8 @@ public class QuestionController implements QuestionApi {
     private final QuestionService questionService;
 
     @Override
-    public List<QuestionData> all() {
-        return questionService.getAll();
+    public QuestionsResponse all() {
+        return new QuestionsResponse(questionService.getAll());
     }
 
     @Override

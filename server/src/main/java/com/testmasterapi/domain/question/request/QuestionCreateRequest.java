@@ -1,12 +1,11 @@
 package com.testmasterapi.domain.question.request;
 
 import com.testmasterapi.domain.question.QuestionTypes;
+import lombok.Data;
 
-import java.util.List;
-
-public record QuestionCreateRequest (
-    String title,
-    String description,
-    QuestionTypes type
-) {
+@Data
+public class QuestionCreateRequest {
+    private String title;
+    private String description;
+    private  QuestionTypes type;
 }

@@ -31,11 +31,21 @@ public interface QuestionRepository extends JpaRepository<Question, Long>, Quest
         select q from Question q
         where q.id = :id and q.softDeleted = false
     """)
-    Optional<Question> findById(@Param("id") Long id);
+    Optional<Question> findById(@NotNull @Param("id") Long id);
 
     @Modifying
-    @Query("delete from Question q where q.id = :id and q.softDeleted = false")
+    @Query("""
+        delete from Question q
+        where q.id = :id and q.softDeleted = false
+    """)
     int delete(@Param("id") Long id);
+
+    @Modifying
+    @Query("""
+        delete from Question q
+        where q.id in :ids and q.softDeleted = false
+    """)
+    void deleteByIds(@Param("ids") List<Long> ids);
 
     @Modifying
     @Query("delete from Question q where q.test.id = :testId")

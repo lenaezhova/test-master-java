@@ -3,6 +3,7 @@ package com.testmaster.controller.UserController;
 import com.testmaster.util.CookieUtil;
 import com.testmasterapi.api.UserApi.UserApi;
 import com.testmasterapi.domain.testSession.data.TestSessionData;
+import com.testmasterapi.domain.testSession.response.TestsSessionsResponse;
 import com.testmasterapi.domain.user.JwtTokenPair;
 import com.testmasterapi.domain.user.data.UserData;
 import com.testmasterapi.domain.user.request.UserCreateRequest;
@@ -10,6 +11,7 @@ import com.testmasterapi.domain.user.request.UserLoginRequest;
 import com.testmasterapi.domain.user.request.UserUpdateRequest;
 import com.testmasterapi.domain.user.response.TokensResponse;
 import com.testmaster.service.UserService.UserService;
+import com.testmasterapi.domain.user.response.UsersResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -32,13 +34,13 @@ public class UserController implements UserApi {
     private final UserService userService;
 
     @Override
-    public List<UserData> all() {
-        return userService.getAll();
+    public UsersResponse all() {
+        return new UsersResponse(userService.getAll());
     }
 
     @Override
-    public List<TestSessionData> allSessions(Long id) {
-        return userService.getAllSessions(id);
+    public TestsSessionsResponse allSessions(Long id) {
+        return new TestsSessionsResponse(userService.getAllSessions(id));
     }
 
     @Override

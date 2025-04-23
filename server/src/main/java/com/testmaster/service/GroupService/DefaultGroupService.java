@@ -56,7 +56,7 @@ public class DefaultGroupService implements GroupService {
     public List<TestGroupsData> getAllTests(Long groupId) {
         return groupTestRepository.findAllByGroupId(groupId)
                 .stream()
-                .map(testMapper::toTestGroupsData)
+                .map(testMapper::toTestGroups)
                 .toList();
     }
 

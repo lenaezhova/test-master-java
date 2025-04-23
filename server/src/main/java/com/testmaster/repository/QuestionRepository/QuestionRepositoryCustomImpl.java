@@ -30,7 +30,6 @@ public class QuestionRepositoryCustomImpl implements QuestionRepositoryCustom {
         var params = new MapSqlParameterSource()
                 .addValue("title", request.getTitle())
                 .addValue("description", request.getDescription())
-//                    .addValue("answer_templates", mapper.writeValueAsString(request.getAnswerTemplates()))
                 .addValue("soft_deleted", request.isSoftDeleted())
                 .addValue("updated_at", now)
                 .addValue("qid", questionId);

@@ -2,10 +2,11 @@ package com.testmaster.controller.QuestionController;
 
 import com.testmaster.annotations.CheckTest.CheckTest;
 import com.testmaster.service.QuestionService.QuestionAnswerTemplate.QuestionAnswerTemplatesService;
-import com.testmaster.service.QuestionService.QuestionService;
 import com.testmasterapi.api.QuestionApi.QuestionAnswerTemplatesApi;
 import com.testmasterapi.domain.answerTemplate.data.AnswerTemplateData;
 import com.testmasterapi.domain.answerTemplate.request.AnswerTemplateCreateRequest;
+import com.testmasterapi.domain.question.data.QuestionWithTemplatesData;
+import com.testmasterapi.domain.question.request.QuestionUpdateWithAnswersTemplatesRequest;
 import com.testmasterapi.domain.test.TestStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,23 +24,15 @@ public class QuestionAnswersTemplatesController implements QuestionAnswerTemplat
     private final QuestionAnswerTemplatesService questionAnswerTemplatesService;
 
     @Override
-    public List<AnswerTemplateData> allAnswerTemplate(Long id) {
-        return questionAnswerTemplatesService.getAllAnswerTemplate(id);
-    }
-
-    @Override
-    @CheckTest(questionId = "id", checkOwner = true, status = TestStatus.CLOSED)
-    public ResponseEntity<Void> createAnswerTemplate(Long questionId, AnswerTemplateCreateRequest request) {
-        var answerTemplate = questionAnswerTemplatesService.createAnswerTemplate(questionId, request);
-
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public QuestionWithTemplatesData oneWithTemplates(Long id) {
+        return questionAnswerTemplatesService.getOneWithTemplates(id);
     }
 
     @Override
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @CheckTest(questionId = "id", checkOwner = true, status = TestStatus.CLOSED)
-    public void deleteAllAnswerTemplate(Long id) {
-        questionAnswerTemplatesService.deleteAllAnswerTemplate(id);
+    @CheckTest(questionId = "questionId", checkOwner = true, status = TestStatus.CLOSED)
+    public void updateWithTemplates(Long questionId, QuestionUpdateWithAnswersTemplatesRequest updateRequest) {
+        questionAnswerTemplatesService.updateWithTemplates(questionId, updateRequest);
     }
 }
 

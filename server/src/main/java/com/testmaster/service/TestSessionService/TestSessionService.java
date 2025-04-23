@@ -1,12 +1,8 @@
 package com.testmaster.service.TestSessionService;
 
-import com.testmasterapi.domain.answer.data.AnswerData;
-import com.testmasterapi.domain.answer.request.AnswerCreateRequest;
-import com.testmasterapi.domain.group.data.GroupData;
-import com.testmasterapi.domain.group.request.GroupCreateRequest;
-import com.testmasterapi.domain.group.request.GroupUpdateRequest;
 import com.testmasterapi.domain.testSession.data.TestSessionData;
-import com.testmasterapi.domain.testSession.request.TestSessionCreateRequest;
+import com.testmasterapi.domain.testSession.request.TestSessionAddAnswerRequest;
+import com.testmasterapi.domain.testSession.request.TestSessionAddTestAnswerRequest;
 import com.testmasterapi.domain.testSession.request.TestSessionUpdateRequest;
 import org.jetbrains.annotations.NotNull;
 
@@ -34,15 +30,40 @@ public interface TestSessionService {
     TestSessionData getOne(Long testSessionId);
 
     /**
-     * Метод для создания ответа.
+     * Метод для сохранения результата теста.
+     * @param testSessionId Идентификатор сессии теста
+     * @param request Запрос
+     */
+    void createTestAnswer(@NotNull Long testSessionId,
+                          @NotNull TestSessionAddTestAnswerRequest request);
+
+    /**
+     * Метод для обновления результата теста.
+     * @param testSessionId Идентификатор сессии теста
+     * @param request Запрос
+     */
+    void updateTestAnswer(@NotNull Long testSessionId,
+                          @NotNull TestSessionAddTestAnswerRequest request);
+
+    /**
+     * Метод для создание ответа на вопрос.
      * @param testSessionId Идентификатор сессии теста
      * @param questionId Идентификатор вопроса
-     * @param answerTemplateId Идентификатор шаблона ответа
      * @param request Запрос
-     * @return Созданный ответ
      */
-    @NotNull
-    AnswerData createAnswer(Long testSessionId, Long questionId, Long answerTemplateId, @NotNull AnswerCreateRequest request);
+    void createQuestionAnswer(@NotNull Long testSessionId,
+                      @NotNull Long questionId,
+                      @NotNull TestSessionAddAnswerRequest request);
+
+    /**
+     * Метод для обновления ответа на вопрос.
+     * @param testSessionId Идентификатор сессии теста
+     * @param questionId Идентификатор вопроса
+     * @param request Запрос
+     */
+    void updateQuestionAnswer(Long testSessionId,
+                      Long questionId,
+                      TestSessionAddAnswerRequest request);
 
     /**
      * Обновить сессию.

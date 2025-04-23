@@ -2,6 +2,8 @@ package com.testmaster.repository.AnswerTemplateRepository;
 
 import com.testmaster.model.AnswerTemplate;
 import com.testmaster.model.Question;
+import com.testmasterapi.domain.question.QuestionTypes;
+import com.testmasterapi.domain.question.data.QuestionData;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -15,7 +17,17 @@ import java.util.Optional;
 public interface AnswerTemplateRepository extends JpaRepository<AnswerTemplate, Long>, AnswerTemplateRepositoryCustom {
     @Query("""
         select at from AnswerTemplate at
-        where at.question.id = :questionId and at.question.softDeleted = false
+        where at.question.id = :questionId and
+              at.question.type = :type and
+              at.question.softDeleted = false
+    """)
+    Optional<AnswerTemplate> findByQuestionIdAndQuestionType(@Param("questionId") Long questionId,
+                                                 @Param("type") QuestionTypes questionTypes);
+
+    @Query("""
+        select at from AnswerTemplate at
+        where at.question.id = :questionId and
+              at.question.softDeleted = false
     """)
     List<AnswerTemplate> findAllByQuestionId(@Param("questionId") Long questionId);
 
@@ -26,7 +38,14 @@ public interface AnswerTemplateRepository extends JpaRepository<AnswerTemplate, 
     @Modifying
     @Query("""
         delete from AnswerTemplate at
-        where at.question.id = :questionId and at.question.softDeleted = false
+        where at.question.id = :questionId
     """)
     int deleteAllByQuestionId(@Param("questionId") Long questionId);
+
+    @Modifying
+    @Query("""
+        delete from AnswerTemplate at
+        where at.question.id in :ids
+    """)
+    void deleteAllByQuestionIds(@Param("ids") List<Long> ids);
 }

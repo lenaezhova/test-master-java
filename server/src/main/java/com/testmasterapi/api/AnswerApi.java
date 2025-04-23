@@ -1,15 +1,9 @@
 package com.testmasterapi.api;
 
-import com.testmasterapi.domain.answer.data.AnswerData;
-import com.testmasterapi.domain.answer.request.AnswerCreateRequest;
 import com.testmasterapi.domain.answer.request.AnswerUpdateRequest;
-import com.testmasterapi.domain.answerTemplate.data.AnswerTemplateData;
-import com.testmasterapi.domain.answerTemplate.request.AnswerTemplateCreateRequest;
-import com.testmasterapi.domain.answerTemplate.request.AnswerTemplateUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 

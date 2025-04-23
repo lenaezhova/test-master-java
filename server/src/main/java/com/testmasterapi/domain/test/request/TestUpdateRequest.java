@@ -2,12 +2,11 @@ package com.testmasterapi.domain.test.request;
 
 import com.testmasterapi.domain.test.TestStatus;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
-@EqualsAndHashCode(callSuper = true)
 @Data
-public class TestUpdateRequest extends TestUpdateStatusRequest {
+public class TestUpdateRequest {
     private String title;
     private String description;
     private Boolean deleted;
+    private TestStatus status;
 }

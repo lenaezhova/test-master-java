@@ -2,9 +2,11 @@ package com.testmasterapi.api;
 
 import com.testmasterapi.api.QuestionApi.QuestionApi;
 import com.testmasterapi.api.TestApi.TestApi;
-import com.testmasterapi.domain.answer.request.AnswerCreateRequest;
+import com.testmasterapi.domain.testSession.request.TestSessionAddAnswerRequest;
 import com.testmasterapi.domain.testSession.data.TestSessionData;
+import com.testmasterapi.domain.testSession.request.TestSessionAddTestAnswerRequest;
 import com.testmasterapi.domain.testSession.request.TestSessionUpdateRequest;
+import com.testmasterapi.domain.testSession.response.TestsSessionsResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,37 +24,12 @@ public interface TestSessionApi {
     @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping
     @Operation(summary = "Получение списка всех сессий")
-    List<TestSessionData> all();
+    TestsSessionsResponse all();
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
     @Operation(summary = "Получение сессии")
     TestSessionData one(@PathVariable Long id);
-
-    @PreAuthorize("isAuthenticated()")
-    @PostMapping(
-            "/{id}" +
-            QuestionApi.BASE_PATH + "/{questionId}" +
-            AnswerTemplateApi.BASE_PATH + "/{answerTemplateId}"  +
-            AnswerApi.BASE_PATH
-    )
-    @Operation(
-            summary = "Создать ответ",
-            responses = {
-                    @ApiResponse(responseCode = "201", description = "Ответ создан"),
-                    @ApiResponse(responseCode = "400", description = "Ошибка при создании ответа"),
-                    @ApiResponse(responseCode = "404", description = "Сессия теста с таким идентификатором не найдена"),
-                    @ApiResponse(responseCode = "404", description = "Вопрос с таким идентификатором не найден"),
-                    @ApiResponse(responseCode = "404", description = "Шаблона ответа с таким идентификатором не найден"),
-                    @ApiResponse(responseCode = "409", description = "Тест закрыт для прохождения"),
-            }
-    )
-    ResponseEntity<Void> createAnswer(
-            @PathVariable Long id,
-            @PathVariable Long questionId,
-            @PathVariable Long answerTemplateId,
-            @RequestBody AnswerCreateRequest request
-    );
 
     @PreAuthorize("isAuthenticated()")
     @PatchMapping("/{id}")
@@ -65,6 +42,81 @@ public interface TestSessionApi {
             }
     )
     void update(@PathVariable Long id, @RequestBody TestSessionUpdateRequest request);
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/{id}" + AnswerApi.BASE_PATH)
+    @Operation(
+            summary = "Сохранение ответов на весь тест",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Ответы на тест сохранены"),
+                    @ApiResponse(responseCode = "400", description = "Ошибка при сохранении ответа"),
+                    @ApiResponse(responseCode = "404", description = "Сессия теста с таким идентификатором не найдена"),
+                    @ApiResponse(responseCode = "404", description = "Вопрос с таким идентификатором не найден"),
+                    @ApiResponse(responseCode = "404", description = "Шаблона ответа с таким идентификатором не найден"),
+                    @ApiResponse(responseCode = "409", description = "Тест закрыт для прохождения"),
+            }
+    )
+    ResponseEntity<Void> createTestAnswer(
+            @PathVariable Long id,
+            @RequestBody TestSessionAddTestAnswerRequest request
+    );
+
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/{id}" + AnswerApi.BASE_PATH)
+    @Operation(
+            summary = "Обновление результата всего теста",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Ответы на тест сохранены"),
+                    @ApiResponse(responseCode = "400", description = "Ошибка при сохранении ответа"),
+                    @ApiResponse(responseCode = "404", description = "Сессия теста с таким идентификатором не найдена"),
+                    @ApiResponse(responseCode = "404", description = "Вопрос с таким идентификатором не найден"),
+                    @ApiResponse(responseCode = "404", description = "Шаблона ответа с таким идентификатором не найден"),
+                    @ApiResponse(responseCode = "409", description = "Тест закрыт для прохождения"),
+            }
+    )
+    void updateTestAnswer(
+            @PathVariable Long id,
+            @RequestBody TestSessionAddTestAnswerRequest request
+    );
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/{id}" + QuestionApi.BASE_PATH + "/{questionId}" + AnswerApi.BASE_PATH)
+    @Operation(
+            summary = "Создание ответа на вопрос",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Ответ сохранен"),
+                    @ApiResponse(responseCode = "400", description = "Ошибка при создании ответа"),
+                    @ApiResponse(responseCode = "404", description = "Сессия теста с таким идентификатором не найдена"),
+                    @ApiResponse(responseCode = "404", description = "Вопрос с таким идентификатором не найден"),
+                    @ApiResponse(responseCode = "404", description = "Шаблона ответа с таким идентификатором не найден"),
+                    @ApiResponse(responseCode = "409", description = "Тест закрыт для прохождения"),
+            }
+    )
+    ResponseEntity<Void> createQuestionAnswer(
+            @PathVariable Long id,
+            @PathVariable Long questionId,
+            @RequestBody TestSessionAddAnswerRequest request
+    );
+
+    @PreAuthorize("isAuthenticated()")
+    @PutMapping("/{id}" + QuestionApi.BASE_PATH + "/{questionId}" + AnswerApi.BASE_PATH)
+    @Operation(
+            summary = "Обновление ответа на вопрос",
+            responses = {
+                    @ApiResponse(responseCode = "201", description = "Ответ обновлен"),
+                    @ApiResponse(responseCode = "400", description = "Ошибка при обновлении ответа"),
+                    @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста (если тест закрыт)"),
+                    @ApiResponse(responseCode = "404", description = "Сессия теста с таким идентификатором не найдена"),
+                    @ApiResponse(responseCode = "404", description = "Вопрос с таким идентификатором не найден"),
+                    @ApiResponse(responseCode = "404", description = "Шаблона ответа с таким идентификатором не найден"),
+                    @ApiResponse(responseCode = "409", description = "Тест закрыт для прохождения"),
+            }
+    )
+    void updateQuestionAnswer(
+            @PathVariable Long id,
+            @PathVariable Long questionId,
+            @RequestBody TestSessionAddAnswerRequest request
+    );
 
     @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
     @DeleteMapping("/{id}")

@@ -14,6 +14,8 @@ public @interface CheckTest {
     String questionId() default "";
     String answerTemplateId() default "";
     String answerId() default "";
+    String testSessionId() default "";
     boolean checkOwner() default false;
+    boolean skipCheckStatusForOwner() default false;
     TestStatus status() default TestStatus.OPENED;
 }

@@ -1,14 +1,11 @@
 package com.testmasterapi.api.QuestionApi;
 
 import com.testmasterapi.api.AnswerApi;
-import com.testmasterapi.api.AnswerTemplateApi;
 import com.testmasterapi.domain.answer.data.AnswerData;
-import com.testmasterapi.domain.answerTemplate.data.AnswerTemplateData;
-import com.testmasterapi.domain.answerTemplate.request.AnswerTemplateCreateRequest;
+import com.testmasterapi.domain.answer.response.AnswersResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,10 +16,10 @@ import java.util.List;
 public interface QuestionAnswersApi {
     String PATH = QuestionApi.PATH + "/{questionId}" + AnswerApi.BASE_PATH;
 
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
     @GetMapping
     @Operation(summary = "Получение всех ответов на вопрос")
-    List<AnswerData> allAnswers(@PathVariable("questionId") Long questionId);
+    AnswersResponse allAnswers(@PathVariable("questionId") Long questionId);
 
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping

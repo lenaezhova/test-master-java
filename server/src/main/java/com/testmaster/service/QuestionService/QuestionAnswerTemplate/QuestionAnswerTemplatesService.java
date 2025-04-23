@@ -2,6 +2,8 @@ package com.testmaster.service.QuestionService.QuestionAnswerTemplate;
 
 import com.testmasterapi.domain.answerTemplate.data.AnswerTemplateData;
 import com.testmasterapi.domain.answerTemplate.request.AnswerTemplateCreateRequest;
+import com.testmasterapi.domain.question.data.QuestionWithTemplatesData;
+import com.testmasterapi.domain.question.request.QuestionUpdateWithAnswersTemplatesRequest;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -13,25 +15,19 @@ import java.util.List;
 public interface QuestionAnswerTemplatesService {
 
     /**
-     * Метод для получения всех шаблонов ответов вопроса.
-     * @param questionId Идентификатор вопроса
-     * @return Все шаблоны ответов вопроса
+     * Метод для получения всех вопросов с шаблонами ответов.
+     *
+     * @return Все вопросы с шаблонами ответов
      */
-    List<AnswerTemplateData> getAllAnswerTemplate(Long questionId);
+    QuestionWithTemplatesData getOneWithTemplates(Long questionId);
 
     /**
-     * Метод для создания нового шаблона ответа.
-     * @param questionId Идентификатор вопроса
-     * @param request Запрос
-     * @return Созданный шаблон ответа
-     */
-    @NotNull
-    AnswerTemplateData createAnswerTemplate(Long questionId, @NotNull AnswerTemplateCreateRequest request);
-
-    /**
-     * Метод для удаления всех шаблонов ответа у вопроса.
+     * Метод для обновления вопроса с шаблонами ответов.
+     * Для обновления вопроса с шаблонами нужно обнвоить информацию о самом вопросе и так же информацию в шаблонах ответов.
+     * Елси у шаблона не будет id, то нужно создать новый, при этом старый удалять не будем, чтобы остались ответы пользователей
      *
      * @param questionId Идентификатор вопроса
+     * @param request Запрос
      */
-    void deleteAllAnswerTemplate(Long questionId);
+    void updateWithTemplates(Long questionId, QuestionUpdateWithAnswersTemplatesRequest request);
 }

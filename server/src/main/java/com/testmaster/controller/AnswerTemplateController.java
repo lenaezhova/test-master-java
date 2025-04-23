@@ -4,8 +4,6 @@ package com.testmaster.controller;
 import com.testmaster.annotations.CheckTest.CheckTest;
 import com.testmaster.service.AnswerTemplateService.AnswerTemplateService;
 import com.testmasterapi.api.AnswerTemplateApi;
-import com.testmasterapi.domain.answerTemplate.data.AnswerTemplateData;
-import com.testmasterapi.domain.answerTemplate.request.AnswerTemplateCreateRequest;
 import com.testmasterapi.domain.answerTemplate.request.AnswerTemplateUpdateRequest;
 import com.testmasterapi.domain.test.TestStatus;
 import lombok.RequiredArgsConstructor;

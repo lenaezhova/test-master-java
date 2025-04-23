@@ -21,7 +21,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
                 @Tag(name = "Группы пользователя", description = "API для работы c группами пользователя"),
 
                 @Tag(name = "Тесты", description = "API для работы c тестами"),
-                @Tag(name = "Группы теста", description = "API для работы c группапи теста"),
+                @Tag(name = "Тесты группы", description = "API для работы c группапи теста"),
                 @Tag(name = "Вопросы теста", description = "API для работы c вопросами теста"),
                 @Tag(name = "Сессии теста", description = "API для работы c сессиями теста"),
 
@@ -30,7 +30,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
                 @Tag(name = "Группы", description = "API для работы c группами"),
 
                 @Tag(name = "Вопросы", description = "API для работы c вопросами"),
-                @Tag(name = "Шаблоны ответов вопроса", description = "API для работы c шаблонами ответов вопроса"),
+                @Tag(name = "Шаблоны ответов вопросов", description = "API для работы c шаблонами ответов вопросов"),
                 @Tag(name = "Ответы на вопрос", description = "API для работы c ответами на вопрос"),
 
                 @Tag(name = "Ответы", description = "API для работы c ответами"),
