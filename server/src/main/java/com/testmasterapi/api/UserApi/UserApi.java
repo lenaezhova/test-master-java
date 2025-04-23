@@ -30,7 +30,7 @@ public interface UserApi {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}" + TestSessionApi.BASE_PATH)
-    @Operation(summary = "Получение всех сессий пользователя")
+    @Operation(summary = "Получение всех сессий тестов пользователя")
     List<TestSessionData> allSessions(@PathVariable("id") Long id);
 
     @PreAuthorize("isAuthenticated()")
@@ -65,27 +65,6 @@ public interface UserApi {
             }
     )
     void update(@PathVariable Long id, @RequestBody UserUpdateRequest userUpdateRequest);
-
-    @PostMapping("/auth/registration")
-    @Operation(summary = "Регистрация")
-    ResponseEntity<Object> registration(@RequestBody UserCreateRequest request, HttpServletResponse response);
-
-    @PostMapping("/auth/login")
-    @Operation(summary = "Войти в систему с помощью пароля")
-    ResponseEntity<Object> login(@RequestBody UserLoginRequest request, HttpServletResponse response);
-
-    @PostMapping("/auth/logout")
-    @Operation(summary = "Выйти из системы")
-    ResponseEntity<Object> logout(HttpServletRequest request, HttpServletResponse response);
-
-    @PostMapping("/auth/refresh")
-    @Operation(summary = "Обновить рефреш токен")
-    ResponseEntity<Object> refresh(HttpServletRequest request,
-                                 HttpServletResponse response);
-
-    @GetMapping("/auth/activate/{link}")
-    @Operation(summary = "Активация аккаунта по ссылке")
-    ResponseEntity<Object> activate(@PathVariable String link);
 
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{id}")

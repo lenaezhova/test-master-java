@@ -1,4 +1,4 @@
-package com.testmaster.service.AuthService;
+package com.testmaster.service.UserService.UserAuthService.TokenService;
 
 import com.testmasterapi.domain.user.JwtTokenPair;
 import com.auth0.jwt.interfaces.DecodedJWT;
@@ -12,7 +12,7 @@ import java.util.Optional;
  * Интерфейс для работы с авторизацией.
  *
  */
-public interface AuthService {
+public interface TokenService {
 
     /**
      * Метод для создание токена.

@@ -1,6 +1,6 @@
 package com.testmaster.config.jwt;
 
-import com.testmaster.service.AuthService.AuthService;
+import com.testmaster.service.UserService.UserAuthService.TokenService.TokenService;
 import com.testmasterapi.domain.user.JwtClaimNames;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import jakarta.servlet.FilterChain;
@@ -25,7 +25,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private final AuthService userAuthService;
+    private final TokenService userAuthService;
 
     private final UserDetailsService userDetailsService;
 

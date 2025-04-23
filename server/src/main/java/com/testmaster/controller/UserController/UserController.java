@@ -58,68 +58,6 @@ public class UserController implements UserApi {
     }
 
     @Override
-    public ResponseEntity<Object> registration(UserCreateRequest request, HttpServletResponse response) {
-        JwtTokenPair jwtTokenPair = userService.registration(request);
-
-        CookieUtil.setTokensInCookie(response, jwtTokenPair);
-
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .body(new TokensResponse(jwtTokenPair.accessToken()));
-    }
-
-    @Override
-    public ResponseEntity<Object> login(UserLoginRequest request, HttpServletResponse response) {
-        JwtTokenPair jwtTokenPair = userService.login(request);
-
-        CookieUtil.setTokensInCookie(response, jwtTokenPair);
-
-        return ResponseEntity
-                .ok()
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .body(new TokensResponse(jwtTokenPair.accessToken()));
-    }
-
-    @Override
-    public ResponseEntity<Object> logout(HttpServletRequest request, HttpServletResponse response) {
-        String refreshToken = CookieUtil.getRefreshToken(request);
-
-        userService.logout(refreshToken);
-
-        CookieUtil.deleteTokensFromCookie(response);
-
-        return ResponseEntity
-                .ok()
-                .build();
-    }
-
-    @Override
-    public ResponseEntity<Object> refresh(HttpServletRequest request, HttpServletResponse response) {
-        String refreshToken = CookieUtil.getRefreshToken(request);
-
-        JwtTokenPair jwtTokenPair = userService.refresh(refreshToken);
-
-        CookieUtil.setTokensInCookie(response, jwtTokenPair);
-
-        return ResponseEntity
-                .ok()
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .body(new TokensResponse(jwtTokenPair.accessToken()));
-    }
-
-    @Override
-    public ResponseEntity<Object> activate(String link) {
-        userService.activate(link);
-
-        String clientUrl = System.getenv("CLIENT_URL");
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(URI.create(clientUrl));
-
-        return new ResponseEntity<>(headers, HttpStatus.FOUND);
-    }
-
-    @Override
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(Long id) {
         var updateRequest = new UserUpdateRequest();

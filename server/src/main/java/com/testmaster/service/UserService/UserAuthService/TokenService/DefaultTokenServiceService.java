@@ -1,4 +1,4 @@
-package com.testmaster.service.AuthService;
+package com.testmaster.service.UserService.UserAuthService.TokenService;
 
 import com.testmasterapi.domain.user.JwtClaimNames;
 import com.testmasterapi.domain.user.JwtTokenPair;
@@ -24,7 +24,7 @@ import java.time.Duration;
 
 @Service
 @RequiredArgsConstructor
-public class DefaultAuthService implements AuthService {
+public class DefaultTokenServiceService implements TokenService {
     private final AuthProperties authProperties;
 
     private final TokenRepository tokenRepository;

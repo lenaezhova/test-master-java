@@ -53,39 +53,4 @@ public interface UserService {
      * @param request Запрос
      */
     void update(Long userId, UserUpdateRequest request);
-
-    /**
-     * Зарегистрировать пользователя.
-     *
-     * @param request Запрос
-     */
-    JwtTokenPair registration(UserCreateRequest request);
-
-    /**
-     * Авторизация.
-     *
-     * @param request Запрос
-     */
-    JwtTokenPair login(UserLoginRequest request);
-
-    /**
-     * Выйти.
-     *
-     * @param refreshToken рефреш токен
-     */
-    void logout(String refreshToken);
-
-    /**
-     * Обновить рефреш токен.
-     *
-     * @param refreshToken рефреш токен
-     */
-    JwtTokenPair refresh(String refreshToken);
-
-    /**
-     * Активировать пользователя.
-     *
-     * @param link ссылка на активацию
-     */
-    void activate(String link);
 }
