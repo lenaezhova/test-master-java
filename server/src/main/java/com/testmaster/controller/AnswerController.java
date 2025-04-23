@@ -29,19 +29,6 @@ public class AnswerController implements AnswerApi {
     private final AnswerService answerService;
 
     @Override
-    public List<AnswerData> allByQuestionId(Long questionId) {
-        return answerService.getAllByQuestionId(questionId);
-    }
-
-    @Override
-    @CheckTest(questionId = "questionId", status = TestStatus.OPENED)
-    public ResponseEntity<Void> create(Long testSessionId, Long questionId, Long answerTemplateId, AnswerCreateRequest request) {
-        var answer = answerService.create(testSessionId, questionId, answerTemplateId, request);
-
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
-    @Override
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @CheckTest(answerId = "id", status = TestStatus.OPENED)
     public void update(Long id, AnswerUpdateRequest request) {
@@ -53,12 +40,5 @@ public class AnswerController implements AnswerApi {
     @CheckTest(answerId = "id", status = TestStatus.OPENED)
     public void delete(Long id) {
         answerService.delete(id);
-    }
-
-    @Override
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @CheckTest(questionId = "questionId", status = TestStatus.OPENED)
-    public void deleteAllByQuestionId(Long questionId) {
-        answerService.deleteAllByQuestionId(questionId);
     }
 }

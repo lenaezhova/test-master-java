@@ -1,5 +1,7 @@
 package com.testmaster.model;
 
+import com.testmaster.model.Test.Test;
+import com.testmaster.model.User.User;
 import com.testmasterapi.domain.testSession.TestSessionStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

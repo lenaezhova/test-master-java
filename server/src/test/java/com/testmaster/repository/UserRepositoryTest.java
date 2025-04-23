@@ -2,7 +2,7 @@ package com.testmaster.repository;
 
 import com.testmaster.repository.UserRepository.UserRepository;
 import com.testmasterapi.domain.user.UserRoles;
-import com.testmaster.model.User;
+import com.testmaster.model.User.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -60,7 +60,7 @@ public class UserRepositoryTest {
 
         User persisted = entityManager.persist(user);
 
-        Optional<User> foundUserOpt = userRepository.findUserById(persisted.getId());
+        Optional<User> foundUserOpt = userRepository.findById(persisted.getId());
 
         assertTrue(foundUserOpt.isPresent());
 

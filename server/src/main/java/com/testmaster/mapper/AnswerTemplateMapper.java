@@ -4,26 +4,22 @@ import com.testmaster.model.AnswerTemplate;
 import com.testmaster.model.Question;
 import com.testmasterapi.domain.answerTemplate.data.AnswerTemplateData;
 import com.testmasterapi.domain.answerTemplate.request.AnswerTemplateCreateRequest;
+import com.testmasterapi.domain.user.CustomUserDetails;
 import org.mapstruct.Mapper;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import java.util.Objects;
 
 
 @Mapper(componentModel = "spring")
 public class AnswerTemplateMapper {
 
-    public AnswerTemplateData toPrivate(AnswerTemplate answerTemplate) {
-        var data = new AnswerTemplateData();
-        fillAnswerTemplate(data, answerTemplate);
-        data.setCorrect(answerTemplate.getIsCorrect());
-        data.setCountPoints(answerTemplate.getCountPoints());
-
-        return data;
-    }
-
-    public AnswerTemplateData toPublic(AnswerTemplate answerTemplate) {
-        var data = new AnswerTemplateData();
-        fillAnswerTemplate(data, answerTemplate);
-
-        return data;
+    public AnswerTemplateData toData(AnswerTemplate answerTemplate) {
+        var currentUser = this.getCurrentUser();
+        var isOwnerTest = Objects.equals(currentUser.getId(), answerTemplate.getQuestion().getTest().getOwner().getId());
+        return isOwnerTest
+                ? this.toPrivate(answerTemplate)
+                : this.toPublic(answerTemplate);
     }
 
     public AnswerTemplate toEntity(AnswerTemplateCreateRequest request, Question question) {
@@ -38,8 +34,28 @@ public class AnswerTemplateMapper {
         return entity;
     }
 
+    private AnswerTemplateData toPrivate(AnswerTemplate answerTemplate) {
+        var data = new AnswerTemplateData();
+        fillAnswerTemplate(data, answerTemplate);
+        data.setCorrect(answerTemplate.getIsCorrect());
+        data.setCountPoints(answerTemplate.getCountPoints());
+
+        return data;
+    }
+
+    private AnswerTemplateData toPublic(AnswerTemplate answerTemplate) {
+        var data = new AnswerTemplateData();
+        fillAnswerTemplate(data, answerTemplate);
+
+        return data;
+    }
+
     private void fillAnswerTemplate(AnswerTemplateData data, AnswerTemplate answerTemplate) {
         data.setId(answerTemplate.getId());
         data.setDescription(answerTemplate.getDescription());
+    }
+
+    private CustomUserDetails getCurrentUser() {
+        return (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

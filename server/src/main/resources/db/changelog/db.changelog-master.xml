@@ -18,5 +18,6 @@
     <include file="db/changelog/changes/0.0.10_add_saved_type.xml"/>
     <include file="/db/changelog/changes/0.0.11_add_deleted_fields_and_refactor.xml"/>
     <include file="/db/changelog/changes/0.0.12_refactor_answers_logic.xml"/>
+    <include file="/db/changelog/changes/0.0.13_rename_dop_groups.xml"/>
 
 </databaseChangeLog>

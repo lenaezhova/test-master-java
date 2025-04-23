@@ -2,8 +2,8 @@ package com.testmaster.repository;
 
 import com.testmaster.repository.GroupRepository.GroupRepository;
 import com.testmasterapi.domain.user.UserRoles;
-import com.testmaster.model.Group.Group;
-import com.testmaster.model.User;
+import com.testmaster.model.Group;
+import com.testmaster.model.User.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

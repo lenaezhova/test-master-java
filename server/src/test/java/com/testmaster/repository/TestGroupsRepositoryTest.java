@@ -1,12 +1,12 @@
 package com.testmaster.repository;
 
-import com.testmaster.model.Group.GroupTest;
+import com.testmaster.model.Test.TestGroup;
 import com.testmasterapi.domain.user.UserRoles;
-import com.testmaster.model.Group.Group;
-import com.testmasterapi.domain.group.GroupTestId;
-import com.testmaster.model.Test;
+import com.testmaster.model.Group;
+import com.testmasterapi.domain.test.TestGroupId;
+import com.testmaster.model.Test.Test;
 import com.testmasterapi.domain.test.TestStatus;
-import com.testmaster.model.User;
+import com.testmaster.model.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
@@ -24,7 +24,7 @@ public class TestGroupsRepositoryTest {
     private TestEntityManager entityManager;
 
     @Autowired
-    private GroupTestRepository groupsTestRepository;
+    private TestGroupRepository groupsTestRepository;
 
     @org.junit.jupiter.api.Test
     public void testSaveGroupsTestModel() {
@@ -55,18 +55,18 @@ public class TestGroupsRepositoryTest {
         );
         entityManager.persist(group);
 
-        GroupTestId id = new GroupTestId(
+        TestGroupId id = new TestGroupId(
                 test.getId(),
                 group.getId()
         );
 
-        GroupTest link = new GroupTest(
+        TestGroup link = new TestGroup(
                 id,
                 test,
                 group
         );
 
-        GroupTest saved = groupsTestRepository.save(link);
+        TestGroup saved = groupsTestRepository.save(link);
 
         assertNotNull(saved.getId());
         assertEquals(test.getId(), saved.getTest().getId());
@@ -103,22 +103,22 @@ public class TestGroupsRepositoryTest {
         );
         entityManager.persist(group);
 
-        GroupTestId id = new GroupTestId(
+        TestGroupId id = new TestGroupId(
                 test.getId(),
                 group.getId()
         );
 
-        GroupTest link = new GroupTest(
+        TestGroup link = new TestGroup(
                 id,
                 test,
                 group
         );
         entityManager.persist(link);
 
-        Optional<GroupTest> foundOpt = groupsTestRepository.findById(id);
+        Optional<TestGroup> foundOpt = groupsTestRepository.findById(id);
         assertTrue(foundOpt.isPresent());
 
-        GroupTest found = foundOpt.get();
+        TestGroup found = foundOpt.get();
         assertEquals("Тест B", found.getTest().getTitle());
         assertEquals("Группа B", found.getGroup().getTitle());
         assertEquals("Пётр Петров", found.getGroup().getOwner().getName());

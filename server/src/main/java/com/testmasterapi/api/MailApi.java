@@ -7,11 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@Tag(name = "Почта", description = "API для работы c почтой")
+@Tag(name = "Почта")
 public interface MailApi {
     String PATH = "/api/mail";
 
     @PostMapping
-    @Operation(summary = "Отправить почту")
+    @Operation(summary = "Отправить подтверждение аккаунта на почту")
     ResponseEntity<Object> sendConfirmEmail(@RequestBody SendConfirmEmailRequest request);
 }

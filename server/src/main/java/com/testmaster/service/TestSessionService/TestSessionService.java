@@ -1,5 +1,7 @@
 package com.testmaster.service.TestSessionService;
 
+import com.testmasterapi.domain.answer.data.AnswerData;
+import com.testmasterapi.domain.answer.request.AnswerCreateRequest;
 import com.testmasterapi.domain.group.data.GroupData;
 import com.testmasterapi.domain.group.request.GroupCreateRequest;
 import com.testmasterapi.domain.group.request.GroupUpdateRequest;
@@ -24,13 +26,6 @@ public interface TestSessionService {
     List<TestSessionData> getAll();
 
     /**
-     * Метод для получения всех сессий пользователя
-     *
-     * @return Все сессии пользователя
-     */
-    List<TestSessionData> getAllByUserId(Long userId);
-
-    /**
      * Метод для получения одной сессии.
      *
      * @param testSessionId Идентификатор сессии
@@ -39,13 +34,15 @@ public interface TestSessionService {
     TestSessionData getOne(Long testSessionId);
 
     /**
-     * Метод для создания новой сессии.
-     *
+     * Метод для создания ответа.
+     * @param testSessionId Идентификатор сессии теста
+     * @param questionId Идентификатор вопроса
+     * @param answerTemplateId Идентификатор шаблона ответа
      * @param request Запрос
-     * @return Созданная сессия
+     * @return Созданный ответ
      */
     @NotNull
-    TestSessionData create(Long testId, @NotNull TestSessionCreateRequest request);
+    AnswerData createAnswer(Long testSessionId, Long questionId, Long answerTemplateId, @NotNull AnswerCreateRequest request);
 
     /**
      * Обновить сессию.

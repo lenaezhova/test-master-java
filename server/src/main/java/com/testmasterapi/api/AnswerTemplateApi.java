@@ -15,27 +15,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "Шаблоны ответов", description = "API для работы c шаблонами ответов")
+@Tag(name = "Шаблоны ответов")
 public interface AnswerTemplateApi {
-    String PATH = "/api/answers-templates";
-
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/questions/{questionId}")
-    @Operation(summary = "Получение всех шаблонов ответа по вопросу")
-    List<AnswerTemplateData> allByQuestionId(@PathVariable("questionId") Long questionId);
-
-    @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
-    @PostMapping("/questions/{questionId}")
-    @Operation(
-            summary = "Создать шаблон ответа",
-            responses = {
-                    @ApiResponse(responseCode = "201", description = "Шаблон ответа создан"),
-                    @ApiResponse(responseCode = "400", description = "Ошибка при создании шаблона ответа"),
-                    @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста"),
-                    @ApiResponse(responseCode = "409", description = "Тест открыт для прохождения"),
-            }
-    )
-    ResponseEntity<Void> create(@PathVariable Long questionId, @RequestBody AnswerTemplateCreateRequest request);
+    String BASE_PATH = AnswerApi.BASE_PATH + "-templates";
+    String PATH = "/api" + BASE_PATH;
 
     @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
     @PatchMapping("/{id}")
@@ -62,17 +45,4 @@ public interface AnswerTemplateApi {
             }
     )
     void delete(@PathVariable Long id);
-
-    @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
-    @DeleteMapping("/questions/{questionId}")
-    @Operation(
-            summary = "Удалить все шаблоны ответа вопроса",
-            responses = {
-                    @ApiResponse(responseCode = "204", description = "Вопросы удалены"),
-                    @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста"),
-                    @ApiResponse(responseCode = "404", description = "Вопрос с таким идентификатором не найден"),
-                    @ApiResponse(responseCode = "409", description = "Тест открыт для прохождения"),
-            }
-    )
-    void deleteAllByQuestionId(@PathVariable Long questionId);
 }

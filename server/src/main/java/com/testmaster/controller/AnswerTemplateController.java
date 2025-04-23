@@ -24,19 +24,6 @@ public class AnswerTemplateController implements AnswerTemplateApi {
     private final AnswerTemplateService answerTemplateService;
 
     @Override
-    public List<AnswerTemplateData> allByQuestionId(Long questionId) {
-        return answerTemplateService.getAllByQuestionId(questionId);
-    }
-
-    @Override
-    @CheckTest(questionId = "questionId", checkOwner = true, status = TestStatus.CLOSED)
-    public ResponseEntity<Void> create(Long questionId, AnswerTemplateCreateRequest request) {
-        answerTemplateService.create(questionId, request);
-
-        return ResponseEntity.status(HttpStatus.CREATED).build();
-    }
-
-    @Override
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @CheckTest(answerTemplateId = "id", checkOwner = true, status = TestStatus.CLOSED)
     public void update(Long id, AnswerTemplateUpdateRequest updateRequest) {
@@ -48,12 +35,5 @@ public class AnswerTemplateController implements AnswerTemplateApi {
     @CheckTest(answerTemplateId = "id", checkOwner = true, status = TestStatus.CLOSED)
     public void delete(Long id) {
         answerTemplateService.delete(id);
-    }
-
-    @Override
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @CheckTest(questionId = "questionId", checkOwner = true, status = TestStatus.CLOSED)
-    public void deleteAllByQuestionId(Long questionId) {
-        answerTemplateService.deleteAllByQuestionId(questionId);
     }
 }

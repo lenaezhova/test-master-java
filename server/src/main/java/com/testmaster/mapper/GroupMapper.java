@@ -1,7 +1,7 @@
 package com.testmaster.mapper;
-import com.testmaster.model.User;
+import com.testmaster.model.User.User;
 import com.testmasterapi.domain.group.data.GroupData;
-import com.testmaster.model.Group.Group;
+import com.testmaster.model.Group;
 import com.testmasterapi.domain.group.data.GroupsUserData;
 import com.testmasterapi.domain.group.request.GroupCreateRequest;
 import org.mapstruct.*;
@@ -12,7 +12,7 @@ public class GroupMapper {
     @Autowired
     private UserMapper userMapper;
 
-    public GroupData toGroupData(Group group) {
+    public GroupData toData(Group group) {
         var groupData = new GroupData();
         groupData.setId(group.getId());
         groupData.setTitle(group.getTitle());
@@ -29,7 +29,7 @@ public class GroupMapper {
         return entity;
     }
 
-    public GroupsUserData toGroupsUserData(Group group) {
+    public GroupsUserData toGroupsUser(Group group) {
         var groupsUserData = new GroupsUserData();
         groupsUserData.setId(group.getId());
         groupsUserData.setTitle(group.getTitle());

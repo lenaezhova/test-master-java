@@ -1,12 +1,8 @@
 package com.testmaster.mapper;
 
-import com.testmaster.model.Group.Group;
-import com.testmaster.model.Test;
+import com.testmaster.model.Test.Test;
 import com.testmaster.model.TestSession;
-import com.testmaster.model.User;
-import com.testmasterapi.domain.group.data.GroupData;
-import com.testmasterapi.domain.group.data.GroupsUserData;
-import com.testmasterapi.domain.group.request.GroupCreateRequest;
+import com.testmaster.model.User.User;
 import com.testmasterapi.domain.testSession.TestSessionStatus;
 import com.testmasterapi.domain.testSession.data.TestSessionData;
 import com.testmasterapi.domain.testSession.request.TestSessionCreateRequest;

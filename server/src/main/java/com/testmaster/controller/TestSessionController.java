@@ -3,6 +3,7 @@ package com.testmaster.controller;
 import com.testmaster.annotations.CheckTest.CheckTest;
 import com.testmaster.service.TestSessionService.TestSessionService;
 import com.testmasterapi.api.TestSessionApi;
+import com.testmasterapi.domain.answer.request.AnswerCreateRequest;
 import com.testmasterapi.domain.test.TestStatus;
 import com.testmasterapi.domain.testSession.data.TestSessionData;
 import com.testmasterapi.domain.testSession.request.TestSessionCreateRequest;
@@ -28,22 +29,18 @@ public class TestSessionController implements TestSessionApi {
     }
 
     @Override
-    public List<TestSessionData> allByUserId(Long userId) {
-        return testSessionService.getAllByUserId(userId);
-    }
-
-    @Override
     public TestSessionData one(Long id) {
         return testSessionService.getOne(id);
     }
 
     @Override
-    @CheckTest(testId = "testId", checkOwner = true, status = TestStatus.OPENED)
-    public ResponseEntity<Void> create(Long testId, TestSessionCreateRequest request) {
-        testSessionService.create(testId, request);
+    @CheckTest(questionId = "questionId", status = TestStatus.OPENED)
+    public ResponseEntity<Void> createAnswer(Long id, Long questionId, Long answerTemplateId, AnswerCreateRequest request) {
+        var answer = testSessionService.createAnswer(id, questionId, answerTemplateId, request);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
 
     @Override
     @ResponseStatus(HttpStatus.NO_CONTENT)

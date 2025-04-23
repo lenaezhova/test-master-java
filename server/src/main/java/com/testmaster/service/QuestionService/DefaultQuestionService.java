@@ -1,10 +1,18 @@
 package com.testmaster.service.QuestionService;
 
 import com.testmaster.exeption.NotFoundException;
+import com.testmaster.mapper.AnswerMapper;
+import com.testmaster.mapper.AnswerTemplateMapper;
 import com.testmaster.mapper.QuestionMapper;
+import com.testmaster.model.AnswerTemplate;
 import com.testmaster.model.Question;
+import com.testmaster.repository.AnswerRepository.AnswerRepository;
+import com.testmaster.repository.AnswerTemplateRepository.AnswerTemplateRepository;
 import com.testmaster.repository.QuestionRepository.QuestionRepository;
 import com.testmaster.repository.TestRepository.TestRepository;
+import com.testmasterapi.domain.answer.data.AnswerData;
+import com.testmasterapi.domain.answerTemplate.data.AnswerTemplateData;
+import com.testmasterapi.domain.answerTemplate.request.AnswerTemplateCreateRequest;
 import com.testmasterapi.domain.question.data.QuestionData;
 import com.testmasterapi.domain.question.request.QuestionCreateRequest;
 import com.testmasterapi.domain.question.request.QuestionUpdateRequest;
@@ -22,48 +30,54 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class DefaultQuestionService implements QuestionService {
     private final QuestionMapper questionMapper;
+    private final AnswerTemplateMapper answerTemplateMapper;
+    private final AnswerMapper answerMapper;
 
     private final QuestionRepository questionRepository;
-    private final TestRepository testRepository;
+    private final AnswerTemplateRepository answerTemplateRepository;
+    private final AnswerRepository answerRepository;
 
     private final String notFoundQuestionMessage = "Вопрос не найден";
 
     @Override
     public List<QuestionData> getAll() {
-        return questionRepository.findAllQuestions()
+        return questionRepository.findAll()
                 .stream()
-                .map(this::mapQuestionData)
+                .map(questionMapper::toData)
                 .toList();
     }
 
     @Override
-    public List<QuestionData> getAllQuestionsByTestId(Long testId) {
-        return questionRepository.findAllQuestionsByTestId(testId)
+    public List<AnswerTemplateData> getAllAnswerTemplate(Long questionId) {
+        return answerTemplateRepository.findAllByQuestionId(questionId)
                 .stream()
-                .map(this::mapQuestionData)
+                .map(answerTemplateMapper::toData)
                 .toList();
     }
 
     @Override
-    public QuestionData getOne(Long id) {
-        var data = questionRepository.findQuestionById(id)
-                .orElseThrow(() -> new NotFoundException(notFoundQuestionMessage));
-
-        return this.mapQuestionData(data);
+    public List<AnswerData> getAllAnswers(Long questionId) {
+        return answerRepository.findAllByQuestionId(questionId)
+                .stream()
+                .map(answerMapper::toData)
+                .toList();
     }
 
     @NotNull
     @Transactional
     @Override
-    public QuestionData create(Long testId, @NotNull QuestionCreateRequest request) {
+    public AnswerTemplateData createAnswerTemplate(Long questionId, @NotNull AnswerTemplateCreateRequest request) {
+        var question = this.getQuestion(questionId);
 
-        var test = testRepository.findTestById(testId)
-                .orElseThrow(() -> new NotFoundException("Тест не найден"));
+        AnswerTemplate entity = answerTemplateMapper.toEntity(request, question);
 
-        Question question = questionMapper.toEntity(request, test);
+        answerTemplateRepository.save(entity);
+        return answerTemplateMapper.toData(entity);
+    }
 
-        questionRepository.save(question);
-        return this.mapQuestionData(question);
+    @Override
+    public QuestionData getOne(Long id) {
+        return questionMapper.toData(this.getQuestion(id));
     }
 
     @Override
@@ -77,22 +91,24 @@ public class DefaultQuestionService implements QuestionService {
 
     @Override
     @Transactional
-    public void deleteAllQuestion(Long testId) {
-        int deleted = questionRepository.deleteAllQuestionByTestId(testId);
+    public void deleteAllAnswerTemplate(Long questionId) {
+        int deleted = answerTemplateRepository.deleteAllByQuestionId(questionId);
         if (deleted == 0) {
             throw new NotFoundException(notFoundQuestionMessage);
         }
     }
 
-    private QuestionData mapQuestionData(Question question) {
-        var currentUser = this.getCurrentUser();
-        var isOwnerTest = Objects.equals(currentUser.getId(), question.getTest().getOwner().getId());
-        return isOwnerTest
-                ? questionMapper.toPrivate(question)
-                : questionMapper.toPublic(question);
+    @Override
+    @Transactional
+    public void deleteAllAnswers(Long questionId) {
+        int deleted = answerRepository.deleteAllByQuestionId(questionId);
+        if (deleted == 0) {
+            throw new NotFoundException(notFoundQuestionMessage);
+        }
     }
 
-    private CustomUserDetails getCurrentUser() {
-        return (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    private Question getQuestion(Long questionId) {
+        return questionRepository.findById(questionId)
+                .orElseThrow(() -> new NotFoundException(notFoundQuestionMessage));
     }
 }

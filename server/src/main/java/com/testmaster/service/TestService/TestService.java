@@ -1,9 +1,13 @@
 package com.testmaster.service.TestService;
 
 import com.testmasterapi.domain.group.data.GroupData;
+import com.testmasterapi.domain.question.data.QuestionData;
+import com.testmasterapi.domain.question.request.QuestionCreateRequest;
 import com.testmasterapi.domain.test.data.TestData;
 import com.testmasterapi.domain.test.request.TestCreateRequest;
 import com.testmasterapi.domain.test.request.TestUpdateRequest;
+import com.testmasterapi.domain.testSession.data.TestSessionData;
+import com.testmasterapi.domain.testSession.request.TestSessionCreateRequest;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -20,6 +24,7 @@ public interface TestService {
      * @return Все тесты
      */
     List<TestData> getAll();
+
     /**
      * Метод для получения одного теста.
      *
@@ -27,6 +32,7 @@ public interface TestService {
      * @return Один тест
      */
     TestData getOne(Long testId);
+
     /**
      * Метод для создания нового теста.
      *
@@ -35,7 +41,6 @@ public interface TestService {
      */
     @NotNull
     TestData create(@NotNull TestCreateRequest request);
-
     /**
      * Обновить тест.
      *

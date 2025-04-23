@@ -1,30 +1,21 @@
 package com.testmaster.service.TestSessionService;
 
 import com.testmaster.exeption.NotFoundException;
-import com.testmaster.mapper.GroupMapper;
+import com.testmaster.mapper.AnswerMapper;
 import com.testmaster.mapper.TestSessionMapper;
-import com.testmaster.model.Group.Group;
-import com.testmaster.model.Test;
-import com.testmaster.model.TestSession;
-import com.testmaster.model.User;
-import com.testmaster.repository.GroupRepository.GroupRepository;
-import com.testmaster.repository.TestRepository.TestRepository;
+import com.testmaster.model.*;
+import com.testmaster.repository.AnswerRepository.AnswerRepository;
+import com.testmaster.repository.AnswerTemplateRepository.AnswerTemplateRepository;
+import com.testmaster.repository.QuestionRepository.QuestionRepository;
 import com.testmaster.repository.TestSessionRepository.TestSessionRepository;
-import com.testmaster.repository.UserRepository.UserRepository;
-import com.testmasterapi.domain.group.data.GroupData;
-import com.testmasterapi.domain.group.request.GroupCreateRequest;
-import com.testmasterapi.domain.group.request.GroupUpdateRequest;
+import com.testmasterapi.domain.answer.data.AnswerData;
+import com.testmasterapi.domain.answer.request.AnswerCreateRequest;
 import com.testmasterapi.domain.testSession.data.TestSessionData;
-import com.testmasterapi.domain.testSession.request.TestSessionCreateRequest;
 import com.testmasterapi.domain.testSession.request.TestSessionUpdateRequest;
-import com.testmasterapi.domain.user.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -32,11 +23,13 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class DefaultTestSessionService implements TestSessionService {
+    private final AnswerMapper answerMapper;
     private final TestSessionMapper testSessionMapper;
 
     private final TestSessionRepository testSessionRepository;
-    private final UserRepository userRepository;
-    private final TestRepository testRepository;
+    private final QuestionRepository questionRepository;
+    private final AnswerTemplateRepository answerTemplateRepository;
+    private final AnswerRepository answerRepository;
 
     private final String notFoundTestSessionMessage = "Сессия теста не найдена";
 
@@ -49,32 +42,27 @@ public class DefaultTestSessionService implements TestSessionService {
     }
 
     @Override
-    public List<TestSessionData> getAllByUserId(Long userId) {
-        return testSessionRepository.findAllByUserId(userId)
-                .stream()
-                .map(testSessionMapper::toData)
-                .toList();
-    }
-
-    @Override
     public TestSessionData getOne(Long testSessionId) {
-        var data = this.getTestSession(testSessionId);
-
-        return testSessionMapper.toData(data);
+        return testSessionMapper.toData(this.getTestSession(testSessionId));
     }
 
     @NotNull
     @Transactional
     @Override
-    public TestSessionData create(Long testId, @NotNull TestSessionCreateRequest request) {
-        User user = this.getCurrentUser();
+    public AnswerData createAnswer(
+            Long testSessionId,
+            Long questionId,
+            Long answerTemplateId,
+            @NotNull AnswerCreateRequest request
+    ) {
+        var testSession = this.getTestSession(testSessionId);
+        var question = this.getQuestion(questionId);
+        var answerTemplate = this.getAnswerTemplate(answerTemplateId);
 
-        Test test = this.getTest(testId);
+        var entity = answerMapper.toEntity(request, testSession, question, answerTemplate);
 
-        TestSession entity = testSessionMapper.toEntity(request, test, user);
-        testSessionRepository.save(entity);
-
-        return testSessionMapper.toData(entity);
+        answerRepository.save(entity);
+        return answerMapper.toData(entity);
     }
 
     @Override
@@ -102,26 +90,18 @@ public class DefaultTestSessionService implements TestSessionService {
         }
     }
 
-    private Test getTest(Long testId) {
-        return testRepository
-                .findTestById(testId)
-                .orElseThrow(() -> new NotFoundException("Тест с таким идентификатором не найден"));
-    }
-
-    private User getUser(Long userId) {
-        return userRepository
-                .findUserById(userId)
-                .orElseThrow(() -> new NotFoundException("Пользователь с таким идентификатором не найден"));
-    }
-
     private TestSession getTestSession(Long testSessionId) {
-        return testSessionRepository
-                .findById(testSessionId)
+        return testSessionRepository.findById(testSessionId)
                 .orElseThrow(() -> new NotFoundException(notFoundTestSessionMessage));
     }
 
-    private User getCurrentUser() {
-        var customUserDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return this.getUser(customUserDetails.getId());
+    private Question getQuestion(Long questionId) {
+        return questionRepository.findById(questionId)
+                .orElseThrow(() -> new NotFoundException("Вопрос не найден"));
+    }
+
+    private AnswerTemplate getAnswerTemplate(Long answerTemplateId) {
+        return answerTemplateRepository.findById(answerTemplateId)
+                .orElseThrow(() -> new NotFoundException("Шаблон ответа не найден"));
     }
 }

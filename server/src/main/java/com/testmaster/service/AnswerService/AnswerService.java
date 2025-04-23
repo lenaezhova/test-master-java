@@ -15,25 +15,6 @@ import java.util.List;
  *
  */
 public interface AnswerService {
-
-    /**
-     * Метод для получения всех ответов на вопрос.
-     * @param questionId Идентификатор вопроса
-     * @return Все ответы на вопрос
-     */
-    List<AnswerData> getAllByQuestionId(Long questionId);
-
-    /**
-     * Метод для создания нового ответа на вопрос.
-     * @param testSessionId Идентификатор сессии теста
-     * @param questionId Идентификатор вопроса
-     * @param answerTemplateId Идентификатор шаблона ответа
-     * @param request Запрос
-     * @return Созданный ответ
-     */
-    @NotNull
-    AnswerData create(Long testSessionId, Long questionId, Long answerTemplateId, @NotNull AnswerCreateRequest request);
-
     /**
      * Обновить ответ.
      *
@@ -47,11 +28,4 @@ public interface AnswerService {
      * @param answerId Идентификатор ответа
      */
     void delete(Long answerId);
-
-    /**
-     * Метод для удаления всех ответов у вопроса
-     *
-     * @param questionId Идентификатор вопроса
-     */
-    void deleteAllByQuestionId(Long questionId);
 }

@@ -2,6 +2,8 @@ package com.testmaster.annotations.CheckTest;
 
 import com.testmaster.exeption.ClientException;
 import com.testmaster.model.*;
+import com.testmaster.model.Test.Test;
+import com.testmaster.model.User.User;
 import com.testmaster.repository.AnswerRepository.AnswerRepository;
 import com.testmaster.repository.AnswerTemplateRepository.AnswerTemplateRepository;
 import com.testmaster.repository.QuestionRepository.QuestionRepository;
@@ -108,7 +110,7 @@ public class CheckTestAspect {
         if (questionId == null) {
             throw new IllegalArgumentException("question id не передан");
         }
-        return questionRepository.findQuestionById(questionId)
+        return questionRepository.findById(questionId)
                 .orElseThrow(() -> new IllegalArgumentException("Вопрос не найден"));
     }
 

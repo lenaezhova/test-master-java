@@ -3,6 +3,8 @@ package com.testmaster.service.GroupService;
 import com.testmasterapi.domain.group.data.GroupData;
 import com.testmasterapi.domain.group.request.GroupCreateRequest;
 import com.testmasterapi.domain.group.request.GroupUpdateRequest;
+import com.testmasterapi.domain.test.data.TestGroupsData;
+import com.testmasterapi.domain.user.data.UserGroupsData;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -19,6 +21,21 @@ public interface GroupService {
      * @return Все группы
      */
     List<GroupData> getAll();
+
+    /**
+     * Метод для получения всех пользователей группы.
+     *
+     * @return Все пользователи группы
+     */
+    List<UserGroupsData> getAllUsers(Long groupId);
+
+    /**
+     * Метод для получения всех тестов группы.
+     *
+     * @return Все тесты группы
+     */
+    List<TestGroupsData> getAllTests(Long groupId);
+
     /**
      * Метод для получения одной группы.
      *
@@ -26,6 +43,7 @@ public interface GroupService {
      * @return Одна группа
      */
     GroupData getOne(Long groupId);
+
     /**
      * Метод для создания новой группы.
      *

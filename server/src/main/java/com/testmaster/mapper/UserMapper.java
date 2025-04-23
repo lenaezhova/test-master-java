@@ -7,7 +7,7 @@ import com.testmasterapi.domain.user.data.UserGroupsData;
 import com.testmasterapi.domain.user.data.UserOwnerData;
 import com.testmasterapi.domain.user.request.UserCreateRequest;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.testmaster.model.User;
+import com.testmaster.model.User.User;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -15,7 +15,7 @@ import java.util.Set;
 
 @Component
 public final class UserMapper {
-    public UserData toUserData(User user) {
+    public UserData toData(User user) {
         var data = new UserData();
         data.setId(user.getId());
         data.setName(user.getName());
@@ -38,7 +38,7 @@ public final class UserMapper {
         return data;
     }
 
-    public UserGroupsData toUserGroupsData(User user) {
+    public UserGroupsData toUserGroups(User user) {
         var data = new UserGroupsData();
         data.setId(user.getId());
         data.setName(user.getName());
@@ -48,8 +48,8 @@ public final class UserMapper {
     }
 
     public User toEntity(UserCreateRequest request, String activationLink) {
-        LocalDateTime now = LocalDateTime.now();
         var entity = new User();
+        LocalDateTime now = LocalDateTime.now();
 
         entity.setEmail(request.email());
         entity.setName(request.name());
@@ -63,7 +63,6 @@ public final class UserMapper {
     }
 
     public static User map(DecodedJWT jwt) {
-        LocalDateTime now = LocalDateTime.now();
         var user = new User();
 
         user.setEmail(jwt.getClaim(JwtClaimNames.EMAIL).asString());

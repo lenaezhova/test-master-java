@@ -2,9 +2,9 @@ package com.testmaster.repository;
 
 import com.testmaster.repository.TestRepository.TestRepository;
 import com.testmasterapi.domain.user.UserRoles;
-import com.testmaster.model.Test;
+import com.testmaster.model.Test.Test;
 import com.testmasterapi.domain.test.TestStatus;
-import com.testmaster.model.User;
+import com.testmaster.model.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
@@ -83,7 +83,7 @@ public class TestRepositoryTest {
 
         Test persistedTest = entityManager.persist(test);
 
-        Optional<Test> foundOpt = testRepository.findTestById(persistedTest.getId());
+        Optional<Test> foundOpt = testRepository.findById(persistedTest.getId());
 
         assertTrue(foundOpt.isPresent());
 

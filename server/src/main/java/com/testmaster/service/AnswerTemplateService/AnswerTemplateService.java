@@ -17,22 +17,6 @@ import java.util.List;
 public interface AnswerTemplateService {
 
     /**
-     * Метод для получения всех шаблонов ответов вопроса.
-     * @param questionId Идентификатор вопроса
-     * @return Все шаблоны ответов вопроса
-     */
-    List<AnswerTemplateData> getAllByQuestionId(Long questionId);
-
-    /**
-     * Метод для создания нового шаблона ответа.
-     * @param questionId Идентификатор вопроса
-     * @param request Запрос
-     * @return Созданный шаблон ответа
-     */
-    @NotNull
-    AnswerTemplateData create(Long questionId, @NotNull AnswerTemplateCreateRequest request);
-
-    /**
      * Обновить шаблон ответа.
      *
      * @param request Запрос
@@ -45,11 +29,4 @@ public interface AnswerTemplateService {
      * @param answerTemplateId Идентификатор шаблона ответа
      */
     void delete(Long answerTemplateId);
-
-    /**
-     * Метод для удаления всех шаблонов ответа у вопроса.
-     *
-     * @param questionId Идентификатор вопроса
-     */
-    void deleteAllByQuestionId(Long questionId);
 }

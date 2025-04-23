@@ -1,5 +1,6 @@
 package com.testmaster.model;
 
+import com.testmaster.model.Test.Test;
 import com.testmasterapi.domain.question.QuestionTypes;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

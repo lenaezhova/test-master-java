@@ -1,10 +1,13 @@
 package com.testmasterapi.api.GroupApi;
 
+import com.testmasterapi.api.TestApi.TestApi;
+import com.testmasterapi.api.UserApi.UserApi;
 import com.testmasterapi.domain.group.data.GroupData;
 import com.testmasterapi.domain.group.request.GroupCreateRequest;
 import com.testmasterapi.domain.group.request.GroupUpdateRequest;
+import com.testmasterapi.domain.test.data.TestGroupsData;
+import com.testmasterapi.domain.user.data.UserGroupsData;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
@@ -13,9 +16,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "Группы", description = "API для работы c группами")
+@Tag(name = "Группы")
 public interface GroupApi {
-    String PATH = "/api/groups";
+    String BASE_PATH = "/groups";
+    String PATH = "/api" + BASE_PATH;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping
@@ -23,16 +27,22 @@ public interface GroupApi {
     List<GroupData> all();
 
     @PreAuthorize("isAuthenticated()")
+    @GetMapping("/{id}" + UserApi.BASE_PATH)
+    @Operation(summary = "Получение списка всех пользователей группы")
+    List<UserGroupsData> allUsers(@PathVariable("id") Long groupId);
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/{id}" + TestApi.BASE_PATH)
+    @Operation(summary = "Получение списка всех тестов группы")
+    List<TestGroupsData> allTests(@PathVariable("id") Long id);
+
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
     @Operation(
             summary = "Получить группу",
             responses = {
                     @ApiResponse(responseCode = "200"),
-                    @ApiResponse(
-                            responseCode = "404",
-                            description = "Группа с таким идентификатором не найдена",
-                            content = @Content()
-                    )
+                    @ApiResponse(responseCode = "404", description = "Группа с таким идентификатором не найдена")
             }
     )
     GroupData one(@PathVariable Long id);

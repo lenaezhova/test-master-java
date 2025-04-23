@@ -1,10 +1,9 @@
 package com.testmasterapi.api;
 
-import com.testmasterapi.domain.question.data.QuestionData;
-import com.testmasterapi.domain.question.request.QuestionCreateRequest;
-import com.testmasterapi.domain.question.request.QuestionUpdateRequest;
+import com.testmasterapi.api.QuestionApi.QuestionApi;
+import com.testmasterapi.api.TestApi.TestApi;
+import com.testmasterapi.domain.answer.request.AnswerCreateRequest;
 import com.testmasterapi.domain.testSession.data.TestSessionData;
-import com.testmasterapi.domain.testSession.request.TestSessionCreateRequest;
 import com.testmasterapi.domain.testSession.request.TestSessionUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -15,9 +14,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "Сессии тестов", description = "API для работы c сессиями тестов")
+@Tag(name = "Сессии тестов")
 public interface TestSessionApi {
-    String PATH = "/api/tests-sessions";
+    String BASE_PATH = TestApi.BASE_PATH + "-sessions";
+    String PATH = "/api" + BASE_PATH;
 
     @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping
@@ -25,26 +25,34 @@ public interface TestSessionApi {
     List<TestSessionData> all();
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/users/{userId}")
-    @Operation(summary = "Получение всех сессий пользователя")
-    List<TestSessionData> allByUserId(@PathVariable("userId") Long userId);
-
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
     @Operation(summary = "Получение сессии")
     TestSessionData one(@PathVariable Long id);
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/tests/{testId}")
+    @PostMapping(
+            "/{id}" +
+            QuestionApi.BASE_PATH + "/{questionId}" +
+            AnswerTemplateApi.BASE_PATH + "/{answerTemplateId}"  +
+            AnswerApi.BASE_PATH
+    )
     @Operation(
-            summary = "Создать сессию",
+            summary = "Создать ответ",
             responses = {
-                    @ApiResponse(responseCode = "201", description = "Сессия создан"),
-                    @ApiResponse(responseCode = "400", description = "Ошибка при создании сессии теста"),
+                    @ApiResponse(responseCode = "201", description = "Ответ создан"),
+                    @ApiResponse(responseCode = "400", description = "Ошибка при создании ответа"),
+                    @ApiResponse(responseCode = "404", description = "Сессия теста с таким идентификатором не найдена"),
+                    @ApiResponse(responseCode = "404", description = "Вопрос с таким идентификатором не найден"),
+                    @ApiResponse(responseCode = "404", description = "Шаблона ответа с таким идентификатором не найден"),
                     @ApiResponse(responseCode = "409", description = "Тест закрыт для прохождения"),
             }
     )
-    ResponseEntity<Void> create(@PathVariable Long testId, @RequestBody TestSessionCreateRequest request);
+    ResponseEntity<Void> createAnswer(
+            @PathVariable Long id,
+            @PathVariable Long questionId,
+            @PathVariable Long answerTemplateId,
+            @RequestBody AnswerCreateRequest request
+    );
 
     @PreAuthorize("isAuthenticated()")
     @PatchMapping("/{id}")

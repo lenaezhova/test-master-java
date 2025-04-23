@@ -3,14 +3,17 @@ package com.testmaster.service.UserService;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.testmaster.exeption.AuthException;
 import com.testmaster.exeption.NotFoundException;
+import com.testmaster.mapper.TestSessionMapper;
 import com.testmaster.mapper.UserMapper;
 import com.testmaster.model.Token;
-import com.testmaster.model.User;
+import com.testmaster.model.User.User;
+import com.testmaster.repository.TestSessionRepository.TestSessionRepository;
 import com.testmaster.repository.UserRepository.UserRepository;
 import com.testmaster.service.AuthService.AuthService;
 import com.testmaster.service.MailService;
 import com.testmaster.service.validation.PasswordValidationService;
 import com.testmaster.service.validation.UserValidationService;
+import com.testmasterapi.domain.testSession.data.TestSessionData;
 import com.testmasterapi.domain.user.CustomUserDetails;
 import com.testmasterapi.domain.user.JwtTokenPair;
 import com.testmasterapi.domain.user.data.UserData;
@@ -24,7 +27,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,44 +37,42 @@ import static org.springframework.util.StringUtils.hasText;
 @RequiredArgsConstructor
 public class DefaultUserService implements UserService {
     protected final UserRepository userRepository;
+    protected final TestSessionRepository testSessionRepository;
+
+    private final AuthService userAuthService;
+    private final MailService mailService;
+    protected final UserValidationService userValidationService;
+    private final PasswordValidationService passwordValidationService;
+
+    private final UserMapper userMapper;
+    private final TestSessionMapper testSessionMapper;
 
     private final PasswordEncoder passwordEncoder;
 
-    private final AuthService userAuthService;
-
-    private final MailService mailService;
-
-    protected final UserValidationService userValidationService;
-
-    private final PasswordValidationService passwordValidationService;
-    private final UserMapper userMapper;
-
     @Override
     public List<UserData> getAll() {
-        return userRepository
-                .findAllUsers()
+        return userRepository.findAll()
                 .stream()
-                .map(userMapper::toUserData)
+                .map(userMapper::toData)
+                .toList();
+    }
+
+    @Override
+    public List<TestSessionData> getAllSessions(Long id) {
+        return testSessionRepository.findAllByUserId(id)
+                .stream()
+                .map(testSessionMapper::toData)
                 .toList();
     }
 
     @Override
     public UserData getOne(Long id) {
-        User user = userRepository
-                .findUserById(id)
-                .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
-
-        return userMapper.toUserData(user);
+        return userMapper.toData(this.getUser(id));
     }
 
     @Override
     public UserData getCurrent() {
-        var currentUser = this.getCurrentUser();
-        User user = userRepository
-                .findUserById(currentUser.getId())
-                .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
-
-        return userMapper.toUserData(user);
+        return userMapper.toData(this.getCurrentUser());
     }
 
     @Override
@@ -81,16 +81,13 @@ public class DefaultUserService implements UserService {
         userValidationService.validate(createUserRequest);
         passwordValidationService.validate(createUserRequest);
 
-        if (userRepository.findUserByEmail(createUserRequest.email()).isPresent()) {
+        if (userRepository.findByEmail(createUserRequest.email()).isPresent()) {
             throw UnprocessableEntity("Email уже используется!");
         }
 
         String activationLink = UUID.randomUUID().toString();
-        LocalDateTime now = LocalDateTime.now();
-
         User user = userMapper.toEntity(createUserRequest, activationLink);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setCreatedAt(now);
 
         userRepository.save(user);
 
@@ -110,8 +107,7 @@ public class DefaultUserService implements UserService {
             throw new AuthException("Имя или пароль не могут быть пустыми!");
         }
 
-        User user = userRepository
-                .findUserByEmail(loginRequest.email())
+        User user = userRepository.findByEmail(loginRequest.email())
                 .orElseThrow(() -> new AuthException("Неверный email или пароль!"));
 
         if (!passwordEncoder.matches(loginRequest.password(), user.getPassword())) {
@@ -160,8 +156,7 @@ public class DefaultUserService implements UserService {
     @Override
     @Transactional
     public void activate(String link) {
-        User user = userRepository
-                .findUserByActivationLink(link)
+        User user = userRepository.findByActivationLink(link)
                 .orElseThrow(() -> new AuthException("Неккоректная ссылка активации"));
 
         UserUpdateRequest userUpdate = new UserUpdateRequest();
@@ -184,7 +179,13 @@ public class DefaultUserService implements UserService {
         return tokenFromDB.getUser();
     }
 
-    private CustomUserDetails getCurrentUser() {
-        return (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    private User getUser(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
+    }
+
+    private User getCurrentUser() {
+        var currentUser = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return this.getUser(currentUser.getId());
     }
 }

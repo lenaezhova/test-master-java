@@ -1,9 +1,7 @@
 package com.testmaster.service.QuestionService;
 
 import com.testmasterapi.domain.question.data.QuestionData;
-import com.testmasterapi.domain.question.request.QuestionCreateRequest;
 import com.testmasterapi.domain.question.request.QuestionUpdateRequest;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -11,7 +9,7 @@ import java.util.List;
  * Интерфейс для работы с вопросами.
  *
  */
-public interface QuestionService {
+public interface QuestionService extends QuestionAnswersTemplatesService, QuestionAnswersService {
 
     /**
      * Метод для получения всех вопросов.
@@ -19,13 +17,6 @@ public interface QuestionService {
      * @return Все вопросы
      */
     List<QuestionData> getAll();
-
-    /**
-     * Метод для получения всех вопросов по test id.
-     *
-     * @return Все вопросы теста
-     */
-    List<QuestionData> getAllQuestionsByTestId(Long testId);
     /**
      * Метод для получения одного вопроса.
      *
@@ -33,14 +24,6 @@ public interface QuestionService {
      * @return Один вопрос
      */
     QuestionData getOne(Long questionId);
-    /**
-     * Метод для создания нового вопроса.
-     * @param testId Идентификатор теста
-     * @param request Запрос
-     * @return Созданный вопрос
-     */
-    @NotNull
-    QuestionData create(Long testId, @NotNull QuestionCreateRequest request);
 
     /**
      * Обновить вопрос.
@@ -49,10 +32,4 @@ public interface QuestionService {
      * @param request Запрос
      */
     void update(Long questionId, QuestionUpdateRequest request);
-
-    /**
-     * Метод для удаления всех вопросов у теста.
-     *
-     */
-    void deleteAllQuestion(Long testId);
 }

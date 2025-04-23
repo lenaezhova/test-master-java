@@ -15,31 +15,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Tag(name = "Ответы", description = "API для работы c ответами")
+@Tag(name = "Ответы")
 public interface AnswerApi {
-    String PATH = "/api/answers";
-
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/questions/{questionId}")
-    @Operation(summary = "Получение всех ответов на вопрос")
-    List<AnswerData> allByQuestionId(@PathVariable("questionId") Long questionId);
-
-    @PreAuthorize("isAuthenticated()")
-    @PostMapping("/tests-sessions/{testSessionId}/questions/{questionId}/answers-templates/{answerTemplateId}")
-    @Operation(
-            summary = "Создать ответ",
-            responses = {
-                    @ApiResponse(responseCode = "201", description = "Ответ создан"),
-                    @ApiResponse(responseCode = "400", description = "Ошибка при создании ответа"),
-                    @ApiResponse(responseCode = "409", description = "Тест закрыт для прохождения"),
-            }
-    )
-    ResponseEntity<Void> create(
-            @PathVariable Long testSessionId,
-            @PathVariable Long questionId,
-            @PathVariable Long answerTemplateId,
-            @RequestBody AnswerCreateRequest request
-    );
+    String BASE_PATH = "/answers";
+    String PATH = "/api" + BASE_PATH;
 
     @PreAuthorize("isAuthenticated()")
     @PatchMapping("/{id}")
@@ -64,16 +43,4 @@ public interface AnswerApi {
             }
     )
     void delete(@PathVariable Long id);
-
-    @PreAuthorize("isAuthenticated()")
-    @DeleteMapping("/questions/{questionId}")
-    @Operation(
-            summary = "Удалить все ответы у вопроса",
-            responses = {
-                    @ApiResponse(responseCode = "204", description = "Ответы удалены"),
-                    @ApiResponse(responseCode = "404", description = "Вопрос с таким идентификатором не найден"),
-                    @ApiResponse(responseCode = "409", description = "Тест закрыт для прохождения"),
-            }
-    )
-    void deleteAllByQuestionId(@PathVariable Long questionId);
 }

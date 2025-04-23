@@ -1,6 +1,7 @@
 package com.testmaster.service.UserService;
 
 import com.testmasterapi.domain.test.request.TestUpdateRequest;
+import com.testmasterapi.domain.testSession.data.TestSessionData;
 import com.testmasterapi.domain.user.JwtTokenPair;
 import com.testmasterapi.domain.user.data.UserData;
 import com.testmasterapi.domain.user.request.UserCreateRequest;
@@ -21,6 +22,13 @@ public interface UserService {
      * @return Все пользователи
      */
     List<UserData> getAll();
+
+    /**
+     * Метод для получения всех сессий пользователя.
+     *
+     * @return Все сессии пользователя
+     */
+    List<TestSessionData> getAllSessions(Long id);
 
     /**
      * Метод для получения одного пользователя.

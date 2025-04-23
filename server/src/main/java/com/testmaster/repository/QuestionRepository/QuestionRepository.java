@@ -1,7 +1,7 @@
 package com.testmaster.repository.QuestionRepository;
 
 import com.testmaster.model.Question;
-import com.testmaster.model.Test;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -13,23 +13,25 @@ import java.util.Optional;
 
 @Repository
 public interface QuestionRepository extends JpaRepository<Question, Long>, QuestionRepositoryCustom {
+    @NotNull
     @Query("""
         select q from Question q
         where q.softDeleted = false
     """)
-    List<Question> findAllQuestions();
+    List<Question> findAll();
 
     @Query("""
         select q from Question q
         where q.test.id = :testId and q.softDeleted = false
     """)
-    List<Question> findAllQuestionsByTestId(@Param("testId") Long testId);
+    List<Question> findAllByTestId(@Param("testId") Long testId);
 
+    @NotNull
     @Query("""
         select q from Question q
-        where q.id = :questionId and q.softDeleted = false
+        where q.id = :id and q.softDeleted = false
     """)
-    Optional<Question> findQuestionById(@Param("questionId") Long questionId);
+    Optional<Question> findById(@Param("id") Long id);
 
     @Modifying
     @Query("delete from Question q where q.id = :id and q.softDeleted = false")
@@ -37,5 +39,5 @@ public interface QuestionRepository extends JpaRepository<Question, Long>, Quest
 
     @Modifying
     @Query("delete from Question q where q.test.id = :testId")
-    int deleteAllQuestionByTestId(@Param("testId") Long testId);
+    int deleteAllByTestId(@Param("testId") Long testId);
 }

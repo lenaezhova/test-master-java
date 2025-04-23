@@ -29,38 +29,9 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class DefaultAnswerService implements AnswerService {
-    private final AnswerMapper answerMapper;
-
     private final AnswerRepository answerRepository;
-    private final TestSessionRepository testSessionRepository;
-    private final QuestionRepository questionRepository;
-    private final AnswerTemplateRepository answerTemplateRepository;
 
     private final String notFoundAnswerTemplateMessage = "Ответ не найден";
-
-    @Override
-    public List<AnswerData> getAllByQuestionId(Long questionId) {
-        return answerRepository.findAllByQuestionId(questionId)
-                .stream()
-                .map(answerMapper::toData)
-                .toList();
-    }
-
-    @NotNull
-    @Transactional
-    @Override
-    public AnswerData create(Long testSessionId, Long questionId, Long answerTemplateId, @NotNull AnswerCreateRequest request) {
-
-        var question = this.getQuestion(questionId);
-        var testSession = this.getTestSession(testSessionId);
-        var answerTemplate = this.getAnswerTemplate(answerTemplateId);
-
-        var entity = answerMapper.toEntity(request, testSession, question, answerTemplate);
-
-        answerRepository.save(entity);
-
-        return answerMapper.toData(entity);
-    }
 
     @Override
     @Transactional
@@ -78,29 +49,5 @@ public class DefaultAnswerService implements AnswerService {
         if (deleted == 0) {
             throw new NotFoundException(notFoundAnswerTemplateMessage);
         }
-    }
-
-    @Override
-    @Transactional
-    public void deleteAllByQuestionId(Long questionId) {
-        int deleted = answerRepository.deleteAllByQuestionId(questionId);
-        if (deleted == 0) {
-            throw new NotFoundException("Вопрос не найден");
-        }
-    }
-
-    private TestSession getTestSession(Long testSessionId) {
-        return testSessionRepository.findById(testSessionId)
-                .orElseThrow(() -> new NotFoundException("Сессия теста не найден"));
-    }
-
-    private Question getQuestion(Long questionId) {
-        return questionRepository.findQuestionById(questionId)
-                .orElseThrow(() -> new NotFoundException("Вопрос не найден"));
-    }
-
-    private AnswerTemplate getAnswerTemplate(Long answerTemplateId) {
-        return answerTemplateRepository.findById(answerTemplateId)
-                .orElseThrow(() -> new NotFoundException("Шаблон ответа не найден"));
     }
 }
