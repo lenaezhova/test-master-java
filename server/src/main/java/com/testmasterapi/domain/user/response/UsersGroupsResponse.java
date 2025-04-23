@@ -5,6 +5,6 @@ import com.testmasterapi.domain.user.data.UserGroupsData;
 import java.util.List;
 
 public record UsersGroupsResponse(
-        List<UserGroupsData> data
+        List<UserGroupsData> content
 ) {
 }

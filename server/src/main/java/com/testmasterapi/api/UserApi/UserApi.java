@@ -1,20 +1,16 @@
 package com.testmasterapi.api.UserApi;
 
 import com.testmasterapi.api.TestSessionApi;
-import com.testmasterapi.domain.testSession.data.TestSessionData;
+import com.testmasterapi.domain.page.data.PageData;
 import com.testmasterapi.domain.testSession.response.TestsSessionsResponse;
 import com.testmasterapi.domain.user.data.UserData;
-import com.testmasterapi.domain.user.request.UserCreateRequest;
-import com.testmasterapi.domain.user.request.UserLoginRequest;
 import com.testmasterapi.domain.user.request.UserUpdateRequest;
-import com.testmasterapi.domain.user.response.UsersResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +24,7 @@ public interface UserApi {
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     @Operation(summary = "Получение списка пользователей")
-    UsersResponse all();
+    PageData<UserData> all(Pageable pageable);
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}" + TestSessionApi.BASE_PATH)

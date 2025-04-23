@@ -2,6 +2,7 @@ package com.testmaster.controller.UserController;
 
 import com.testmaster.util.CookieUtil;
 import com.testmasterapi.api.UserApi.UserApi;
+import com.testmasterapi.domain.page.data.PageData;
 import com.testmasterapi.domain.testSession.data.TestSessionData;
 import com.testmasterapi.domain.testSession.response.TestsSessionsResponse;
 import com.testmasterapi.domain.user.JwtTokenPair;
@@ -15,6 +16,8 @@ import com.testmasterapi.domain.user.response.UsersResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -34,8 +37,8 @@ public class UserController implements UserApi {
     private final UserService userService;
 
     @Override
-    public UsersResponse all() {
-        return new UsersResponse(userService.getAll());
+    public PageData<UserData> all(Pageable pageable) {
+        return userService.getAll(pageable);
     }
 
     @Override

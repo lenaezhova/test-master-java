@@ -5,7 +5,7 @@ import com.testmasterapi.domain.question.data.QuestionData;
 import java.util.List;
 
 public record QuestionsResponse (
-        List<QuestionData> data
+        List<QuestionData> content
 ) {
 
 }

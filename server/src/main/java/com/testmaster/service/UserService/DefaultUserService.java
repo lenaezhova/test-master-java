@@ -1,5 +1,6 @@
 package com.testmaster.service.UserService;
 
+import com.testmasterapi.domain.page.data.PageData;
 import com.testmaster.exeption.NotFoundException;
 import com.testmaster.mapper.TestSessionMapper;
 import com.testmaster.mapper.UserMapper;
@@ -12,10 +13,15 @@ import com.testmasterapi.domain.user.data.UserData;
 import com.testmasterapi.domain.user.request.UserUpdateRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.function.LongSupplier;
 
 @Service
 @RequiredArgsConstructor
@@ -26,12 +32,19 @@ public class DefaultUserService implements UserService {
     private final UserMapper userMapper;
     private final TestSessionMapper testSessionMapper;
 
+    @NotNull
     @Override
-    public List<UserData> getAll() {
-        return userRepository.findAll()
+    public PageData<UserData> getAll(@NotNull Pageable pageable) {
+        var content = userRepository.findUsers(pageable)
                 .stream()
                 .map(userMapper::toData)
                 .toList();
+
+        LongSupplier total = userRepository::countUsers;
+
+        Page<UserData> page = PageableExecutionUtils.getPage(content, pageable, total);
+
+        return PageData.fromPage(page);
     }
 
     @Override
