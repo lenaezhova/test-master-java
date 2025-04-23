@@ -1,4 +1,4 @@
-package com.testmaster.service.QuestionService;
+package com.testmaster.service.QuestionService.QuestionAnswerTemplate;
 
 import com.testmasterapi.domain.answerTemplate.data.AnswerTemplateData;
 import com.testmasterapi.domain.answerTemplate.request.AnswerTemplateCreateRequest;
@@ -10,7 +10,7 @@ import java.util.List;
  * Интерфейс для работы с вопросами.
  *
  */
-public interface QuestionAnswersTemplatesService {
+public interface QuestionAnswerTemplatesService {
 
     /**
      * Метод для получения всех шаблонов ответов вопроса.

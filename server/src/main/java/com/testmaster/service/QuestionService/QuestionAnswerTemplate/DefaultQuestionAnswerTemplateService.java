@@ -1,4 +1,4 @@
-package com.testmaster.service.QuestionService;
+package com.testmaster.service.QuestionService.QuestionAnswerTemplate;
 
 import com.testmaster.exeption.NotFoundException;
 import com.testmaster.mapper.AnswerMapper;
@@ -9,54 +9,60 @@ import com.testmaster.model.Question;
 import com.testmaster.repository.AnswerRepository.AnswerRepository;
 import com.testmaster.repository.AnswerTemplateRepository.AnswerTemplateRepository;
 import com.testmaster.repository.QuestionRepository.QuestionRepository;
-import com.testmaster.repository.TestRepository.TestRepository;
+import com.testmaster.service.QuestionService.QuestionService;
 import com.testmasterapi.domain.answer.data.AnswerData;
 import com.testmasterapi.domain.answerTemplate.data.AnswerTemplateData;
 import com.testmasterapi.domain.answerTemplate.request.AnswerTemplateCreateRequest;
 import com.testmasterapi.domain.question.data.QuestionData;
-import com.testmasterapi.domain.question.request.QuestionCreateRequest;
 import com.testmasterapi.domain.question.request.QuestionUpdateRequest;
-import com.testmasterapi.domain.user.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class DefaultQuestionService implements QuestionService {
+public class DefaultQuestionAnswerTemplateService implements QuestionAnswerTemplatesService {
     private final QuestionMapper questionMapper;
+    private final AnswerTemplateMapper answerTemplateMapper;
+    private final AnswerMapper answerMapper;
 
     private final QuestionRepository questionRepository;
+    private final AnswerTemplateRepository answerTemplateRepository;
+    private final AnswerRepository answerRepository;
 
     private final String notFoundQuestionMessage = "Вопрос не найден";
 
     @Override
-    public List<QuestionData> getAll() {
-        return questionRepository.findAll()
+    public List<AnswerTemplateData> getAllAnswerTemplate(Long questionId) {
+        return answerTemplateRepository.findAllByQuestionId(questionId)
                 .stream()
-                .map(questionMapper::toData)
+                .map(answerTemplateMapper::toData)
                 .toList();
     }
 
+    @NotNull
+    @Transactional
     @Override
-    public QuestionData getOne(Long id) {
-        return questionMapper.toData(this.getQuestion(id));
+    public AnswerTemplateData createAnswerTemplate(Long questionId, @NotNull AnswerTemplateCreateRequest request) {
+        var question = this.getQuestion(questionId);
+
+        AnswerTemplate entity = answerTemplateMapper.toEntity(request, question);
+
+        answerTemplateRepository.save(entity);
+        return answerTemplateMapper.toData(entity);
     }
 
     @Override
     @Transactional
-    public void update(Long questionId, QuestionUpdateRequest request) {
-        int updated = questionRepository.update(questionId, request);
-        if (updated == 0) {
+    public void deleteAllAnswerTemplate(Long questionId) {
+        int deleted = answerTemplateRepository.deleteAllByQuestionId(questionId);
+        if (deleted == 0) {
             throw new NotFoundException(notFoundQuestionMessage);
         }
     }
-
     private Question getQuestion(Long questionId) {
         return questionRepository.findById(questionId)
                 .orElseThrow(() -> new NotFoundException(notFoundQuestionMessage));

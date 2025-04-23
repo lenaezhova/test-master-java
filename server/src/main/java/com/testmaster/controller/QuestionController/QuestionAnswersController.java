@@ -1,7 +1,7 @@
 package com.testmaster.controller.QuestionController;
 
 import com.testmaster.annotations.CheckTest.CheckTest;
-import com.testmaster.service.QuestionService.QuestionService;
+import com.testmaster.service.QuestionService.QuestionAnswerService.QuestionAnswerService;
 import com.testmasterapi.api.QuestionApi.QuestionAnswersApi;
 import com.testmasterapi.domain.answer.data.AnswerData;
 import com.testmasterapi.domain.test.TestStatus;
@@ -17,18 +17,18 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping(QuestionAnswersApi.PATH)
 public class QuestionAnswersController implements QuestionAnswersApi {
-    private final QuestionService questionService;
+    private final QuestionAnswerService questionAnswerService;
 
     @Override
     public List<AnswerData> allAnswers(Long questionId) {
-        return questionService.getAllAnswers(questionId);
+        return questionAnswerService.getAllAnswers(questionId);
     }
 
     @Override
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @CheckTest(questionId = "questionId", status = TestStatus.OPENED)
     public void deleteAllAnswers(Long questionId) {
-        questionService.deleteAllAnswers(questionId);
+        questionAnswerService.deleteAllAnswers(questionId);
     }
 }
 

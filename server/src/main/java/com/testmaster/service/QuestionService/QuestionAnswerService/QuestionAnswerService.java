@@ -1,9 +1,6 @@
-package com.testmaster.service.QuestionService;
+package com.testmaster.service.QuestionService.QuestionAnswerService;
 
 import com.testmasterapi.domain.answer.data.AnswerData;
-import com.testmasterapi.domain.answerTemplate.data.AnswerTemplateData;
-import com.testmasterapi.domain.answerTemplate.request.AnswerTemplateCreateRequest;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -11,7 +8,7 @@ import java.util.List;
  * Интерфейс для работы с вопросами.
  *
  */
-public interface QuestionAnswersService {
+public interface QuestionAnswerService {
 
     /**
      * Метод для получения всех ответов на вопрос.

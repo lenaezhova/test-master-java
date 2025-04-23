@@ -9,7 +9,7 @@ import java.util.List;
  * Интерфейс для работы с вопросами.
  *
  */
-public interface QuestionService extends QuestionAnswersTemplatesService, QuestionAnswersService {
+public interface QuestionService {
 
     /**
      * Метод для получения всех вопросов.
