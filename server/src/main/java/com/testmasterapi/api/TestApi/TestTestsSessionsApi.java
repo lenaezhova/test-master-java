@@ -8,6 +8,7 @@ import com.testmasterapi.domain.testSession.request.TestSessionCreateRequest;
 import com.testmasterapi.domain.testSession.response.TestsSessionsResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springdoc.core.annotations.ParameterObject;
@@ -45,7 +46,7 @@ public interface TestTestsSessionsApi {
             summary = "Закрыть все открытые сессии теста",
             responses = {
                     @ApiResponse(responseCode = "204", description = "Все открытые сессии теста закрыты"),
-                    @ApiResponse(responseCode = "404", description = "Тест с таким идентификатором не найден"),
+                    @ApiResponse(responseCode = "404", description = "Тест с таким идентификатором не найден", content = @Content()),
             }
     )
     void closeAllOpenedSessions(@PathVariable Long testId);
@@ -56,9 +57,9 @@ public interface TestTestsSessionsApi {
             summary = "Создать сессию",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Сессия создана"),
-                    @ApiResponse(responseCode = "400", description = "Ошибка при создании сессии теста"),
-                    @ApiResponse(responseCode = "404", description = "Тест с таким идентификатором не найден"),
-                    @ApiResponse(responseCode = "409", description = "Тест закрыт для прохождения"),
+                    @ApiResponse(responseCode = "400", description = "Ошибка при создании сессии теста", content = @Content()),
+                    @ApiResponse(responseCode = "404", description = "Тест с таким идентификатором не найден", content = @Content()),
+                    @ApiResponse(responseCode = "409", description = "Тест закрыт для прохождения", content = @Content()),
             }
     )
     ResponseEntity<Void> createSession(

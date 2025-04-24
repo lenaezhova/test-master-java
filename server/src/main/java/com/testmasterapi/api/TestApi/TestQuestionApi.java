@@ -9,6 +9,7 @@ import com.testmasterapi.domain.question.request.QuestionCreateWithAnswersTempla
 import com.testmasterapi.domain.question.request.QuestionUpdateWithAnswersTemplatesRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
@@ -39,10 +40,10 @@ public interface TestQuestionApi {
             summary = "Создать вопрос",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Вопрос создан"),
-                    @ApiResponse(responseCode = "400", description = "Ошибка при создании вопроса"),
-                    @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста"),
-                    @ApiResponse(responseCode = "404", description = "Тест с таким идентификатором не найден"),
-                    @ApiResponse(responseCode = "409", description = "Тест открыт для прохождения"),
+                    @ApiResponse(responseCode = "400", description = "Ошибка при создании вопроса", content = @Content()),
+                    @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста", content = @Content()),
+                    @ApiResponse(responseCode = "404", description = "Тест с таким идентификатором не найден", content = @Content()),
+                    @ApiResponse(responseCode = "409", description = "Тест открыт для прохождения", content = @Content()),
             }
     )
     ResponseEntity<Void> createQuestion(@PathVariable Long testId, @RequestBody QuestionCreateRequest request);
@@ -53,10 +54,10 @@ public interface TestQuestionApi {
             summary = "Создать вопрос с шаблонами ответов",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Вопрос создан"),
-                    @ApiResponse(responseCode = "400", description = "Ошибка при создании вопроса"),
-                    @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста"),
-                    @ApiResponse(responseCode = "404", description = "Тест с таким идентификатором не найден"),
-                    @ApiResponse(responseCode = "409", description = "Тест открыт для прохождения"),
+                    @ApiResponse(responseCode = "400", description = "Ошибка при создании вопроса", content = @Content()),
+                    @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста", content = @Content()),
+                    @ApiResponse(responseCode = "404", description = "Тест с таким идентификатором не найден", content = @Content()),
+                    @ApiResponse(responseCode = "409", description = "Тест открыт для прохождения", content = @Content()),
             }
     )
     ResponseEntity<Void> createQuestionWithTemplates(@PathVariable Long testId, @RequestBody QuestionCreateWithAnswersTemplatesRequest request);
@@ -67,9 +68,9 @@ public interface TestQuestionApi {
             summary = "Удалить все вопросы теста",
             responses = {
                     @ApiResponse(responseCode = "204", description = "Вопросы удалены"),
-                    @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста"),
-                    @ApiResponse(responseCode = "404", description = "Тест с таким идентификатором не найден"),
-                    @ApiResponse(responseCode = "409", description = "Тест открыт для прохождения"),
+                    @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста", content = @Content()),
+                    @ApiResponse(responseCode = "404", description = "Тест с таким идентификатором не найден", content = @Content()),
+                    @ApiResponse(responseCode = "409", description = "Тест открыт для прохождения", content = @Content()),
             }
     )
     void deleteAllQuestions(@PathVariable Long testId);

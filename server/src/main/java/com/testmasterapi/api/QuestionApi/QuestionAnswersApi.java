@@ -6,6 +6,7 @@ import com.testmasterapi.domain.answer.response.AnswersResponse;
 import com.testmasterapi.domain.page.data.PageData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springdoc.core.annotations.ParameterObject;
@@ -42,8 +43,8 @@ public interface QuestionAnswersApi {
             summary = "Удалить все ответы у вопроса",
             responses = {
                     @ApiResponse(responseCode = "204", description = "Ответы удалены"),
-                    @ApiResponse(responseCode = "404", description = "Вопрос с таким идентификатором не найден"),
-                    @ApiResponse(responseCode = "409", description = "Тест закрыт для прохождения"),
+                    @ApiResponse(responseCode = "404", description = "Вопрос с таким идентификатором не найден", content = @Content()),
+                    @ApiResponse(responseCode = "409", description = "Тест закрыт для прохождения", content = @Content()),
             }
     )
     void deleteAllAnswers(@PathVariable Long questionId);

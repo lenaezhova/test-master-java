@@ -10,6 +10,7 @@ import com.testmasterapi.domain.testSession.request.TestSessionUpdateRequest;
 import com.testmasterapi.domain.testSession.response.TestsSessionsResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.jetbrains.annotations.NotNull;
@@ -51,8 +52,8 @@ public interface TestSessionApi {
             summary = "Обновить информацию о сессии",
             responses = {
                     @ApiResponse(responseCode = "204", description = "Информация о сессии обновлена"),
-                    @ApiResponse(responseCode = "404", description = "Сессия с таким идентификатором не найдена"),
-                    @ApiResponse(responseCode = "409", description = "Тест закрыт для прохождения"),
+                    @ApiResponse(responseCode = "404", description = "Сессия с таким идентификатором не найдена", content = @Content()),
+                    @ApiResponse(responseCode = "409", description = "Тест закрыт для прохождения", content = @Content()),
             }
     )
     void update(@PathVariable Long testSessionId, @RequestBody TestSessionUpdateRequest request);
@@ -63,8 +64,8 @@ public interface TestSessionApi {
             summary = "Закрыть сессию",
             responses = {
                     @ApiResponse(responseCode = "204", description = "Сессия закрыта обновлена"),
-                    @ApiResponse(responseCode = "404", description = "Сессия с таким идентификатором не найдена"),
-                    @ApiResponse(responseCode = "409", description = "Тест закрыт для прохождения"),
+                    @ApiResponse(responseCode = "404", description = "Сессия с таким идентификатором не найдена", content = @Content()),
+                    @ApiResponse(responseCode = "409", description = "Тест закрыт для прохождения", content = @Content()),
             }
     )
     void close(@PathVariable Long testSessionId);
@@ -75,11 +76,11 @@ public interface TestSessionApi {
             summary = "Сохранение ответов на весь тест",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Ответы на тест сохранены"),
-                    @ApiResponse(responseCode = "400", description = "Ошибка при сохранении ответа"),
-                    @ApiResponse(responseCode = "404", description = "Сессия теста с таким идентификатором не найдена"),
-                    @ApiResponse(responseCode = "404", description = "Вопрос с таким идентификатором не найден"),
-                    @ApiResponse(responseCode = "404", description = "Шаблона ответа с таким идентификатором не найден"),
-                    @ApiResponse(responseCode = "409", description = "Тест закрыт для прохождения"),
+                    @ApiResponse(responseCode = "400", description = "Ошибка при сохранении ответа", content = @Content()),
+                    @ApiResponse(responseCode = "404", description = "Сессия теста с таким идентификатором не найдена", content = @Content()),
+                    @ApiResponse(responseCode = "404", description = "Вопрос с таким идентификатором не найден", content = @Content()),
+                    @ApiResponse(responseCode = "404", description = "Шаблона ответа с таким идентификатором не найден", content = @Content()),
+                    @ApiResponse(responseCode = "409", description = "Тест закрыт для прохождения", content = @Content()),
             }
     )
     ResponseEntity<Void> createTestAnswer(

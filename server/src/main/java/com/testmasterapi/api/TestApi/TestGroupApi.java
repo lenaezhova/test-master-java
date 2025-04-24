@@ -3,6 +3,7 @@ package com.testmasterapi.api.TestApi;
 import com.testmasterapi.api.GroupApi.GroupApi;
 import com.testmasterapi.domain.group.request.TestsGroupAddRequest;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +21,8 @@ public interface TestGroupApi {
             summary = "Добавить тест в группу",
             responses = {
                     @ApiResponse(responseCode = "204", description = "Тест добавлен в группу"),
-                    @ApiResponse(responseCode = "404", description = "Группа (тест) с таким идентификатором не найдены"),
-                    @ApiResponse(responseCode = "409", description = "В группе уже есть тест с таким идентификатором")
+                    @ApiResponse(responseCode = "404", description = "Группа (тест) с таким идентификатором не найдены", content = @Content()),
+                    @ApiResponse(responseCode = "409", description = "В группе уже есть тест с таким идентификатором", content = @Content())
             }
     )
     ResponseEntity<Void> addTest(
@@ -36,7 +37,7 @@ public interface TestGroupApi {
             summary = "Удалить тест из группы",
             responses = {
                     @ApiResponse(responseCode = "204", description = "Тест удален из группы"),
-                    @ApiResponse(responseCode = "404", description = "Группа (тест) с таким идентификатором не найдены")
+                    @ApiResponse(responseCode = "404", description = "Группа (тест) с таким идентификатором не найдены", content = @Content())
             }
     )
     void deleteTest(

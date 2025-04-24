@@ -13,6 +13,7 @@ import com.testmasterapi.domain.user.data.UserGroupsData;
 import com.testmasterapi.domain.user.response.UsersGroupsResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springdoc.core.annotations.ParameterObject;
@@ -74,7 +75,7 @@ public interface GroupApi {
             summary = "Получить группу",
             responses = {
                     @ApiResponse(responseCode = "200"),
-                    @ApiResponse(responseCode = "404", description = "Группа с таким идентификатором не найдена")
+                    @ApiResponse(responseCode = "404", description = "Группа с таким идентификатором не найдена", content = @Content())
             }
     )
     GroupData one(@PathVariable Long groupId);
@@ -85,7 +86,7 @@ public interface GroupApi {
             summary = "Создать группу",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Группа создана"),
-                    @ApiResponse(responseCode = "400", description = "Ошибка при создании группы")
+                    @ApiResponse(responseCode = "400", description = "Ошибка при создании группы", content = @Content())
             }
     )
     ResponseEntity<Void> create(@RequestBody GroupCreateRequest request);
@@ -96,7 +97,7 @@ public interface GroupApi {
             summary = "Обновить информацию о группе",
             responses = {
                     @ApiResponse(responseCode = "204", description = "Информация о группе обновлена"),
-                    @ApiResponse(responseCode = "404", description = "Группа с таким идентификатором не найдена")
+                    @ApiResponse(responseCode = "404", description = "Группа с таким идентификатором не найдена", content = @Content())
             }
     )
     void update(@PathVariable Long groupId, @RequestBody GroupUpdateRequest request);
@@ -107,7 +108,7 @@ public interface GroupApi {
             summary = "Удалить группу",
             responses = {
                     @ApiResponse(responseCode = "204", description = "Группа удалена"),
-                    @ApiResponse(responseCode = "404", description = "Группа с таким идентификатором не найдена")
+                    @ApiResponse(responseCode = "404", description = "Группа с таким идентификатором не найдена", content = @Content())
             }
     )
     void delete(@PathVariable Long groupId);

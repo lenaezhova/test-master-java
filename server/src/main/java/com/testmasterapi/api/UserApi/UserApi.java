@@ -59,7 +59,7 @@ public interface UserApi {
             summary = "Получить пользователя",
             responses = {
                     @ApiResponse(responseCode = "200"),
-                    @ApiResponse(responseCode = "404", description = "Пользователь с таким идентификатором не найден")
+                    @ApiResponse(responseCode = "404", description = "Пользователь с таким идентификатором не найден", content = @Content())
             }
     )
     UserData one(@PathVariable Long userId);
@@ -70,7 +70,7 @@ public interface UserApi {
             summary = "Получить текущего авторизованного пользователя",
             responses = {
                     @ApiResponse(responseCode = "200"),
-                    @ApiResponse(responseCode = "404", description = "Пользователь с таким идентификатором не найден")
+                    @ApiResponse(responseCode = "404", description = "Пользователь с таким идентификатором не найден", content = @Content())
             }
     )
     UserData current();
@@ -81,7 +81,7 @@ public interface UserApi {
             summary = "Обновить информацию о пользователе",
             responses = {
                     @ApiResponse(responseCode = "204", description = "Информация о пользователе обновлена"),
-                    @ApiResponse(responseCode = "404", description = "Пользователь с таким идентификатором не найден")
+                    @ApiResponse(responseCode = "404", description = "Пользователь с таким идентификатором не найден", content = @Content())
             }
     )
     void update(@PathVariable Long userId, @RequestBody UserUpdateRequest userUpdateRequest);
@@ -92,7 +92,7 @@ public interface UserApi {
             summary = "Удалить пользователя",
             responses = {
                     @ApiResponse(responseCode = "204", description = "Пользователь удален"),
-                    @ApiResponse(responseCode = "404", description = "Пользователь с таким идентификатором не найден")
+                    @ApiResponse(responseCode = "404", description = "Пользователь с таким идентификатором не найден", content = @Content())
             }
     )
     void delete(@PathVariable Long userId);

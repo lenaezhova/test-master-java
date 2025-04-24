@@ -6,6 +6,7 @@ import com.testmasterapi.domain.question.reponse.QuestionsResponse;
 import com.testmasterapi.domain.question.request.QuestionUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springdoc.core.annotations.ParameterObject;
@@ -45,9 +46,9 @@ public interface QuestionApi {
             summary = "Обновить информацию о вопросе",
             responses = {
                     @ApiResponse(responseCode = "204", description = "Информация о вопросе обновлена"),
-                    @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста"),
-                    @ApiResponse(responseCode = "404", description = "Вопрос с таким идентификатором не найден"),
-                    @ApiResponse(responseCode = "409", description = "Тест открыт для прохождения"),
+                    @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста", content = @Content()),
+                    @ApiResponse(responseCode = "404", description = "Вопрос с таким идентификатором не найден", content = @Content()),
+                    @ApiResponse(responseCode = "409", description = "Тест открыт для прохождения", content = @Content()),
             }
     )
     void update(@PathVariable Long questionId, @RequestBody QuestionUpdateRequest request);
@@ -58,9 +59,9 @@ public interface QuestionApi {
             summary = "Удалить вопрос",
             responses = {
                     @ApiResponse(responseCode = "204", description = "Вопрос удален"),
-                    @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста"),
-                    @ApiResponse(responseCode = "404", description = "Вопрос с таким идентификатором не найден"),
-                    @ApiResponse(responseCode = "409", description = "Тест открыт для прохождения"),
+                    @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста", content = @Content()),
+                    @ApiResponse(responseCode = "404", description = "Вопрос с таким идентификатором не найден", content = @Content()),
+                    @ApiResponse(responseCode = "409", description = "Тест открыт для прохождения", content = @Content()),
             }
     )
     void delete(@PathVariable Long questionId);

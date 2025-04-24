@@ -6,6 +6,7 @@ import com.testmasterapi.domain.group.request.UserGroupsAddRequest;
 import com.testmasterapi.domain.group.response.GroupsUsersResponse;
 import com.testmasterapi.domain.page.data.PageData;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springdoc.core.annotations.ParameterObject;
@@ -39,8 +40,8 @@ public interface UserGroupApi {
             summary = "Добавить пользователя в группу",
             responses = {
                     @ApiResponse(responseCode = "204", description = "Пользователь добавлен в группу"),
-                    @ApiResponse(responseCode = "404", description = "Группа (пользователь) с таким идентификатором не найдена"),
-                    @ApiResponse(responseCode = "409", description = "Пользователь уже состоит в группе с таким идентификатором")
+                    @ApiResponse(responseCode = "404", description = "Группа (пользователь) с таким идентификатором не найдена", content = @Content()),
+                    @ApiResponse(responseCode = "409", description = "Пользователь уже состоит в группе с таким идентификатором", content = @Content())
             }
     )
     ResponseEntity<Void> addGroup(
@@ -55,7 +56,7 @@ public interface UserGroupApi {
             summary = "Удалить пользователя из группы",
             responses = {
                     @ApiResponse(responseCode = "204", description = "Пользователен удален из группы"),
-                    @ApiResponse(responseCode = "404", description = "Группа (пользователь) с таким идентификатором не найдена")
+                    @ApiResponse(responseCode = "404", description = "Группа (пользователь) с таким идентификатором не найдена", content = @Content())
             }
     )
     void deleteGroup(

@@ -9,6 +9,7 @@ import com.testmasterapi.domain.test.request.TestCreateRequest;
 import com.testmasterapi.domain.test.request.TestUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springdoc.core.annotations.ParameterObject;
@@ -46,8 +47,8 @@ public interface TestApi {
             summary = "Получить результаты теста",
             responses = {
                     @ApiResponse(responseCode = "200"),
-                    @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста"),
-                    @ApiResponse( responseCode = "404", description = "Тест с таким идентификатором не найден")
+                    @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста", content = @Content()),
+                    @ApiResponse(responseCode = "404", description = "Тест с таким идентификатором не найден", content = @Content())
             }
     )
     PageData<TestSessionResultData> results(
@@ -68,7 +69,7 @@ public interface TestApi {
             summary = "Получить тест",
             responses = {
                     @ApiResponse(responseCode = "200"),
-                    @ApiResponse( responseCode = "404", description = "Тест с таким идентификатором не найден")
+                    @ApiResponse( responseCode = "404", description = "Тест с таким идентификатором не найден", content = @Content())
             }
     )
     TestData one(@PathVariable Long testId);
@@ -79,7 +80,7 @@ public interface TestApi {
             summary = "Создать тест",
             responses = {
                     @ApiResponse(responseCode = "201", description = "Тест создан"),
-                    @ApiResponse(responseCode = "400", description = "Ошибка при создании теста")
+                    @ApiResponse(responseCode = "400", description = "Ошибка при создании теста", content = @Content())
             }
     )
     ResponseEntity<Void> create(@RequestBody TestCreateRequest test);
@@ -90,9 +91,9 @@ public interface TestApi {
             summary = "Обновить тест",
             responses = {
                     @ApiResponse(responseCode = "204", description = "Тест обновлен"),
-                    @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста"),
-                    @ApiResponse(responseCode = "404", description = "Тест с таким идентификатором не найден"),
-                    @ApiResponse(responseCode = "409", description = "Тест открыт для прохождения"),
+                    @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста", content = @Content()),
+                    @ApiResponse(responseCode = "404", description = "Тест с таким идентификатором не найден", content = @Content()),
+                    @ApiResponse(responseCode = "409", description = "Тест открыт для прохождения", content = @Content()),
             }
     )
     void update(@PathVariable Long testId, @RequestBody TestUpdateRequest test);
@@ -103,7 +104,7 @@ public interface TestApi {
             summary = "Открыть тест для прохождения",
             responses = {
                     @ApiResponse(responseCode = "204", description = "Тест открыт для прохождения"),
-                    @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста"),
+                    @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста", content = @Content()),
                     @ApiResponse(responseCode = "404", description = "Тест с таким идентификатором не найден"),
             }
     )
