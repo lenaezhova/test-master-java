@@ -1,6 +1,9 @@
 package com.testmaster.config;
 
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.context.annotation.Configuration;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
@@ -13,6 +16,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
                 version = "1.0",
                 description = "Документация API"
         ),
+        security = @SecurityRequirement(name = "BearerAuth"),
         tags = {
                 @Tag(name = "Почта", description = "API для работы c почтой"),
 
@@ -36,6 +40,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
                 @Tag(name = "Ответы", description = "API для работы c ответами"),
                 @Tag(name = "Шаблоны ответов", description = "API для работы c шаблонами ответов")
         }
+)
+@SecurityScheme(
+        name = "BearerAuth",
+        type = SecuritySchemeType.HTTP,
+        scheme = "bearer",
+        bearerFormat = "JWT"
 )
 public class OpenApiConfig {
 }
