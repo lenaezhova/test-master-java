@@ -14,7 +14,7 @@ public class AnswerRepositoryCustomImpl implements AnswerRepositoryCustom {
     @Override
     public int update(Long answerId, AnswerUpdateRequest request) {
         var query = """
-                update answers_templates set text = coalesce(:text, text),
+                update answers_templates set text = coalesce(:text, text)
                 where id = :aid
                 """;
 

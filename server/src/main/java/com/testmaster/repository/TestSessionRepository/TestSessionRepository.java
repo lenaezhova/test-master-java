@@ -1,8 +1,10 @@
 package com.testmaster.repository.TestSessionRepository;
 
 import com.testmaster.model.Question;
+import com.testmaster.model.Test.Test;
 import com.testmaster.model.TestSession;
 import com.testmaster.model.User.User;
+import com.testmasterapi.domain.testSession.TestSessionStatus;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -78,4 +80,6 @@ public interface TestSessionRepository extends JpaRepository<TestSession, Long>,
     @Modifying
     @Query("delete from TestSession ts where ts.id = :id")
     int delete(@Param("id") Long id);
+
+    Long test(Test test);
 }

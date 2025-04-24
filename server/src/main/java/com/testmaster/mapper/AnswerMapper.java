@@ -2,6 +2,7 @@ package com.testmaster.mapper;
 
 import com.testmaster.model.*;
 import com.testmasterapi.domain.answer.data.AnswerData;
+import com.testmasterapi.domain.answer.data.AnswerResultData;
 import com.testmasterapi.domain.answer.request.AnswerCreateRequest;
 import org.mapstruct.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,9 @@ public class AnswerMapper {
     @Autowired
     private QuestionMapper questionMapper;
 
+    @Autowired
+    private AnswerTemplateMapper answerTemplateMapper;
+
     public AnswerData toData(Answer answer) {
         var data = new AnswerData();
 
@@ -21,6 +25,16 @@ public class AnswerMapper {
         data.setText(answer.getText());
         data.setCreatedAt(answer.getCreatedAt());
         data.setUpdatedAt(answer.getUpdatedAt());
+
+        return data;
+    }
+
+    public AnswerResultData toResult(Answer answer) {
+        var data = new AnswerResultData();
+
+        data.setId(answer.getId());
+        data.setText(answer.getText());
+        data.setAnswerTemplate(answerTemplateMapper.toResult(answer.getAnswerTemplate()));
 
         return data;
     }

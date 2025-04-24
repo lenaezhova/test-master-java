@@ -77,6 +77,13 @@ public interface TestSessionService {
     void update(Long testSessionId, TestSessionUpdateRequest request);
 
     /**
+     * Закрыть сессию.
+     *
+     * @param testSessionId Идентификатор сессии
+     */
+    void close(Long testSessionId);
+
+    /**
      * Метод для удаления сессии.
      *
      * @param testSessionId Идентификатор сессии

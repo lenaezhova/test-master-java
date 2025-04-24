@@ -34,7 +34,8 @@ public interface GroupApi {
     @Operation(summary = "Получение списка групп")
     PageData<GroupData> all(
             @ParameterObject
-            @PageableDefault(page = 0, size = 10) Pageable pageable
+            @PageableDefault(page = 0, size = 10)
+            Pageable pageable
     );
 
     @PreAuthorize("isAuthenticated()")

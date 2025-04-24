@@ -1,6 +1,7 @@
 package com.testmasterapi.api.TestApi;
 
 import com.testmasterapi.api.TestSessionApi;
+import com.testmasterapi.domain.group.request.GroupUpdateRequest;
 import com.testmasterapi.domain.page.data.PageData;
 import com.testmasterapi.domain.testSession.data.TestSessionData;
 import com.testmasterapi.domain.testSession.request.TestSessionCreateRequest;
@@ -37,6 +38,17 @@ public interface TestTestsSessionsApi {
             @PageableDefault(page = 0, size = 10)
             Pageable pageable
     );
+
+    @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
+    @PatchMapping
+    @Operation(
+            summary = "Закрыть все открытые сессии теста",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "Все открытые сессии теста закрыты"),
+                    @ApiResponse(responseCode = "404", description = "Тест с таким идентификатором не найден"),
+            }
+    )
+    void closeAllOpenedSessions(@PathVariable Long testId);
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping

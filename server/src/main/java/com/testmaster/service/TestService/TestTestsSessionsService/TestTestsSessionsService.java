@@ -24,6 +24,12 @@ public interface TestTestsSessionsService {
     @NotNull
     PageData<TestSessionData> getAllSessions(Long testId, Boolean showUserDeleted, @NotNull Pageable pageable);
 
+    /**
+     * Метод для закрытия всех открытых сессий теста.
+     *
+     * @param testId Идентификатор теста
+     */
+    void closeAllOpenedSessions(Long testId);
 
     /**
      * Метод для создания новой сессии.

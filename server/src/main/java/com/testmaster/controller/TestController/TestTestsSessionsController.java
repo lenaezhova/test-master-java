@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -27,6 +28,12 @@ public class TestTestsSessionsController implements TestTestsSessionsApi {
     @Override
     public PageData<TestSessionData> allSessions(Long testId, Boolean showUserDeleted, Pageable pageable) {
         return testTestsSessionsService.getAllSessions(testId, showUserDeleted, pageable);
+    }
+
+    @Override
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void closeAllOpenedSessions(Long testId) {
+        testTestsSessionsService.closeAllOpenedSessions(testId);
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.testmaster.model.Question;
 import com.testmaster.model.Test.Test;
 import com.testmasterapi.domain.question.data.QuestionAnswerData;
 import com.testmasterapi.domain.question.data.QuestionData;
+import com.testmasterapi.domain.question.data.QuestionResultData;
 import com.testmasterapi.domain.question.data.QuestionWithTemplatesData;
 import com.testmasterapi.domain.question.request.QuestionCreateRequest;
 import com.testmasterapi.domain.user.CustomUserDetails;
@@ -61,6 +62,15 @@ public class QuestionMapper {
         data.setSoftDeleted(question.isSoftDeleted());
         data.setId(question.getId());
         data.setTitle(question.getTitle());
+
+        return data;
+    }
+
+    public QuestionResultData toResult(Question question) {
+        var data = new QuestionResultData();
+        data.setId(question.getId());
+        data.setTitle(question.getTitle());
+        data.setType(question.getType());
 
         return data;
     }

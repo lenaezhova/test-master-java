@@ -4,18 +4,17 @@ import com.testmaster.annotations.CheckTest.CheckTest;
 import com.testmaster.service.TestService.TestService;
 import com.testmasterapi.api.TestApi.TestApi;
 import com.testmasterapi.domain.page.data.PageData;
+import com.testmasterapi.domain.test.TestResultDetailLevel;
 import com.testmasterapi.domain.test.TestStatus;
 import com.testmasterapi.domain.test.data.TestData;
+import com.testmasterapi.domain.testSession.data.TestSessionResultData;
 import com.testmasterapi.domain.test.request.TestCreateRequest;
 import com.testmasterapi.domain.test.request.TestUpdateRequest;
-import com.testmasterapi.domain.test.response.TestsResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,8 +23,13 @@ public class TestController implements TestApi {
     private final TestService testService;
 
     @Override
-    public PageData<TestData> all(Boolean showOnlyDeleted, Pageable pageable) {
-        return testService.getAll(showOnlyDeleted, pageable);
+    public PageData<TestData> all(Boolean showOnlyDeleted, TestStatus status, Pageable pageable) {
+        return testService.getAll(showOnlyDeleted, status, pageable);
+    }
+
+    @Override
+    public PageData<TestSessionResultData> results(@PathVariable Long testId, TestResultDetailLevel detailLevel, Pageable pageable) {
+        return testService.getResults(testId, detailLevel, pageable);
     }
 
     @Override

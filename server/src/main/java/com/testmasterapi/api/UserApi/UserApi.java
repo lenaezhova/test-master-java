@@ -34,7 +34,8 @@ public interface UserApi {
             Boolean showOnlyDeleted,
 
             @ParameterObject
-            @PageableDefault(page = 0, size = 10) Pageable pageable
+            @PageableDefault(page = 0, size = 10)
+            Pageable pageable
     );
 
     @PreAuthorize("isAuthenticated()")
@@ -48,7 +49,8 @@ public interface UserApi {
             Boolean showTestDeleted,
 
             @ParameterObject
-            @PageableDefault(page = 0, size = 10) Pageable pageable
+            @PageableDefault(page = 0, size = 10)
+            Pageable pageable
     );
 
     @PreAuthorize("isAuthenticated()")

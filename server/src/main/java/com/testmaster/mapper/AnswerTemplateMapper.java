@@ -3,6 +3,7 @@ package com.testmaster.mapper;
 import com.testmaster.model.AnswerTemplate;
 import com.testmaster.model.Question;
 import com.testmasterapi.domain.answerTemplate.data.AnswerTemplateData;
+import com.testmasterapi.domain.answerTemplate.data.AnswerTemplateResultData;
 import com.testmasterapi.domain.answerTemplate.request.AnswerTemplateCreateRequest;
 import com.testmasterapi.domain.answerTemplate.request.AnswerTemplateQuestionUpdateRequest;
 import com.testmasterapi.domain.user.CustomUserDetails;
@@ -21,6 +22,14 @@ public class AnswerTemplateMapper {
         return isOwnerTest
                 ? this.toPrivate(answerTemplate)
                 : this.toPublic(answerTemplate);
+    }
+
+    public AnswerTemplateResultData toResult(AnswerTemplate answerTemplate) {
+        var data = new AnswerTemplateResultData();
+        data.setId(answerTemplate.getId());
+        data.setDescription(answerTemplate.getDescription());
+        return data;
+
     }
 
     public AnswerTemplate toEntity(AnswerTemplateCreateRequest request, Question question) {

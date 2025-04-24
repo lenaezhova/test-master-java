@@ -5,6 +5,7 @@ import com.testmaster.model.TestSession;
 import com.testmaster.model.User.User;
 import com.testmasterapi.domain.testSession.TestSessionStatus;
 import com.testmasterapi.domain.testSession.data.TestSessionData;
+import com.testmasterapi.domain.testSession.data.TestSessionResultData;
 import com.testmasterapi.domain.testSession.request.TestSessionCreateRequest;
 import org.mapstruct.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,17 @@ public class TestSessionMapper {
         data.setTest(testMapper.toSession(testSession.getTest()));
         data.setClosedAt(testSession.getClosedAt());
         data.setCreatedAt(testSession.getCreatedAt());
+
+        return data;
+    }
+
+    public TestSessionResultData toResult(TestSession testSession) {
+        var data = new TestSessionResultData();
+
+        data.setId(testSession.getId());
+        data.setCountPoints(testSession.getCountPoints());
+        data.setCreatedAt(testSession.getCreatedAt());
+        data.setClosedAt(testSession.getClosedAt());
 
         return data;
     }

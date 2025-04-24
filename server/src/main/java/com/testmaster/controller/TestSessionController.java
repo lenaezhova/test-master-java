@@ -67,14 +67,21 @@ public class TestSessionController implements TestSessionApi {
 
     @Override
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @CheckTest(questionId = "questionId", checkOwner = true, status = TestStatus.OPENED)
+    @CheckTest(testSessionId = "testSessionId", skipCheckStatusForOwner = true, status = TestStatus.OPENED)
     public void update(Long testSessionId, TestSessionUpdateRequest request) {
         testSessionService.update(testSessionId, request);
     }
 
     @Override
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @CheckTest(questionId = "questionId", status = TestStatus.CLOSED)
+    @CheckTest(testSessionId = "testSessionId", skipCheckStatusForOwner = true, status = TestStatus.OPENED)
+    public void close(Long testSessionId) {
+        testSessionService.close(testSessionId);
+    }
+
+    @Override
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @CheckTest(testSessionId = "testSessionId", status = TestStatus.CLOSED)
     public void delete(Long testSessionId) {
         testSessionService.delete(testSessionId);
     }

@@ -14,6 +14,11 @@ import java.util.List;
 
 @Repository
 public interface AnswerRepository extends JpaRepository<Answer, Long>, AnswerRepositoryCustom {
+    @Query("""
+        select a from Answer a
+        where a.testSession.id = :testSessionId
+    """)
+    List<Answer> findAllByTestSessionId(@Param("testSessionId") Long testSessionId);
 
     @Query("""
         select a from Answer a
@@ -24,6 +29,15 @@ public interface AnswerRepository extends JpaRepository<Answer, Long>, AnswerRep
             @Param("questionId") Long questionId,
             @Param("showOnlyDeletedQuestion") Boolean showOnlyDeletedQuestion,
             Pageable pageable
+    );
+
+    @Query("""
+        select a from Answer a
+        where a.testSession.id = :testSessionId and a.question.id = :questionId
+    """)
+    List<Answer> findBySessionIdAndQuestionId(
+            @Param("testSessionId") Long testSessionId,
+            @Param("questionId") Long questionId
     );
 
     @Query("""

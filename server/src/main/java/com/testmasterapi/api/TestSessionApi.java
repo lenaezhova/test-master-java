@@ -58,6 +58,18 @@ public interface TestSessionApi {
     void update(@PathVariable Long testSessionId, @RequestBody TestSessionUpdateRequest request);
 
     @PreAuthorize("isAuthenticated()")
+    @PatchMapping("/{testSessionId}:close")
+    @Operation(
+            summary = "Закрыть сессию",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "Сессия закрыта обновлена"),
+                    @ApiResponse(responseCode = "404", description = "Сессия с таким идентификатором не найдена"),
+                    @ApiResponse(responseCode = "409", description = "Тест закрыт для прохождения"),
+            }
+    )
+    void close(@PathVariable Long testSessionId);
+
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/{testSessionId}" + AnswerApi.BASE_PATH)
     @Operation(
             summary = "Сохранение ответов на весь тест",

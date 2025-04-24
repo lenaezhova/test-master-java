@@ -1,6 +1,7 @@
-package com.testmaster.service.events;
+package com.testmaster.events;
 
 import com.testmaster.service.TestService.TestQuestionService.DefaultTestQuestionService;
+import com.testmaster.service.TestService.TestQuestionService.TestQuestionService;
 import com.testmasterapi.domain.test.event.TestDeletedEvent;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -11,11 +12,11 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class TestDeletedEventListener {
 
-    private final DefaultTestQuestionService testQuestionService;
+    private final TestQuestionService testQuestionService;
 
     @Transactional
     @EventListener
-    public void onTestDeleted(TestDeletedEvent event) {
+    public void onTestDelete(TestDeletedEvent event) {
         testQuestionService.deleteAllQuestions(event.testId());
     }
 }

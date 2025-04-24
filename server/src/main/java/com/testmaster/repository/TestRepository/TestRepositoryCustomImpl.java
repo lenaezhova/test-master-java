@@ -1,7 +1,10 @@
 package com.testmaster.repository.TestRepository;
 
+import com.testmasterapi.domain.test.TestStatus;
+import com.testmasterapi.domain.test.event.TestClosedEvent;
 import com.testmasterapi.domain.test.request.TestUpdateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -14,6 +17,9 @@ public class TestRepositoryCustomImpl implements TestRepositoryCustom {
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
 
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
+
     @Override
     @Transactional
     public int update(Long testId, TestUpdateRequest request) {
@@ -25,6 +31,8 @@ public class TestRepositoryCustomImpl implements TestRepositoryCustom {
                                  status = coalesce(:status, status)
                 where id = :tid and deleted = false
                 """;
+
+
         LocalDateTime now = LocalDateTime.now();
 
         var status = request.getStatus();

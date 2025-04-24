@@ -10,11 +10,11 @@ import com.testmaster.repository.QuestionRepository.QuestionRepository;
 import com.testmaster.repository.TestSessionRepository.TestSessionRepository;
 import com.testmasterapi.domain.page.data.PageData;
 import com.testmasterapi.domain.question.QuestionTypes;
+import com.testmasterapi.domain.testSession.TestSessionStatus;
 import com.testmasterapi.domain.testSession.data.TestSessionData;
 import com.testmasterapi.domain.testSession.request.TestSessionAddAnswerRequest;
 import com.testmasterapi.domain.testSession.request.TestSessionAddTestAnswerRequest;
 import com.testmasterapi.domain.testSession.request.TestSessionUpdateRequest;
-import com.testmasterapi.domain.user.data.UserData;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
@@ -24,10 +24,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 import java.util.function.LongSupplier;
 import java.util.stream.Collectors;
@@ -108,10 +106,7 @@ public class DefaultTestSessionService implements TestSessionService {
         }
 
         // если тип вопроса с выбором, то ищем все шаблоны ответа с переданными answerIds
-        var questionTypesSelected = new ArrayList<>(List.of(
-                QuestionTypes.SINGLE, QuestionTypes.MULTIPLE
-        ));
-        if (questionTypesSelected.contains(question.getType()) && !answerIds.isEmpty()) {
+        if (QuestionTypes.choiceTypes().contains(question.getType()) && !answerIds.isEmpty()) {
             Map<Long, AnswerTemplate> templateMap = answerTemplateRepository.findAllById(answerIds)
                     .stream()
                     .collect(Collectors.toMap(AnswerTemplate::getId, Function.identity()));
@@ -142,17 +137,39 @@ public class DefaultTestSessionService implements TestSessionService {
     @Override
     @Transactional
     public void update(Long testSessionId, TestSessionUpdateRequest request) {
-        TestSession session = this.getTestSession(testSessionId);
-
-        if (session.getClosedAt() == null) {
-            LocalDateTime now = LocalDateTime.now();
-            request.setClosedAt(now);
-        }
-
         int updated = testSessionRepository.update(testSessionId, request);
         if (updated == 0) {
             throw new NotFoundException(notFoundTestSessionMessage);
         }
+    }
+
+    @Override
+    @Transactional
+    public void close(Long testSessionId) {
+        var sessionsAnswers = answerRepository.findAllByTestSessionId(testSessionId);
+        AtomicInteger countPoints = new AtomicInteger();
+
+        sessionsAnswers.forEach(answer -> {
+            var type = answer.getQuestion().getType();
+            var selectedTemplate = answer.getAnswerTemplate();
+
+            // если тип вопроса с выбором, то проверяем выбранные варианты ответов
+            // если тип вопроса с текстом, то сравниваем текст в ответе и текст вшаблоне ответа
+            if (
+                    QuestionTypes.choiceTypes().contains(type) && selectedTemplate.getIsCorrect() ||
+                    type == QuestionTypes.TEXT && Objects.equals(answer.getText(), selectedTemplate.getText())
+            ) {
+                countPoints.addAndGet(selectedTemplate.getCountPoints());
+            }
+        });
+        LocalDateTime now = LocalDateTime.now();
+
+        var update = new TestSessionUpdateRequest();
+        update.setStatus(TestSessionStatus.CLOSED);
+        update.setCountPoints(countPoints.get());
+        update.setClosedAt(now);
+
+        this.update(testSessionId, update);
     }
 
     @Override
