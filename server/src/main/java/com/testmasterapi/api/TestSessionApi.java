@@ -2,6 +2,7 @@ package com.testmasterapi.api;
 
 import com.testmasterapi.api.QuestionApi.QuestionApi;
 import com.testmasterapi.api.TestApi.TestApi;
+import com.testmasterapi.domain.page.data.PageData;
 import com.testmasterapi.domain.testSession.request.TestSessionAddAnswerRequest;
 import com.testmasterapi.domain.testSession.data.TestSessionData;
 import com.testmasterapi.domain.testSession.request.TestSessionAddTestAnswerRequest;
@@ -10,6 +11,8 @@ import com.testmasterapi.domain.testSession.response.TestsSessionsResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +27,7 @@ public interface TestSessionApi {
     @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping
     @Operation(summary = "Получение списка всех сессий")
-    TestsSessionsResponse all();
+    PageData<TestSessionData> all(Boolean showDeleted, Pageable pageable);
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")

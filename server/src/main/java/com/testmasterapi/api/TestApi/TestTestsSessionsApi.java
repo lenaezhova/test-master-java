@@ -1,12 +1,14 @@
 package com.testmasterapi.api.TestApi;
 
 import com.testmasterapi.api.TestSessionApi;
+import com.testmasterapi.domain.page.data.PageData;
 import com.testmasterapi.domain.testSession.data.TestSessionData;
 import com.testmasterapi.domain.testSession.request.TestSessionCreateRequest;
 import com.testmasterapi.domain.testSession.response.TestsSessionsResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +23,11 @@ public interface TestTestsSessionsApi {
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     @Operation(summary = "Получение всех сессий теста")
-    TestsSessionsResponse allSessions(@PathVariable("testId") Long testId);
+    PageData<TestSessionData> allSessions(
+            @PathVariable("testId") Long testId,
+            Boolean showDeleted,
+            Pageable pageable
+    );
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping
@@ -34,5 +40,8 @@ public interface TestTestsSessionsApi {
                     @ApiResponse(responseCode = "409", description = "Тест закрыт для прохождения"),
             }
     )
-    ResponseEntity<Void> createSession(@PathVariable("testId") Long testId, @RequestBody TestSessionCreateRequest request);
+    ResponseEntity<Void> createSession(
+            @PathVariable("testId") Long testId,
+            @RequestBody TestSessionCreateRequest request
+    );
 }

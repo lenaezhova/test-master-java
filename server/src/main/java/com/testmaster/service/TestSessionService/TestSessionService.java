@@ -1,10 +1,12 @@
 package com.testmaster.service.TestSessionService;
 
+import com.testmasterapi.domain.page.data.PageData;
 import com.testmasterapi.domain.testSession.data.TestSessionData;
 import com.testmasterapi.domain.testSession.request.TestSessionAddAnswerRequest;
 import com.testmasterapi.domain.testSession.request.TestSessionAddTestAnswerRequest;
 import com.testmasterapi.domain.testSession.request.TestSessionUpdateRequest;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -19,7 +21,7 @@ public interface TestSessionService {
      *
      * @return Все сессии
      */
-    List<TestSessionData> getAll();
+    PageData<TestSessionData> getAll(Boolean showDeleted, @NotNull Pageable pageable);
 
     /**
      * Метод для получения одной сессии.

@@ -37,13 +37,13 @@ public class UserController implements UserApi {
     private final UserService userService;
 
     @Override
-    public PageData<UserData> all(Pageable pageable) {
-        return userService.getAll(pageable);
+    public PageData<UserData> all(Boolean showDeleted, Pageable pageable) {
+        return userService.getAll(showDeleted, pageable);
     }
 
     @Override
-    public TestsSessionsResponse allSessions(Long id) {
-        return new TestsSessionsResponse(userService.getAllSessions(id));
+    public PageData<TestSessionData> allSessions(Long id,  Boolean showDeleted, Pageable pageable) {
+        return userService.getAllSessions(id, showDeleted, pageable);
     }
 
     @Override

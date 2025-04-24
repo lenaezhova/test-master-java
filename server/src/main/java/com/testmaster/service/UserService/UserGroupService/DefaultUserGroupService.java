@@ -11,13 +11,20 @@ import com.testmaster.repository.UserGroupRepository;
 import com.testmaster.repository.UserRepository.UserRepository;
 import com.testmasterapi.domain.group.data.GroupsUserData;
 import com.testmasterapi.domain.group.request.UserGroupsAddRequest;
+import com.testmasterapi.domain.page.data.PageData;
 import com.testmasterapi.domain.user.UserGroupId;
+import com.testmasterapi.domain.user.data.UserData;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.function.LongSupplier;
 
 @Service
 @RequiredArgsConstructor
@@ -28,12 +35,19 @@ public class DefaultUserGroupService implements UserGroupService {
     private final UserRepository userRepository;
     private final GroupRepository groupRepository;
 
+    @NotNull
     @Override
-    public List<GroupsUserData> getAllGroups(Long userId) {
-        return groupUserRepository.findAllByUserId(userId)
+    public PageData<GroupsUserData> getAllGroups(Long userId, @NotNull Pageable pageable) {
+        var content = groupUserRepository.findAllByUserId(userId, pageable)
                 .stream()
                 .map(groupMapper::toGroupsUser)
                 .toList();
+
+        LongSupplier total = () -> groupUserRepository.countAllByUserId(userId);
+
+        Page<GroupsUserData> page = PageableExecutionUtils.getPage(content, pageable, total);
+
+        return PageData.fromPage(page);
     }
 
     @Transactional

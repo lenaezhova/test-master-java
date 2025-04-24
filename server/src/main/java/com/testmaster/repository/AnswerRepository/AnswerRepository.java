@@ -2,6 +2,8 @@ package com.testmaster.repository.AnswerRepository;
 
 import com.testmaster.model.Answer;
 import com.testmaster.model.AnswerTemplate;
+import com.testmaster.model.User.User;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -12,11 +14,27 @@ import java.util.List;
 
 @Repository
 public interface AnswerRepository extends JpaRepository<Answer, Long>, AnswerRepositoryCustom {
+
     @Query("""
         select a from Answer a
-        where a.question.id = :questionId
+        where a.question.id = :questionId and
+             (:showDeletedQuestion is null or a.question.softDeleted = :showDeletedQuestion)
     """)
-    List<Answer> findAllByQuestionId(@Param("questionId") Long questionId);
+    List<Answer> findAllByQuestionId(
+            @Param("questionId") Long questionId,
+            @Param("showDeletedQuestion") Boolean showDeletedQuestion,
+            Pageable pageable
+    );
+
+    @Query("""
+        select count(a) from Answer a
+        where a.question.id = :questionId and
+             (:showDeletedQuestion is null or a.question.softDeleted = :showDeletedQuestion)
+    """)
+    long countAllByQuestionId(
+            @Param("questionId") Long questionId,
+            @Param("showDeletedQuestion") Boolean showDeletedQuestion
+    );
 
     @Modifying
     @Query("delete from Answer a where a.id = :id")

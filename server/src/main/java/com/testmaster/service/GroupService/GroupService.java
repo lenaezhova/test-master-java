@@ -3,9 +3,11 @@ package com.testmaster.service.GroupService;
 import com.testmasterapi.domain.group.data.GroupData;
 import com.testmasterapi.domain.group.request.GroupCreateRequest;
 import com.testmasterapi.domain.group.request.GroupUpdateRequest;
+import com.testmasterapi.domain.page.data.PageData;
 import com.testmasterapi.domain.test.data.TestGroupsData;
 import com.testmasterapi.domain.user.data.UserGroupsData;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -20,21 +22,24 @@ public interface GroupService {
      *
      * @return Все группы
      */
-    List<GroupData> getAll();
+    @NotNull
+    PageData<GroupData> getAll(@NotNull Pageable pageable);
 
     /**
      * Метод для получения всех пользователей группы.
      *
-     * @return Все пользователи группы
+     * @return Страница всех пользователей группы
      */
-    List<UserGroupsData> getAllUsers(Long groupId);
+    @NotNull
+    PageData<UserGroupsData> getAllUsers(Long groupId, Boolean showDeleted, @NotNull Pageable pageable);
 
     /**
      * Метод для получения всех тестов группы.
      *
      * @return Все тесты группы
      */
-    List<TestGroupsData> getAllTests(Long groupId);
+    @NotNull
+    PageData<TestGroupsData> getAllTests(Long groupId, Boolean showDeleted, @NotNull Pageable pageable);
 
     /**
      * Метод для получения одной группы.

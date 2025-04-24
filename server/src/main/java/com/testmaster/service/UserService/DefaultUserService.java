@@ -34,25 +34,32 @@ public class DefaultUserService implements UserService {
 
     @NotNull
     @Override
-    public PageData<UserData> getAll(@NotNull Pageable pageable) {
-        var content = userRepository.findUsers(pageable)
+    public PageData<UserData> getAll(Boolean showDeleted, @NotNull Pageable pageable) {
+        var content = userRepository.findUsers(showDeleted, pageable)
                 .stream()
                 .map(userMapper::toData)
                 .toList();
 
-        LongSupplier total = userRepository::countUsers;
+        LongSupplier total = () -> userRepository.countUsers(showDeleted);
 
         Page<UserData> page = PageableExecutionUtils.getPage(content, pageable, total);
 
         return PageData.fromPage(page);
     }
 
+    @NotNull
     @Override
-    public List<TestSessionData> getAllSessions(Long id) {
-        return testSessionRepository.findAllByUserId(id)
+    public PageData<TestSessionData> getAllSessions(Long userId, Boolean showDeleted, @NotNull Pageable pageable) {
+        var content = testSessionRepository.findAllByUserId(userId, showDeleted, pageable)
                 .stream()
                 .map(testSessionMapper::toData)
                 .toList();
+
+        LongSupplier total = () -> testSessionRepository.countAllByUserId(userId, showDeleted);
+
+        Page<TestSessionData> page = PageableExecutionUtils.getPage(content, pageable, total);
+
+        return PageData.fromPage(page);
     }
 
     @Override

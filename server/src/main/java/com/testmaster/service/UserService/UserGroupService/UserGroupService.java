@@ -2,6 +2,9 @@ package com.testmaster.service.UserService.UserGroupService;
 
 import com.testmasterapi.domain.group.data.GroupsUserData;
 import com.testmasterapi.domain.group.request.UserGroupsAddRequest;
+import com.testmasterapi.domain.page.data.PageData;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -16,7 +19,8 @@ public interface UserGroupService {
      *
      * @return Все группы пользователя
      */
-    List<GroupsUserData> getAllGroups(Long userId);
+    @NotNull
+    PageData<GroupsUserData> getAllGroups(Long userId, @NotNull Pageable pageable);
 
     /**
      * Метод для добавления пользователя в группу

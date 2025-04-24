@@ -9,21 +9,27 @@ import com.testmaster.repository.AnswerTemplateRepository.AnswerTemplateReposito
 import com.testmaster.repository.QuestionRepository.QuestionRepository;
 import com.testmaster.repository.UserRepository.UserRepository;
 import com.testmaster.service.TestService.TestQuestionService.DefaultTestQuestionService;
+import com.testmasterapi.domain.page.data.PageData;
 import com.testmasterapi.domain.test.data.TestData;
 import com.testmasterapi.domain.test.event.TestDeletedEvent;
 import com.testmasterapi.domain.test.request.TestCreateRequest;
 import com.testmasterapi.domain.test.request.TestUpdateRequest;
 import com.testmasterapi.domain.user.CustomUserDetails;
+import com.testmasterapi.domain.user.data.UserData;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import com.testmaster.model.Test.Test;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import com.testmaster.repository.TestRepository.TestRepository;
 
 import java.util.List;
+import java.util.function.LongSupplier;
 
 @Service
 @RequiredArgsConstructor
@@ -37,12 +43,19 @@ public class DefaultTestService implements TestService {
 
     private final String notFoundTestMessage = "Тест не найден";
 
+    @NotNull
     @Override
-    public List<TestData> getAll() {
-        return testRepository.findAll()
+    public PageData<TestData> getAll(Boolean showDeleted, @NotNull Pageable pageable) {
+        var content = testRepository.findTests(showDeleted, pageable)
                 .stream()
                 .map(testMapper::toData)
                 .toList();
+
+        LongSupplier total = () -> testRepository.countTests(showDeleted);
+
+        Page<TestData> page = PageableExecutionUtils.getPage(content, pageable, total);
+
+        return PageData.fromPage(page);
     }
 
     @Override

@@ -8,13 +8,18 @@ import com.testmaster.repository.AnswerRepository.AnswerRepository;
 import com.testmaster.repository.AnswerTemplateRepository.AnswerTemplateRepository;
 import com.testmaster.repository.QuestionRepository.QuestionRepository;
 import com.testmaster.repository.TestSessionRepository.TestSessionRepository;
+import com.testmasterapi.domain.page.data.PageData;
 import com.testmasterapi.domain.question.QuestionTypes;
 import com.testmasterapi.domain.testSession.data.TestSessionData;
 import com.testmasterapi.domain.testSession.request.TestSessionAddAnswerRequest;
 import com.testmasterapi.domain.testSession.request.TestSessionAddTestAnswerRequest;
 import com.testmasterapi.domain.testSession.request.TestSessionUpdateRequest;
+import com.testmasterapi.domain.user.data.UserData;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.LongSupplier;
 import java.util.stream.Collectors;
 
 @Service
@@ -41,11 +47,17 @@ public class DefaultTestSessionService implements TestSessionService {
     private final String notFoundAnswerTemplateMessage = "Шаблон ответа не найден";
 
     @Override
-    public List<TestSessionData> getAll() {
-        return testSessionRepository.findAll()
+    public PageData<TestSessionData> getAll(Boolean showDeleted, @NotNull Pageable pageable) {
+        var content = testSessionRepository.findAllTestSessions(showDeleted, pageable)
                 .stream()
                 .map(testSessionMapper::toData)
                 .toList();
+
+        LongSupplier total = () -> testSessionRepository.countAllTestSessions(showDeleted);
+
+        Page<TestSessionData> page = PageableExecutionUtils.getPage(content, pageable, total);
+
+        return PageData.fromPage(page);
     }
 
     @Override

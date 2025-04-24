@@ -14,18 +14,24 @@ import com.testmaster.repository.TestRepository.TestRepository;
 import com.testmaster.repository.TestSessionRepository.TestSessionRepository;
 import com.testmaster.repository.UserRepository.UserRepository;
 import com.testmasterapi.domain.group.request.TestsGroupAddRequest;
+import com.testmasterapi.domain.page.data.PageData;
 import com.testmasterapi.domain.test.TestGroupId;
 import com.testmasterapi.domain.testSession.data.TestSessionData;
 import com.testmasterapi.domain.testSession.request.TestSessionCreateRequest;
 import com.testmasterapi.domain.user.CustomUserDetails;
+import com.testmasterapi.domain.user.data.UserData;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.function.LongSupplier;
 
 @Service
 @RequiredArgsConstructor
@@ -36,12 +42,19 @@ public class DefaultTestTestsSessionsService implements TestTestsSessionsService
     private final TestRepository testRepository;
     private final UserRepository userRepository;
 
+    @NotNull
     @Override
-    public List<TestSessionData> getAllSessions(Long testId) {
-        return testSessionRepository.findAllByTestId(testId)
+    public PageData<TestSessionData> getAllSessions(Long testId, Boolean showDeleted, @NotNull Pageable pageable) {
+        var content = testSessionRepository.findAllByTestId(testId, showDeleted, pageable)
                 .stream()
                 .map(testSessionMapper::toData)
                 .toList();
+
+        LongSupplier total = () -> testSessionRepository.countAllByTestId(testId, showDeleted);
+
+        Page<TestSessionData> page = PageableExecutionUtils.getPage(content, pageable, total);
+
+        return PageData.fromPage(page);
     }
 
     @NotNull

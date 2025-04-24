@@ -6,11 +6,13 @@ import com.testmasterapi.api.GroupApi.GroupApi;
 import com.testmasterapi.domain.group.request.GroupCreateRequest;
 import com.testmasterapi.domain.group.request.GroupUpdateRequest;
 import com.testmasterapi.domain.group.response.GroupsResponse;
+import com.testmasterapi.domain.page.data.PageData;
 import com.testmasterapi.domain.test.data.TestGroupsData;
 import com.testmasterapi.domain.test.response.TestsGroupsResponse;
 import com.testmasterapi.domain.user.data.UserGroupsData;
 import com.testmasterapi.domain.user.response.UsersGroupsResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,18 +28,18 @@ public class GroupController implements GroupApi {
     private final GroupService groupService;
 
     @Override
-    public GroupsResponse all() {
-        return new GroupsResponse(groupService.getAll());
+    public PageData<GroupData> all(Pageable pageable) {
+        return groupService.getAll(pageable);
     }
 
     @Override
-    public UsersGroupsResponse allUsers(Long id) {
-        return new UsersGroupsResponse(groupService.getAllUsers(id));
+    public PageData<UserGroupsData> allUsers(Long id, Boolean showDeleted, Pageable pageable) {
+        return groupService.getAllUsers(id, showDeleted, pageable);
     }
 
     @Override
-    public TestsGroupsResponse allTests(Long id) {
-        return new TestsGroupsResponse(groupService.getAllTests(id));
+    public PageData<TestGroupsData> allTests(Long id, Boolean showDeleted, Pageable pageable) {
+        return groupService.getAllTests(id, showDeleted, pageable);
     }
 
     @Override

@@ -4,9 +4,10 @@ import com.testmaster.annotations.CheckTest.CheckTest;
 import com.testmaster.service.QuestionService.QuestionAnswerService.QuestionAnswerService;
 import com.testmasterapi.api.QuestionApi.QuestionAnswersApi;
 import com.testmasterapi.domain.answer.data.AnswerData;
-import com.testmasterapi.domain.answer.response.AnswersResponse;
+import com.testmasterapi.domain.page.data.PageData;
 import com.testmasterapi.domain.test.TestStatus;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -21,8 +22,8 @@ public class QuestionAnswersController implements QuestionAnswersApi {
     private final QuestionAnswerService questionAnswerService;
 
     @Override
-    public AnswersResponse allAnswers(Long questionId) {
-        return new AnswersResponse(questionAnswerService.getAllAnswers(questionId));
+    public PageData<AnswerData> allAnswers(Long questionId, Boolean showDeletedQuestion, Pageable pageable) {
+        return questionAnswerService.getAllAnswers(questionId, showDeletedQuestion, pageable);
     }
 
     @Override

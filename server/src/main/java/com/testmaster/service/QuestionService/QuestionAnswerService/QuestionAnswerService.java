@@ -1,6 +1,9 @@
 package com.testmaster.service.QuestionService.QuestionAnswerService;
 
 import com.testmasterapi.domain.answer.data.AnswerData;
+import com.testmasterapi.domain.page.data.PageData;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -15,7 +18,8 @@ public interface QuestionAnswerService {
      * @param questionId Идентификатор вопроса
      * @return Все ответы на вопрос
      */
-    List<AnswerData> getAllAnswers(Long questionId);
+    @NotNull
+    PageData<AnswerData> getAllAnswers(Long questionId, Boolean showDeletedQuestion, @NotNull Pageable pageable);
 
     /**
      * Метод для удаления всех ответов у вопроса

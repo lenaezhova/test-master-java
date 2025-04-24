@@ -1,5 +1,6 @@
 package com.testmasterapi.api.TestApi;
 
+import com.testmasterapi.domain.page.data.PageData;
 import com.testmasterapi.domain.test.data.TestData;
 import com.testmasterapi.domain.test.request.TestCreateRequest;
 import com.testmasterapi.domain.test.request.TestUpdateRequest;
@@ -8,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +24,7 @@ public interface TestApi {
     @PreAuthorize("isAuthenticated()")
     @GetMapping
     @Operation(summary = "Получение списка всех тестов")
-    TestsResponse all();
+    PageData<TestData> all(Boolean showDeleted, Pageable pageable);
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")

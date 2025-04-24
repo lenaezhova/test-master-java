@@ -2,6 +2,7 @@ package com.testmasterapi.api.UserApi;
 
 import com.testmasterapi.api.TestSessionApi;
 import com.testmasterapi.domain.page.data.PageData;
+import com.testmasterapi.domain.testSession.data.TestSessionData;
 import com.testmasterapi.domain.testSession.response.TestsSessionsResponse;
 import com.testmasterapi.domain.user.data.UserData;
 import com.testmasterapi.domain.user.request.UserUpdateRequest;
@@ -24,12 +25,12 @@ public interface UserApi {
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     @Operation(summary = "Получение списка пользователей")
-    PageData<UserData> all(Pageable pageable);
+    PageData<UserData> all(Boolean showDeleted, Pageable pageable);
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}" + TestSessionApi.BASE_PATH)
     @Operation(summary = "Получение всех сессий тестов пользователя")
-    TestsSessionsResponse allSessions(@PathVariable("id") Long id);
+    PageData<TestSessionData> allSessions(@PathVariable("id") Long id, Boolean showDeleted, Pageable pageable);
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")

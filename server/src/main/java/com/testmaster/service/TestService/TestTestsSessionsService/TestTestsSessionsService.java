@@ -1,8 +1,10 @@
 package com.testmaster.service.TestService.TestTestsSessionsService;
 
+import com.testmasterapi.domain.page.data.PageData;
 import com.testmasterapi.domain.testSession.data.TestSessionData;
 import com.testmasterapi.domain.testSession.request.TestSessionCreateRequest;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -18,7 +20,8 @@ public interface TestTestsSessionsService {
      * @param testId Идентификатор теста
      * @return Все сесии теста
      */
-    List<TestSessionData> getAllSessions(Long testId);
+    @NotNull
+    PageData<TestSessionData> getAllSessions(Long testId, Boolean showDeleted, @NotNull Pageable pageable);
 
 
     /**

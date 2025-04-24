@@ -1,11 +1,13 @@
 package com.testmasterapi.api.QuestionApi;
 
+import com.testmasterapi.domain.page.data.PageData;
 import com.testmasterapi.domain.question.data.QuestionData;
 import com.testmasterapi.domain.question.reponse.QuestionsResponse;
 import com.testmasterapi.domain.question.request.QuestionUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +21,7 @@ public interface QuestionApi {
     @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping
     @Operation(summary = "Получение списка всех вопросов")
-    QuestionsResponse all();
+    PageData<QuestionData> all(Boolean showDeleted, Pageable pageable);
 
     @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
     @GetMapping("/{id}")

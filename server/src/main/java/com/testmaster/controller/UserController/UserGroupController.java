@@ -5,7 +5,9 @@ import com.testmasterapi.api.UserApi.UserGroupApi;
 import com.testmasterapi.domain.group.data.GroupsUserData;
 import com.testmasterapi.domain.group.request.UserGroupsAddRequest;
 import com.testmasterapi.domain.group.response.GroupsUsersResponse;
+import com.testmasterapi.domain.page.data.PageData;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,8 +22,8 @@ import java.util.List;
 public class UserGroupController implements UserGroupApi {
     private final UserGroupService groupUsersService;
     @Override
-    public GroupsUsersResponse allGroups(Long userId) {
-        return new GroupsUsersResponse(groupUsersService.getAllGroups(userId));
+    public PageData<GroupsUserData> allGroups(Long userId, Pageable pageable) {
+        return groupUsersService.getAllGroups(userId, pageable);
     }
 
     @Override

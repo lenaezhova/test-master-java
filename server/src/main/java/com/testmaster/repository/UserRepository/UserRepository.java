@@ -14,11 +14,20 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>, UserRepositoryCustom {
     @NotNull
-    @Query("select u from User u where u.deleted = false")
-    List<User> findUsers(Pageable pageable);
+    @Query("""
+        select u from User u
+        where (:showDeleted is null or u.deleted = :showDeleted)
+    """)
+    List<User> findUsers(
+            @Param("showDeleted") Boolean showDeleted,
+            Pageable pageable
+    );
 
-    @Query("select count(u) from User u where u.deleted = false")
-    long countUsers();
+    @Query("""
+        select count(u) from User u
+        where (:showDeleted is null or u.deleted = :showDeleted)
+    """)
+    long countUsers(@Param("showDeleted") Boolean showDeleted);
 
     @NotNull
     @Query("""

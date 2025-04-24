@@ -3,12 +3,14 @@ package com.testmaster.controller.TestController;
 import com.testmaster.annotations.CheckTest.CheckTest;
 import com.testmaster.service.TestService.TestService;
 import com.testmasterapi.api.TestApi.TestApi;
+import com.testmasterapi.domain.page.data.PageData;
 import com.testmasterapi.domain.test.TestStatus;
 import com.testmasterapi.domain.test.data.TestData;
 import com.testmasterapi.domain.test.request.TestCreateRequest;
 import com.testmasterapi.domain.test.request.TestUpdateRequest;
 import com.testmasterapi.domain.test.response.TestsResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +24,8 @@ public class TestController implements TestApi {
     private final TestService testService;
 
     @Override
-    public TestsResponse all() {
-        return new TestsResponse(testService.getAll());
+    public PageData<TestData> all(Boolean showDeleted, Pageable pageable) {
+        return testService.getAll(showDeleted, pageable);
     }
 
     @Override

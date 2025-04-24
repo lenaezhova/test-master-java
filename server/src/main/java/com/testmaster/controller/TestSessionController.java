@@ -3,6 +3,7 @@ package com.testmaster.controller;
 import com.testmaster.annotations.CheckTest.CheckTest;
 import com.testmaster.service.TestSessionService.TestSessionService;
 import com.testmasterapi.api.TestSessionApi;
+import com.testmasterapi.domain.page.data.PageData;
 import com.testmasterapi.domain.testSession.request.TestSessionAddAnswerRequest;
 import com.testmasterapi.domain.test.TestStatus;
 import com.testmasterapi.domain.testSession.data.TestSessionData;
@@ -10,6 +11,8 @@ import com.testmasterapi.domain.testSession.request.TestSessionAddTestAnswerRequ
 import com.testmasterapi.domain.testSession.request.TestSessionUpdateRequest;
 import com.testmasterapi.domain.testSession.response.TestsSessionsResponse;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,8 +28,8 @@ public class TestSessionController implements TestSessionApi {
     private final TestSessionService testSessionService;
 
     @Override
-    public TestsSessionsResponse all() {
-        return new TestsSessionsResponse(testSessionService.getAll());
+    public PageData<TestSessionData> all(Boolean showDeleted, Pageable pageable) {
+        return testSessionService.getAll(showDeleted, pageable);
     }
 
     @Override

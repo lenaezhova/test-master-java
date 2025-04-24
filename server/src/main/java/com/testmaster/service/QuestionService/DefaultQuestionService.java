@@ -4,13 +4,20 @@ import com.testmaster.exeption.NotFoundException;
 import com.testmaster.mapper.QuestionMapper;
 import com.testmaster.model.Question;
 import com.testmaster.repository.QuestionRepository.QuestionRepository;
+import com.testmasterapi.domain.page.data.PageData;
 import com.testmasterapi.domain.question.data.QuestionData;
 import com.testmasterapi.domain.question.request.QuestionUpdateRequest;
+import com.testmasterapi.domain.testSession.data.TestSessionData;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.function.LongSupplier;
 
 @Service
 @RequiredArgsConstructor
@@ -21,12 +28,19 @@ public class DefaultQuestionService implements QuestionService {
 
     private final String notFoundQuestionMessage = "Вопрос не найден";
 
+    @NotNull
     @Override
-    public List<QuestionData> getAll() {
-        return questionRepository.findAll()
+    public PageData<QuestionData> getAll(Boolean showDeleted, @NotNull Pageable pageable) {
+        var content = questionRepository.findAllQuestions(showDeleted, pageable)
                 .stream()
                 .map(questionMapper::toData)
                 .toList();
+
+        LongSupplier total = () -> questionRepository.countAllQuestions(showDeleted);
+
+        Page<QuestionData> page = PageableExecutionUtils.getPage(content, pageable, total);
+
+        return PageData.fromPage(page);
     }
 
     @Override

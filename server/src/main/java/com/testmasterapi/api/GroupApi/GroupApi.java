@@ -6,6 +6,7 @@ import com.testmasterapi.domain.group.data.GroupData;
 import com.testmasterapi.domain.group.request.GroupCreateRequest;
 import com.testmasterapi.domain.group.request.GroupUpdateRequest;
 import com.testmasterapi.domain.group.response.GroupsResponse;
+import com.testmasterapi.domain.page.data.PageData;
 import com.testmasterapi.domain.test.data.TestGroupsData;
 import com.testmasterapi.domain.test.response.TestsGroupsResponse;
 import com.testmasterapi.domain.user.data.UserGroupsData;
@@ -13,6 +14,7 @@ import com.testmasterapi.domain.user.response.UsersGroupsResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -27,17 +29,25 @@ public interface GroupApi {
     @PreAuthorize("isAuthenticated()")
     @GetMapping
     @Operation(summary = "Получение списка групп")
-    GroupsResponse all();
+    PageData<GroupData> all(Pageable pageable);
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}" + UserApi.BASE_PATH)
     @Operation(summary = "Получение списка всех пользователей группы")
-    UsersGroupsResponse allUsers(@PathVariable("id") Long groupId);
+    PageData<UserGroupsData> allUsers(
+            @PathVariable("id") Long groupId,
+            Boolean showDeleted,
+            Pageable pageable
+    );
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}" + TestApi.BASE_PATH)
     @Operation(summary = "Получение списка всех тестов группы")
-    TestsGroupsResponse allTests(@PathVariable("id") Long id);
+    PageData<TestGroupsData> allTests(
+            @PathVariable("id") Long id,
+            Boolean showDeleted,
+            Pageable pageable
+    );
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")

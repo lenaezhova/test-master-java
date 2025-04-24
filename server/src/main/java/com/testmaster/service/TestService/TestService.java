@@ -1,11 +1,11 @@
 package com.testmaster.service.TestService;
 
+import com.testmasterapi.domain.page.data.PageData;
 import com.testmasterapi.domain.test.data.TestData;
 import com.testmasterapi.domain.test.request.TestCreateRequest;
 import com.testmasterapi.domain.test.request.TestUpdateRequest;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
+import org.springframework.data.domain.Pageable;
 
 /**
  * Интерфейс для работы с тестами.
@@ -16,9 +16,10 @@ public interface TestService {
     /**
      * Метод для получения всех тестов.
      *
-     * @return Все тесты
+     * @return Страница списка всех тестов
      */
-    List<TestData> getAll();
+    @NotNull
+    PageData<TestData> getAll(Boolean showDeleted, @NotNull Pageable pageable);
 
     /**
      * Метод для получения одного теста.

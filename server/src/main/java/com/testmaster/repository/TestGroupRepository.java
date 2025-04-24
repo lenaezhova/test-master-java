@@ -4,6 +4,7 @@ import com.testmaster.model.Test.Test;
 import com.testmaster.model.Test.TestGroup;
 import com.testmasterapi.domain.test.TestGroupId;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,8 +17,26 @@ import java.util.List;
 public interface TestGroupRepository extends JpaRepository<TestGroup, TestGroupId> {
     boolean existsByTest_Id(Long testId);
 
-    @Query("select gt.test from TestGroup gt where gt.id.groupId = :groupId and gt.test.deleted = false")
-    List<Test> findAllByGroupId(@Param("groupId") Long groupId);
+    @Query("""
+        select gt.test from TestGroup gt
+        where gt.id.groupId = :groupId and
+             (:showDeleted is null or gt.test.deleted = :showDeleted)
+    """)
+    List<Test> findAllByGroupId(
+            @Param("groupId") Long groupId,
+            @Param("showDeleted") Boolean showDeleted,
+            Pageable pageable
+    );
+
+    @Query("""
+        select count(gt.test) from TestGroup gt
+        where gt.id.groupId = :groupId and
+             (:showDeleted is null or gt.test.deleted = :showDeleted)
+    """)
+    long countAllByGroupId(
+            @Param("groupId") Long groupId,
+            @Param("showDeleted") Boolean showDeleted
+    );
 
     @Transactional
     @Modifying

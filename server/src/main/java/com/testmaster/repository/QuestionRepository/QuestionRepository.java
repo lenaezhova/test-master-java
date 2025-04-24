@@ -1,7 +1,9 @@
 package com.testmaster.repository.QuestionRepository;
 
 import com.testmaster.model.Question;
+import com.testmaster.model.TestSession;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -16,9 +18,18 @@ public interface QuestionRepository extends JpaRepository<Question, Long>, Quest
     @NotNull
     @Query("""
         select q from Question q
-        where q.softDeleted = false
+        where (:showDeleted is null or q.softDeleted = :showDeleted)
     """)
-    List<Question> findAll();
+    List<Question> findAllQuestions(
+            @Param("showDeleted") Boolean showDeleted,
+            Pageable pageable
+    );
+
+    @Query("""
+        select count(q) from Question q
+        where (:showDeleted is null or q.softDeleted = :showDeleted)
+    """)
+    long countAllQuestions(@Param("showDeleted") Boolean showDeleted);
 
     @Query("""
         select q from Question q

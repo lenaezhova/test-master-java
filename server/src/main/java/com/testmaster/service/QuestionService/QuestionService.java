@@ -1,7 +1,10 @@
 package com.testmaster.service.QuestionService;
 
+import com.testmasterapi.domain.page.data.PageData;
 import com.testmasterapi.domain.question.data.QuestionData;
 import com.testmasterapi.domain.question.request.QuestionUpdateRequest;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -16,7 +19,8 @@ public interface QuestionService {
      *
      * @return Все вопросы
      */
-    List<QuestionData> getAll();
+    @NotNull
+    PageData<QuestionData> getAll(Boolean showDeleted, @NotNull Pageable pageable);
 
     /**
      * Метод для получения одного вопроса.

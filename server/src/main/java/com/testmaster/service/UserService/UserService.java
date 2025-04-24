@@ -23,17 +23,18 @@ public interface UserService {
     /**
      * Метод для получения всех пользователей.
      *
-     * @return Все пользователи
+     * @return Страница списка пользователей
      */
     @NotNull
-    PageData<UserData> getAll(@NotNull Pageable pageable);
+    PageData<UserData> getAll(Boolean showDeleted, @NotNull Pageable pageable);
 
     /**
      * Метод для получения всех сессий пользователя.
      *
-     * @return Все сессии пользователя
+     * @return Страница тестовых сессий пользователей
      */
-    List<TestSessionData> getAllSessions(Long id);
+    @NotNull
+    PageData<TestSessionData> getAllSessions(Long id, Boolean showDeleted, @NotNull Pageable pageable);
 
     /**
      * Метод для получения одного пользователя.

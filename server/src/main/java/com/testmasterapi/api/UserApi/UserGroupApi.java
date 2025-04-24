@@ -4,9 +4,11 @@ import com.testmasterapi.api.GroupApi.GroupApi;
 import com.testmasterapi.domain.group.data.GroupsUserData;
 import com.testmasterapi.domain.group.request.UserGroupsAddRequest;
 import com.testmasterapi.domain.group.response.GroupsUsersResponse;
+import com.testmasterapi.domain.page.data.PageData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +23,7 @@ public interface UserGroupApi {
     @PreAuthorize("isAuthenticated()")
     @GetMapping
     @Operation(summary = "Получение списка всех групп пользователя")
-    GroupsUsersResponse allGroups(@PathVariable("userId") Long userId);
+    PageData<GroupsUserData> allGroups(@PathVariable("userId") Long userId, Pageable pageable);
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/{groupId}")

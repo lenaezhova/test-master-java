@@ -13,16 +13,21 @@ import com.testmaster.repository.GroupRepository.GroupRepository;
 import com.testmaster.repository.UserRepository.UserRepository;
 import com.testmasterapi.domain.group.request.GroupCreateRequest;
 import com.testmasterapi.domain.group.request.GroupUpdateRequest;
+import com.testmasterapi.domain.page.data.PageData;
 import com.testmasterapi.domain.test.data.TestGroupsData;
 import com.testmasterapi.domain.user.CustomUserDetails;
 import com.testmasterapi.domain.user.data.UserGroupsData;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.function.LongSupplier;
 
 @Service
 @RequiredArgsConstructor
@@ -33,31 +38,52 @@ public class DefaultGroupService implements GroupService {
 
     private final GroupRepository groupRepository;
     private final UserRepository userRepository;
-    private final UserGroupRepository groupUserRepository;
-    private final TestGroupRepository groupTestRepository;
+    private final UserGroupRepository userGroupRepository;
+    private final TestGroupRepository testGroupRepository;
 
+    @NotNull
     @Override
-    public List<GroupData> getAll() {
-        return groupRepository.findAll()
+    public PageData<GroupData> getAll(@NotNull Pageable pageable) {
+        var content = groupRepository.findAllGroups(pageable)
                 .stream()
                 .map(groupMapper::toData)
                 .toList();
+
+        LongSupplier total = groupRepository::countAllGroups;
+
+        Page<GroupData> page = PageableExecutionUtils.getPage(content, pageable, total);
+
+        return PageData.fromPage(page);
     }
 
+    @NotNull
     @Override
-    public List<UserGroupsData> getAllUsers(Long groupId) {
-        return groupUserRepository.findAllByGroupId(groupId)
+    public PageData<UserGroupsData> getAllUsers(Long groupId, Boolean showDeleted, @NotNull Pageable pageable) {
+        var content = userGroupRepository.findAllByGroupId(groupId, showDeleted, pageable)
                 .stream()
                 .map(userMapper::toUserGroups)
                 .toList();
+
+        LongSupplier total = () -> userGroupRepository.countAllByGroupId(groupId, showDeleted);
+
+        Page<UserGroupsData> page = PageableExecutionUtils.getPage(content, pageable, total);
+
+        return PageData.fromPage(page);
     }
 
     @Override
-    public List<TestGroupsData> getAllTests(Long groupId) {
-        return groupTestRepository.findAllByGroupId(groupId)
+    @NotNull
+    public PageData<TestGroupsData> getAllTests(Long groupId, Boolean showDeleted, @NotNull Pageable pageable) {
+        var content = testGroupRepository.findAllByGroupId(groupId, showDeleted, pageable)
                 .stream()
                 .map(testMapper::toTestGroups)
                 .toList();
+
+        LongSupplier total = () -> testGroupRepository.countAllByGroupId(groupId, showDeleted);
+
+        Page<TestGroupsData> page = PageableExecutionUtils.getPage(content, pageable, total);
+
+        return PageData.fromPage(page);
     }
 
     @Override
