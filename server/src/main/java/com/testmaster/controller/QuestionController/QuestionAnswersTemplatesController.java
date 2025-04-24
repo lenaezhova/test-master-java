@@ -24,8 +24,8 @@ public class QuestionAnswersTemplatesController implements QuestionAnswerTemplat
     private final QuestionAnswerTemplatesService questionAnswerTemplatesService;
 
     @Override
-    public QuestionWithTemplatesData oneWithTemplates(Long id) {
-        return questionAnswerTemplatesService.getOneWithTemplates(id);
+    public QuestionWithTemplatesData oneWithTemplates(Long questionId) {
+        return questionAnswerTemplatesService.getOneWithTemplates(questionId);
     }
 
     @Override

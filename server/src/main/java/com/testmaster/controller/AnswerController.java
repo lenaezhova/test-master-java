@@ -22,15 +22,15 @@ public class AnswerController implements AnswerApi {
 
     @Override
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @CheckTest(answerId = "id", status = TestStatus.OPENED)
-    public void update(Long id, AnswerUpdateRequest request) {
-        answerService.update(id, request);
+    @CheckTest(answerId = "answerId", status = TestStatus.OPENED)
+    public void update(Long answerId, AnswerUpdateRequest request) {
+        answerService.update(answerId, request);
     }
 
     @Override
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @CheckTest(answerId = "id", status = TestStatus.OPENED)
-    public void delete(Long id) {
-        answerService.delete(id);
+    @CheckTest(answerId = "answerId", status = TestStatus.OPENED)
+    public void delete(Long answerId) {
+        answerService.delete(answerId);
     }
 }

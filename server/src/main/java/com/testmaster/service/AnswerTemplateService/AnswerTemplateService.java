@@ -11,6 +11,7 @@ public interface AnswerTemplateService {
     /**
      * Обновить шаблон ответа.
      *
+     * @param answerTemplateId Идентификатор шаблона ответа
      * @param request Запрос
      */
     void update(Long answerTemplateId, AnswerTemplateUpdateRequest request);

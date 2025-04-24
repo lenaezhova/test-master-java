@@ -18,22 +18,22 @@ public interface AnswerRepository extends JpaRepository<Answer, Long>, AnswerRep
     @Query("""
         select a from Answer a
         where a.question.id = :questionId and
-             (:showDeletedQuestion is null or a.question.softDeleted = :showDeletedQuestion)
+             (:showOnlyDeletedQuestion is null or a.question.softDeleted = :showOnlyDeletedQuestion)
     """)
     List<Answer> findAllByQuestionId(
             @Param("questionId") Long questionId,
-            @Param("showDeletedQuestion") Boolean showDeletedQuestion,
+            @Param("showOnlyDeletedQuestion") Boolean showOnlyDeletedQuestion,
             Pageable pageable
     );
 
     @Query("""
         select count(a) from Answer a
         where a.question.id = :questionId and
-             (:showDeletedQuestion is null or a.question.softDeleted = :showDeletedQuestion)
+             (:showOnlyDeletedQuestion is null or a.question.softDeleted = :showOnlyDeletedQuestion)
     """)
     long countAllByQuestionId(
             @Param("questionId") Long questionId,
-            @Param("showDeletedQuestion") Boolean showDeletedQuestion
+            @Param("showOnlyDeletedQuestion") Boolean showOnlyDeletedQuestion
     );
 
     @Modifying

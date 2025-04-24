@@ -21,6 +21,7 @@ import java.util.List;
 @RequestMapping(UserGroupApi.PATH)
 public class UserGroupController implements UserGroupApi {
     private final UserGroupService groupUsersService;
+
     @Override
     public PageData<GroupsUserData> allGroups(Long userId, Pageable pageable) {
         return groupUsersService.getAllGroups(userId, pageable);

@@ -17,10 +17,11 @@ public interface QuestionService {
     /**
      * Метод для получения всех вопросов.
      *
-     * @return Все вопросы
+     * @param showOnlySoftDeleted Если <b>true</b> в результате будут только удаленные вопросы (удаленные не через тест)
+     * @return Страница списка всех вопросов
      */
     @NotNull
-    PageData<QuestionData> getAll(Boolean showDeleted, @NotNull Pageable pageable);
+    PageData<QuestionData> getAll(Boolean showOnlySoftDeleted, @NotNull Pageable pageable);
 
     /**
      * Метод для получения одного вопроса.

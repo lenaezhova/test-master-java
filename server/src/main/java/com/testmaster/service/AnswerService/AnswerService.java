@@ -12,6 +12,7 @@ public interface AnswerService {
     /**
      * Обновить ответ.
      *
+     * @param answerId Идентификатор ответа
      * @param request Запрос
      */
     void update(Long answerId, AnswerUpdateRequest request);

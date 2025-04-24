@@ -8,6 +8,7 @@ import com.testmasterapi.domain.question.request.QuestionCreateRequest;
 import com.testmasterapi.domain.question.request.QuestionCreateWithAnswersTemplatesRequest;
 import com.testmasterapi.domain.question.request.QuestionUpdateWithAnswersTemplatesRequest;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,13 @@ public interface TestQuestionApi {
     @PreAuthorize("isAuthenticated()")
     @GetMapping
     @Operation(summary = "Получение всех вопросов теста")
-    QuestionsResponse allQuestions(@PathVariable Long testId);
+    QuestionsResponse allQuestions(
+            @PathVariable Long testId,
+
+            @Parameter(description = "Показывать удаленные вопросы (удаленные не через тест)", example = "false")
+            @RequestParam(required = false)
+            Boolean showQuestionSoftDeleted
+    );
 
     @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
     @PostMapping

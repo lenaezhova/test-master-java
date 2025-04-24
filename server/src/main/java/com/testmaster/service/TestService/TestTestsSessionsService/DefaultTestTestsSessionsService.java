@@ -44,13 +44,13 @@ public class DefaultTestTestsSessionsService implements TestTestsSessionsService
 
     @NotNull
     @Override
-    public PageData<TestSessionData> getAllSessions(Long testId, Boolean showDeleted, @NotNull Pageable pageable) {
-        var content = testSessionRepository.findAllByTestId(testId, showDeleted, pageable)
+    public PageData<TestSessionData> getAllSessions(Long testId, Boolean showUserDeleted, @NotNull Pageable pageable) {
+        var content = testSessionRepository.findAllByTestId(testId, showUserDeleted, pageable)
                 .stream()
                 .map(testSessionMapper::toData)
                 .toList();
 
-        LongSupplier total = () -> testSessionRepository.countAllByTestId(testId, showDeleted);
+        LongSupplier total = () -> testSessionRepository.countAllByTestId(testId, showUserDeleted);
 
         Page<TestSessionData> page = PageableExecutionUtils.getPage(content, pageable, total);
 

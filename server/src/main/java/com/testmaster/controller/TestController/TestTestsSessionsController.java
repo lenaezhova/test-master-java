@@ -25,14 +25,14 @@ public class TestTestsSessionsController implements TestTestsSessionsApi {
     private final TestTestsSessionsService testTestsSessionsService;
 
     @Override
-    public PageData<TestSessionData> allSessions(Long id, Boolean showDeleted, Pageable pageable) {
-        return testTestsSessionsService.getAllSessions(id, showDeleted, pageable);
+    public PageData<TestSessionData> allSessions(Long testId, Boolean showUserDeleted, Pageable pageable) {
+        return testTestsSessionsService.getAllSessions(testId, showUserDeleted, pageable);
     }
 
     @Override
-    @CheckTest(testId = "id", checkOwner = false, status = TestStatus.OPENED)
-    public ResponseEntity<Void> createSession(Long id, TestSessionCreateRequest request) {
-        var testSession = testTestsSessionsService.createSession(id, request);
+    @CheckTest(testId = "testId", checkOwner = false, status = TestStatus.OPENED)
+    public ResponseEntity<Void> createSession(Long testId, TestSessionCreateRequest request) {
+        var testSession = testTestsSessionsService.createSession(testId, request);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }

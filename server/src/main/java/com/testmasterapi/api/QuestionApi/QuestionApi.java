@@ -5,9 +5,12 @@ import com.testmasterapi.domain.question.data.QuestionData;
 import com.testmasterapi.domain.question.reponse.QuestionsResponse;
 import com.testmasterapi.domain.question.request.QuestionUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,15 +24,23 @@ public interface QuestionApi {
     @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping
     @Operation(summary = "Получение списка всех вопросов")
-    PageData<QuestionData> all(Boolean showDeleted, Pageable pageable);
+    PageData<QuestionData> all(
+            @Parameter( description = "Показать только удаленные вопросы (удаленные не через тест)", example = "false")
+            @RequestParam(required = false)
+            Boolean showOnlySoftDeleted,
+
+            @ParameterObject
+            @PageableDefault(page = 0, size = 10)
+            Pageable pageable
+    );
 
     @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
-    @GetMapping("/{id}")
+    @GetMapping("/{questionId}")
     @Operation(summary = "Получение вопроса")
-    QuestionData one(@PathVariable Long id);
+    QuestionData one(@PathVariable Long questionId);
 
     @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
-    @PatchMapping("/{id}")
+    @PatchMapping("/{questionId}")
     @Operation(
             summary = "Обновить информацию о вопросе",
             responses = {
@@ -39,10 +50,10 @@ public interface QuestionApi {
                     @ApiResponse(responseCode = "409", description = "Тест открыт для прохождения"),
             }
     )
-    void update(@PathVariable Long id, @RequestBody QuestionUpdateRequest request);
+    void update(@PathVariable Long questionId, @RequestBody QuestionUpdateRequest request);
 
     @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{questionId}")
     @Operation(
             summary = "Удалить вопрос",
             responses = {
@@ -52,5 +63,5 @@ public interface QuestionApi {
                     @ApiResponse(responseCode = "409", description = "Тест открыт для прохождения"),
             }
     )
-    void delete(@PathVariable Long id);
+    void delete(@PathVariable Long questionId);
 }

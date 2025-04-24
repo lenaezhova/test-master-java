@@ -28,18 +28,20 @@ public interface GroupService {
     /**
      * Метод для получения всех пользователей группы.
      *
+     * @param showUserDeleted Если <b>true</b> в результат включаются удаленные пользователи
      * @return Страница всех пользователей группы
      */
     @NotNull
-    PageData<UserGroupsData> getAllUsers(Long groupId, Boolean showDeleted, @NotNull Pageable pageable);
+    PageData<UserGroupsData> getAllUsers(Long groupId, Boolean showUserDeleted, @NotNull Pageable pageable);
 
     /**
      * Метод для получения всех тестов группы.
      *
+     * @param showTestDeleted Если <b>true</b> в результат включаются удаленные тесты
      * @return Все тесты группы
      */
     @NotNull
-    PageData<TestGroupsData> getAllTests(Long groupId, Boolean showDeleted, @NotNull Pageable pageable);
+    PageData<TestGroupsData> getAllTests(Long groupId, Boolean showTestDeleted, @NotNull Pageable pageable);
 
     /**
      * Метод для получения одной группы.

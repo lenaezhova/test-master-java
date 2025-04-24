@@ -12,9 +12,12 @@ import com.testmasterapi.domain.test.response.TestsGroupsResponse;
 import com.testmasterapi.domain.user.data.UserGroupsData;
 import com.testmasterapi.domain.user.response.UsersGroupsResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -29,28 +32,43 @@ public interface GroupApi {
     @PreAuthorize("isAuthenticated()")
     @GetMapping
     @Operation(summary = "Получение списка групп")
-    PageData<GroupData> all(Pageable pageable);
+    PageData<GroupData> all(
+            @ParameterObject
+            @PageableDefault(page = 0, size = 10) Pageable pageable
+    );
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/{id}" + UserApi.BASE_PATH)
+    @GetMapping("/{groupId}" + UserApi.BASE_PATH)
     @Operation(summary = "Получение списка всех пользователей группы")
     PageData<UserGroupsData> allUsers(
-            @PathVariable("id") Long groupId,
-            Boolean showDeleted,
+            @PathVariable Long groupId,
+
+            @Parameter( description = "Показать удаленных пользователями", example = "false")
+            @RequestParam(required = false)
+            Boolean showUserDeleted,
+
+            @ParameterObject
+            @PageableDefault(page = 0, size = 10)
             Pageable pageable
     );
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/{id}" + TestApi.BASE_PATH)
+    @GetMapping("/{groupId}" + TestApi.BASE_PATH)
     @Operation(summary = "Получение списка всех тестов группы")
     PageData<TestGroupsData> allTests(
-            @PathVariable("id") Long id,
-            Boolean showDeleted,
+            @PathVariable Long groupId,
+
+            @Parameter( description = "Показать удаленные тесты", example = "false")
+            @RequestParam(required = false)
+            Boolean showTestDeleted,
+
+            @ParameterObject
+            @PageableDefault(page = 0, size = 10)
             Pageable pageable
     );
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/{id}")
+    @GetMapping("/{groupId}")
     @Operation(
             summary = "Получить группу",
             responses = {
@@ -58,7 +76,7 @@ public interface GroupApi {
                     @ApiResponse(responseCode = "404", description = "Группа с таким идентификатором не найдена")
             }
     )
-    GroupData one(@PathVariable Long id);
+    GroupData one(@PathVariable Long groupId);
 
     @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
     @PostMapping
@@ -72,7 +90,7 @@ public interface GroupApi {
     ResponseEntity<Void> create(@RequestBody GroupCreateRequest request);
 
     @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
-    @PatchMapping("/{id}")
+    @PatchMapping("/{groupId}")
     @Operation(
             summary = "Обновить информацию о группе",
             responses = {
@@ -80,10 +98,10 @@ public interface GroupApi {
                     @ApiResponse(responseCode = "404", description = "Группа с таким идентификатором не найдена")
             }
     )
-    void update(@PathVariable Long id, @RequestBody GroupUpdateRequest request);
+    void update(@PathVariable Long groupId, @RequestBody GroupUpdateRequest request);
 
     @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{groupId}")
     @Operation(
             summary = "Удалить группу",
             responses = {
@@ -91,5 +109,5 @@ public interface GroupApi {
                     @ApiResponse(responseCode = "404", description = "Группа с таким идентификатором не найдена")
             }
     )
-    void delete(@PathVariable Long id);
+    void delete(@PathVariable Long groupId);
 }

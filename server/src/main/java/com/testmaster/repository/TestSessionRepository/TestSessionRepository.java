@@ -19,60 +19,60 @@ public interface TestSessionRepository extends JpaRepository<TestSession, Long>,
     @NotNull
     @Query("""
         select ts from TestSession ts
-        where (:showDeleted is null or ts.test.deleted = :showDeleted)
+        where (:showOnlyTestDeleted is null or ts.test.deleted = :showOnlyTestDeleted)
     """)
     List<TestSession> findAllTestSessions(
-            @Param("showDeleted") Boolean showDeleted,
+            @Param("showOnlyTestDeleted") Boolean showOnlyTestDeleted,
             Pageable pageable
     );
 
     @Query("""
         select count(ts) from TestSession ts
-        where (:showDeleted is null or ts.test.deleted = :showDeleted)
+        where (:showOnlyTestDeleted is null or ts.test.deleted = :showOnlyTestDeleted)
     """)
-    long countAllTestSessions(@Param("showDeleted") Boolean showDeleted);
+    long countAllTestSessions(@Param("showOnlyTestDeleted") Boolean showOnlyTestDeleted);
 
     @NotNull
     @Query("""
         select ts from TestSession ts
         where ts.test.id = :testId and
-              (:showDeleted is null or ts.test.deleted = :showDeleted)
+              (:showUserDeleted is true or ts.user.deleted = false)
     """)
     List<TestSession> findAllByTestId(
             @Param("testId") Long testId,
-            @Param("showDeleted") Boolean showDeleted,
+            @Param("showUserDeleted") Boolean showUserDeleted,
             Pageable pageable
     );
 
     @Query("""
         select count(ts) from TestSession ts
         where ts.test.id = :testId and
-              (:showDeleted is null or ts.test.deleted = :showDeleted)
+              (:showUserDeleted is true or ts.user.deleted = false)
     """)
     long countAllByTestId(
             @Param("testId") Long testId,
-            @Param("showDeleted") Boolean showDeleted
+            @Param("showUserDeleted") Boolean showUserDeleted
     );
 
     @Query("""
         select ts from TestSession ts
         where ts.user.id = :userId and
-              (:showDeleted is null or ts.user.deleted = :showDeleted)
+              (:showTestDeleted is true or ts.test.deleted = false)
     """)
     List<TestSession> findAllByUserId(
             @Param("userId") Long userId,
-            @Param("showDeleted") Boolean showDeleted,
+            @Param("showTestDeleted") Boolean showTestDeleted,
             Pageable pageable
     );
 
     @Query("""
         select count(ts) from TestSession ts
         where ts.user.id = :userId and
-              (:showDeleted is null or ts.user.deleted = :showDeleted)
+              (:showTestDeleted is true or ts.test.deleted = false)
     """)
     long countAllByUserId(
             @Param("userId") Long userId,
-            @Param("showDeleted") Boolean showDeleted
+            @Param("showTestDeleted") Boolean showTestDeleted
     );
 
     @Modifying

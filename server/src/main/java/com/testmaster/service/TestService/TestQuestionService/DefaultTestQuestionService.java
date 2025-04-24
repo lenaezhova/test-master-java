@@ -38,8 +38,8 @@ public class DefaultTestQuestionService implements TestQuestionService {
     private final AnswerRepository answerRepository;
 
     @Override
-    public List<QuestionData> getAllQuestions(Long testId) {
-        return questionRepository.findAllByTestId(testId)
+    public List<QuestionData> getAllQuestions(Long testId, Boolean showQuestionSoftDeleted) {
+        return questionRepository.findAllByTestId(testId, showQuestionSoftDeleted)
                 .stream()
                 .map(questionMapper::toData)
                 .toList();
@@ -78,7 +78,7 @@ public class DefaultTestQuestionService implements TestQuestionService {
     @Override
     @Transactional
     public void deleteAllQuestions(Long testId) {
-        List<Long> questionIds = questionRepository.findAllByTestId(testId)
+        List<Long> questionIds = questionRepository.findAllByTestId(testId, true)
                 .stream()
                 .map(Question::getId)
                 .toList();

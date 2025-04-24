@@ -27,13 +27,13 @@ public class DefaultQuestionAnswerService implements QuestionAnswerService {
 
     @NotNull
     @Override
-    public PageData<AnswerData> getAllAnswers(Long questionId, Boolean showDeletedQuestion, @NotNull Pageable pageable) {
-        var content = answerRepository.findAllByQuestionId(questionId, showDeletedQuestion, pageable)
+    public PageData<AnswerData> getAllAnswers(Long questionId, Boolean showOnlyDeletedQuestion, @NotNull Pageable pageable) {
+        var content = answerRepository.findAllByQuestionId(questionId, showOnlyDeletedQuestion, pageable)
                 .stream()
                 .map(answerMapper::toData)
                 .toList();
 
-        LongSupplier total = () -> answerRepository.countAllByQuestionId(questionId, showDeletedQuestion);
+        LongSupplier total = () -> answerRepository.countAllByQuestionId(questionId, showOnlyDeletedQuestion);
 
         Page<AnswerData> page = PageableExecutionUtils.getPage(content, pageable, total);
 

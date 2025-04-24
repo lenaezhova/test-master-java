@@ -23,15 +23,15 @@ public class AnswerTemplateController implements AnswerTemplateApi {
 
     @Override
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @CheckTest(answerTemplateId = "id", checkOwner = true, status = TestStatus.CLOSED)
-    public void update(Long id, AnswerTemplateUpdateRequest updateRequest) {
-        answerTemplateService.update(id, updateRequest);
+    @CheckTest(answerTemplateId = "answerTemplateId", checkOwner = true, status = TestStatus.CLOSED)
+    public void update(Long answerTemplateId, AnswerTemplateUpdateRequest updateRequest) {
+        answerTemplateService.update(answerTemplateId, updateRequest);
     }
 
     @Override
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @CheckTest(answerTemplateId = "id", checkOwner = true, status = TestStatus.CLOSED)
-    public void delete(Long id) {
-        answerTemplateService.delete(id);
+    @CheckTest(answerTemplateId = "answerTemplateId", checkOwner = true, status = TestStatus.CLOSED)
+    public void delete(Long answerTemplateId) {
+        answerTemplateService.delete(answerTemplateId);
     }
 }

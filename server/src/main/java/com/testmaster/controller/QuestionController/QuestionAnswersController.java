@@ -22,8 +22,8 @@ public class QuestionAnswersController implements QuestionAnswersApi {
     private final QuestionAnswerService questionAnswerService;
 
     @Override
-    public PageData<AnswerData> allAnswers(Long questionId, Boolean showDeletedQuestion, Pageable pageable) {
-        return questionAnswerService.getAllAnswers(questionId, showDeletedQuestion, pageable);
+    public PageData<AnswerData> allAnswers(Long questionId, Boolean showOnlyDeletedQuestion, Pageable pageable) {
+        return questionAnswerService.getAllAnswers(questionId, showOnlyDeletedQuestion, pageable);
     }
 
     @Override

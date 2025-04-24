@@ -15,7 +15,7 @@ public interface AnswerTemplateApi {
     String PATH = "/api" + BASE_PATH;
 
     @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
-    @PatchMapping("/{id}")
+    @PatchMapping("/{answerTemplateId}")
     @Operation(
             summary = "Обновить информацию в шаблоне ответа",
             responses = {
@@ -25,10 +25,10 @@ public interface AnswerTemplateApi {
                     @ApiResponse(responseCode = "409", description = "Тест открыт для прохождения"),
             }
     )
-    void update(@PathVariable Long id, @RequestBody AnswerTemplateUpdateRequest request);
+    void update(@PathVariable Long answerTemplateId, @RequestBody AnswerTemplateUpdateRequest request);
 
     @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{answerTemplateId}")
     @Operation(
             summary = "Удалить шаблон ответа",
             responses = {
@@ -38,5 +38,5 @@ public interface AnswerTemplateApi {
                     @ApiResponse(responseCode = "409", description = "Тест открыт для прохождения"),
             }
     )
-    void delete(@PathVariable Long id);
+    void delete(@PathVariable Long answerTemplateId);
 }

@@ -6,10 +6,13 @@ import com.testmasterapi.domain.test.request.TestCreateRequest;
 import com.testmasterapi.domain.test.request.TestUpdateRequest;
 import com.testmasterapi.domain.test.response.TestsResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -24,22 +27,26 @@ public interface TestApi {
     @PreAuthorize("isAuthenticated()")
     @GetMapping
     @Operation(summary = "Получение списка всех тестов")
-    PageData<TestData> all(Boolean showDeleted, Pageable pageable);
+    PageData<TestData> all(
+            @Parameter(description = "Показать только удаленные тесты", example = "false")
+            @RequestParam(required = false)
+            Boolean showOnlyDeleted,
+
+            @ParameterObject
+            @PageableDefault(page = 0, size = 10)
+            Pageable pageable
+    );
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/{id}")
+    @GetMapping("/{testId}")
     @Operation(
             summary = "Получить тест",
             responses = {
                     @ApiResponse(responseCode = "200"),
-                    @ApiResponse(
-                            responseCode = "404",
-                            description = "Тест с таким идентификатором не найден",
-                            content = @Content()
-                    )
+                    @ApiResponse( responseCode = "404", description = "Тест с таким идентификатором не найден")
             }
     )
-    TestData one(@PathVariable Long id);
+    TestData one(@PathVariable Long testId);
 
     @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
     @PostMapping
@@ -53,7 +60,7 @@ public interface TestApi {
     ResponseEntity<Void> create(@RequestBody TestCreateRequest test);
 
     @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
-    @PatchMapping("/{id}")
+    @PatchMapping("/{testId}")
     @Operation(
             summary = "Обновить тест",
             responses = {
@@ -63,10 +70,10 @@ public interface TestApi {
                     @ApiResponse(responseCode = "409", description = "Тест открыт для прохождения"),
             }
     )
-    void update(@PathVariable Long id, @RequestBody TestUpdateRequest test);
+    void update(@PathVariable Long testId, @RequestBody TestUpdateRequest test);
 
     @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
-    @PatchMapping("/{id}:open")
+    @PatchMapping("/{testId}:open")
     @Operation(
             summary = "Открыть тест для прохождения",
             responses = {
@@ -75,10 +82,10 @@ public interface TestApi {
                     @ApiResponse(responseCode = "404", description = "Тест с таким идентификатором не найден"),
             }
     )
-    void open(@PathVariable Long id);
+    void open(@PathVariable Long testId);
 
     @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
-    @PatchMapping("/{id}:close")
+    @PatchMapping("/{testId}:close")
     @Operation(
             summary = "Закрыть тест для прохождения",
             responses = {
@@ -87,10 +94,10 @@ public interface TestApi {
                     @ApiResponse(responseCode = "404", description = "Тест с таким идентификатором не найден"),
             }
     )
-    void close(@PathVariable Long id);
+    void close(@PathVariable Long testId);
 
     @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{testId}")
     @Operation(
             summary = "Удалить тест",
             responses = {
@@ -100,5 +107,5 @@ public interface TestApi {
                     @ApiResponse(responseCode = "409", description = "Тест открыт для прохождения"),
             }
     )
-    void delete(@PathVariable Long id);
+    void delete(@PathVariable Long testId);
 }

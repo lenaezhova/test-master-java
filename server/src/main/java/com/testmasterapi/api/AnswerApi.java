@@ -15,7 +15,7 @@ public interface AnswerApi {
     String PATH = "/api" + BASE_PATH;
 
     @PreAuthorize("isAuthenticated()")
-    @PatchMapping("/{id}")
+    @PatchMapping("/{answerId}")
     @Operation(
             summary = "Обновить ответ",
             responses = {
@@ -24,10 +24,10 @@ public interface AnswerApi {
                     @ApiResponse(responseCode = "409", description = "Тест закрыт для прохождения"),
             }
     )
-    void update(@PathVariable Long id, @RequestBody AnswerUpdateRequest request);
+    void update(@PathVariable Long answerId, @RequestBody AnswerUpdateRequest request);
 
     @PreAuthorize("isAuthenticated()")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{answerId}")
     @Operation(
             summary = "Удалить ответ",
             responses = {
@@ -36,5 +36,5 @@ public interface AnswerApi {
                     @ApiResponse(responseCode = "409", description = "Тест закрыт для прохождения"),
             }
     )
-    void delete(@PathVariable Long id);
+    void delete(@PathVariable Long answerId);
 }

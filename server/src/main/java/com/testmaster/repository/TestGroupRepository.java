@@ -20,22 +20,22 @@ public interface TestGroupRepository extends JpaRepository<TestGroup, TestGroupI
     @Query("""
         select gt.test from TestGroup gt
         where gt.id.groupId = :groupId and
-             (:showDeleted is null or gt.test.deleted = :showDeleted)
+             (:showTestDeleted is true or gt.test.deleted = false)
     """)
     List<Test> findAllByGroupId(
             @Param("groupId") Long groupId,
-            @Param("showDeleted") Boolean showDeleted,
+            @Param("showTestDeleted") Boolean showTestDeleted,
             Pageable pageable
     );
 
     @Query("""
         select count(gt.test) from TestGroup gt
         where gt.id.groupId = :groupId and
-             (:showDeleted is null or gt.test.deleted = :showDeleted)
+             (:showTestDeleted is true or gt.test.deleted = false)
     """)
     long countAllByGroupId(
             @Param("groupId") Long groupId,
-            @Param("showDeleted") Boolean showDeleted
+            @Param("showTestDeleted") Boolean showTestDeleted
     );
 
     @Transactional

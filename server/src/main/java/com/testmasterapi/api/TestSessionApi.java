@@ -9,10 +9,13 @@ import com.testmasterapi.domain.testSession.request.TestSessionAddTestAnswerRequ
 import com.testmasterapi.domain.testSession.request.TestSessionUpdateRequest;
 import com.testmasterapi.domain.testSession.response.TestsSessionsResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.jetbrains.annotations.NotNull;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -27,15 +30,23 @@ public interface TestSessionApi {
     @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping
     @Operation(summary = "Получение списка всех сессий")
-    PageData<TestSessionData> all(Boolean showDeleted, Pageable pageable);
+    PageData<TestSessionData> all(
+            @Parameter(description = "Показать сессии только удаленных тестов", example = "false")
+            @RequestParam(required = false)
+            Boolean showOnlyTestDeleted,
+
+            @ParameterObject
+            @PageableDefault(page = 0, size = 10)
+            Pageable pageable
+    );
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/{id}")
+    @GetMapping("/{testSessionId}")
     @Operation(summary = "Получение сессии")
-    TestSessionData one(@PathVariable Long id);
+    TestSessionData one(@PathVariable Long testSessionId);
 
     @PreAuthorize("isAuthenticated()")
-    @PatchMapping("/{id}")
+    @PatchMapping("/{testSessionId}")
     @Operation(
             summary = "Обновить информацию о сессии",
             responses = {
@@ -44,10 +55,10 @@ public interface TestSessionApi {
                     @ApiResponse(responseCode = "409", description = "Тест закрыт для прохождения"),
             }
     )
-    void update(@PathVariable Long id, @RequestBody TestSessionUpdateRequest request);
+    void update(@PathVariable Long testSessionId, @RequestBody TestSessionUpdateRequest request);
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/{id}" + AnswerApi.BASE_PATH)
+    @PostMapping("/{testSessionId}" + AnswerApi.BASE_PATH)
     @Operation(
             summary = "Сохранение ответов на весь тест",
             responses = {
@@ -60,12 +71,12 @@ public interface TestSessionApi {
             }
     )
     ResponseEntity<Void> createTestAnswer(
-            @PathVariable Long id,
+            @PathVariable Long testSessionId,
             @RequestBody TestSessionAddTestAnswerRequest request
     );
 
     @PreAuthorize("isAuthenticated()")
-    @PutMapping("/{id}" + AnswerApi.BASE_PATH)
+    @PutMapping("/{testSessionId}" + AnswerApi.BASE_PATH)
     @Operation(
             summary = "Обновление результата всего теста",
             responses = {
@@ -78,12 +89,12 @@ public interface TestSessionApi {
             }
     )
     void updateTestAnswer(
-            @PathVariable Long id,
+            @PathVariable Long testSessionId,
             @RequestBody TestSessionAddTestAnswerRequest request
     );
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/{id}" + QuestionApi.BASE_PATH + "/{questionId}" + AnswerApi.BASE_PATH)
+    @PostMapping("/{testSessionId}" + QuestionApi.BASE_PATH + "/{questionId}" + AnswerApi.BASE_PATH)
     @Operation(
             summary = "Создание ответа на вопрос",
             responses = {
@@ -96,13 +107,13 @@ public interface TestSessionApi {
             }
     )
     ResponseEntity<Void> createQuestionAnswer(
-            @PathVariable Long id,
+            @PathVariable Long testSessionId,
             @PathVariable Long questionId,
             @RequestBody TestSessionAddAnswerRequest request
     );
 
     @PreAuthorize("isAuthenticated()")
-    @PutMapping("/{id}" + QuestionApi.BASE_PATH + "/{questionId}" + AnswerApi.BASE_PATH)
+    @PutMapping("/{testSessionId}" + QuestionApi.BASE_PATH + "/{questionId}" + AnswerApi.BASE_PATH)
     @Operation(
             summary = "Обновление ответа на вопрос",
             responses = {
@@ -116,13 +127,13 @@ public interface TestSessionApi {
             }
     )
     void updateQuestionAnswer(
-            @PathVariable Long id,
+            @PathVariable Long testSessionId,
             @PathVariable Long questionId,
             @RequestBody TestSessionAddAnswerRequest request
     );
 
     @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{testSessionId}")
     @Operation(
             summary = "Удалить сессию",
             responses = {
@@ -132,5 +143,5 @@ public interface TestSessionApi {
                     @ApiResponse(responseCode = "409", description = "Тест открыт для прохождения"),
             }
     )
-    void delete(@PathVariable Long id);
+    void delete(@PathVariable Long testSessionId);
 }

@@ -16,15 +16,15 @@ public interface TestRepository extends JpaRepository<Test, Long>, TestRepositor
     @NotNull
     @Query("""
         select t from Test t
-        where (:showDeleted is null or t.deleted = :showDeleted)
+        where (:showOnlyDeleted is null or t.deleted = :showOnlyDeleted)
     """)
-    List<Test> findTests(Boolean showDeleted, Pageable pageable);
+    List<Test> findAllTests(Boolean showOnlyDeleted, Pageable pageable);
 
     @Query("""
         select count(t) from Test t
-        where (:showDeleted is null or t.deleted = :showDeleted)
+        where (:showOnlyDeleted is null or t.deleted = :showOnlyDeleted)
     """)
-    long countTests(Boolean showDeleted);
+    long countAllTests(Boolean showOnlyDeleted);
 
     @NotNull
     @Query("""

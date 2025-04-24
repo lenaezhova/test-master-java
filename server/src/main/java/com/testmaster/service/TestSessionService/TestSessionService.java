@@ -19,9 +19,10 @@ public interface TestSessionService {
     /**
      * Метод для получения всех сессий.
      *
+     * @param showOnlyTestDeleted Если <b>true</b> в результате показываются сессии только удаленных тестов
      * @return Все сессии
      */
-    PageData<TestSessionData> getAll(Boolean showDeleted, @NotNull Pageable pageable);
+    PageData<TestSessionData> getAll(Boolean showOnlyTestDeleted, @NotNull Pageable pageable);
 
     /**
      * Метод для получения одной сессии.

@@ -16,18 +16,18 @@ public interface UserRepository extends JpaRepository<User, Long>, UserRepositor
     @NotNull
     @Query("""
         select u from User u
-        where (:showDeleted is null or u.deleted = :showDeleted)
+        where (:showOnlyDeleted is null or u.deleted = :showOnlyDeleted)
     """)
     List<User> findUsers(
-            @Param("showDeleted") Boolean showDeleted,
+            @Param("showOnlyDeleted") Boolean showOnlyDeleted,
             Pageable pageable
     );
 
     @Query("""
-        select count(u) from User u
-        where (:showDeleted is null or u.deleted = :showDeleted)
+        select coutn(u) from User u
+        where (:showOnlyDeleted is null or u.deleted = :showOnlyDeleted)
     """)
-    long countUsers(@Param("showDeleted") Boolean showDeleted);
+    long countUsers(@Param("showOnlyDeleted") Boolean showOnlyDeleted);
 
     @NotNull
     @Query("""

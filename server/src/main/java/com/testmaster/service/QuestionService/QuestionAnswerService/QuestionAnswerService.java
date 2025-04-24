@@ -15,11 +15,13 @@ public interface QuestionAnswerService {
 
     /**
      * Метод для получения всех ответов на вопрос.
+     *
+     * @param showOnlyDeletedQuestion Если <b>true</b> в результате показываются только ответы на удаленные вопросы
      * @param questionId Идентификатор вопроса
-     * @return Все ответы на вопрос
+     * @return Страница всех ответов на вопрос
      */
     @NotNull
-    PageData<AnswerData> getAllAnswers(Long questionId, Boolean showDeletedQuestion, @NotNull Pageable pageable);
+    PageData<AnswerData> getAllAnswers(Long questionId, Boolean showOnlyDeletedQuestion, @NotNull Pageable pageable);
 
     /**
      * Метод для удаления всех ответов у вопроса

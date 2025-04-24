@@ -30,13 +30,13 @@ public class DefaultQuestionService implements QuestionService {
 
     @NotNull
     @Override
-    public PageData<QuestionData> getAll(Boolean showDeleted, @NotNull Pageable pageable) {
-        var content = questionRepository.findAllQuestions(showDeleted, pageable)
+    public PageData<QuestionData> getAll(Boolean showOnlySoftDeleted, @NotNull Pageable pageable) {
+        var content = questionRepository.findAllQuestions(showOnlySoftDeleted, pageable)
                 .stream()
                 .map(questionMapper::toData)
                 .toList();
 
-        LongSupplier total = () -> questionRepository.countAllQuestions(showDeleted);
+        LongSupplier total = () -> questionRepository.countAllQuestions(showOnlySoftDeleted);
 
         Page<QuestionData> page = PageableExecutionUtils.getPage(content, pageable, total);
 

@@ -26,28 +26,28 @@ public class QuestionController implements QuestionApi {
     private final QuestionService questionService;
 
     @Override
-    public PageData<QuestionData> all(Boolean showDeleted, Pageable pageable) {
-        return questionService.getAll(showDeleted, pageable);
+    public PageData<QuestionData> all(Boolean showOnlySoftDeleted, Pageable pageable) {
+        return questionService.getAll(showOnlySoftDeleted, pageable);
     }
 
     @Override
-    public QuestionData one(Long id) {
-        return questionService.getOne(id);
-    }
-
-    @Override
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @CheckTest(questionId = "id", checkOwner = true, status = TestStatus.CLOSED)
-    public void update(Long id, QuestionUpdateRequest updateRequest) {
-        questionService.update(id, updateRequest);
+    public QuestionData one(Long questionId) {
+        return questionService.getOne(questionId);
     }
 
     @Override
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @CheckTest(questionId = "id", checkOwner = true, status = TestStatus.CLOSED)
-    public void delete(Long id) {
+    @CheckTest(questionId = "questionId", checkOwner = true, status = TestStatus.CLOSED)
+    public void update(Long questionId, QuestionUpdateRequest updateRequest) {
+        questionService.update(questionId, updateRequest);
+    }
+
+    @Override
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @CheckTest(questionId = "questionId", checkOwner = true, status = TestStatus.CLOSED)
+    public void delete(Long questionId) {
         var data = new QuestionUpdateRequest();
         data.setSoftDeleted(true);
-        questionService.update(id, data);
+        questionService.update(questionId, data);
     }
 }

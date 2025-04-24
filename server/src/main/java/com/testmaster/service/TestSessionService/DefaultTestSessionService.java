@@ -47,13 +47,13 @@ public class DefaultTestSessionService implements TestSessionService {
     private final String notFoundAnswerTemplateMessage = "Шаблон ответа не найден";
 
     @Override
-    public PageData<TestSessionData> getAll(Boolean showDeleted, @NotNull Pageable pageable) {
-        var content = testSessionRepository.findAllTestSessions(showDeleted, pageable)
+    public PageData<TestSessionData> getAll(Boolean showOnlyTestDeleted, @NotNull Pageable pageable) {
+        var content = testSessionRepository.findAllTestSessions(showOnlyTestDeleted, pageable)
                 .stream()
                 .map(testSessionMapper::toData)
                 .toList();
 
-        LongSupplier total = () -> testSessionRepository.countAllTestSessions(showDeleted);
+        LongSupplier total = () -> testSessionRepository.countAllTestSessions(showOnlyTestDeleted);
 
         Page<TestSessionData> page = PageableExecutionUtils.getPage(content, pageable, total);
 

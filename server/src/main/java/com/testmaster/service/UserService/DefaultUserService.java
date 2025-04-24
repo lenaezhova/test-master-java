@@ -34,13 +34,13 @@ public class DefaultUserService implements UserService {
 
     @NotNull
     @Override
-    public PageData<UserData> getAll(Boolean showDeleted, @NotNull Pageable pageable) {
-        var content = userRepository.findUsers(showDeleted, pageable)
+    public PageData<UserData> getAll(Boolean showOnlyDeleted, @NotNull Pageable pageable) {
+        var content = userRepository.findUsers(showOnlyDeleted, pageable)
                 .stream()
                 .map(userMapper::toData)
                 .toList();
 
-        LongSupplier total = () -> userRepository.countUsers(showDeleted);
+        LongSupplier total = () -> userRepository.countUsers(showOnlyDeleted);
 
         Page<UserData> page = PageableExecutionUtils.getPage(content, pageable, total);
 
@@ -49,13 +49,13 @@ public class DefaultUserService implements UserService {
 
     @NotNull
     @Override
-    public PageData<TestSessionData> getAllSessions(Long userId, Boolean showDeleted, @NotNull Pageable pageable) {
-        var content = testSessionRepository.findAllByUserId(userId, showDeleted, pageable)
+    public PageData<TestSessionData> getAllSessions(Long userId, Boolean showTestDeleted, @NotNull Pageable pageable) {
+        var content = testSessionRepository.findAllByUserId(userId, showTestDeleted, pageable)
                 .stream()
                 .map(testSessionMapper::toData)
                 .toList();
 
-        LongSupplier total = () -> testSessionRepository.countAllByUserId(userId, showDeleted);
+        LongSupplier total = () -> testSessionRepository.countAllByUserId(userId, showTestDeleted);
 
         Page<TestSessionData> page = PageableExecutionUtils.getPage(content, pageable, total);
 

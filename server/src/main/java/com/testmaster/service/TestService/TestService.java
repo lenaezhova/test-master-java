@@ -16,10 +16,11 @@ public interface TestService {
     /**
      * Метод для получения всех тестов.
      *
+     * @param showOnlyDeleted Если <b>true</b> в результате показываются только удаленные тесты
      * @return Страница списка всех тестов
      */
     @NotNull
-    PageData<TestData> getAll(Boolean showDeleted, @NotNull Pageable pageable);
+    PageData<TestData> getAll(Boolean showOnlyDeleted, @NotNull Pageable pageable);
 
     /**
      * Метод для получения одного теста.

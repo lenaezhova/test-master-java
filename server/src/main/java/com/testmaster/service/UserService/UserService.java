@@ -23,18 +23,20 @@ public interface UserService {
     /**
      * Метод для получения всех пользователей.
      *
+     * @param showOnlyDeleted Если <b>true</b> в результате показываются только удаленные пользователи
      * @return Страница списка пользователей
      */
     @NotNull
-    PageData<UserData> getAll(Boolean showDeleted, @NotNull Pageable pageable);
+    PageData<UserData> getAll(Boolean showOnlyDeleted, @NotNull Pageable pageable);
 
     /**
      * Метод для получения всех сессий пользователя.
      *
+     * @param showTestDeleted Если <b>true</b> в результат включаются сессии удаленных тестов
      * @return Страница тестовых сессий пользователей
      */
     @NotNull
-    PageData<TestSessionData> getAllSessions(Long id, Boolean showDeleted, @NotNull Pageable pageable);
+    PageData<TestSessionData> getAllSessions(Long id, Boolean showTestDeleted, @NotNull Pageable pageable);
 
     /**
      * Метод для получения одного пользователя.

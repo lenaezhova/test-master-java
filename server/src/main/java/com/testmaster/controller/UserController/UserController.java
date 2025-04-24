@@ -22,18 +22,18 @@ public class UserController implements UserApi {
     private final UserService userService;
 
     @Override
-    public PageData<UserData> all(Boolean showDeleted, Pageable pageable) {
-        return userService.getAll(showDeleted, pageable);
+    public PageData<UserData> all(Boolean showOnlyDeleted, Pageable pageable) {
+        return userService.getAll(showOnlyDeleted, pageable);
     }
 
     @Override
-    public PageData<TestSessionData> allSessions(Long id,  Boolean showDeleted, Pageable pageable) {
-        return userService.getAllSessions(id, showDeleted, pageable);
+    public PageData<TestSessionData> allSessions(Long userId,  Boolean showTestDeleted, Pageable pageable) {
+        return userService.getAllSessions(userId, showTestDeleted, pageable);
     }
 
     @Override
-    public UserData one(Long id) {
-        return userService.getOne(id);
+    public UserData one(Long userId) {
+        return userService.getOne(userId);
     }
 
     @Override
@@ -49,9 +49,9 @@ public class UserController implements UserApi {
 
     @Override
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(Long id) {
+    public void delete(Long userId) {
         var updateRequest = new UserUpdateRequest();
         updateRequest.setDeleted(true);
-        userService.update(id, updateRequest);
+        userService.update(userId, updateRequest);
     }
 }

@@ -45,13 +45,13 @@ public class DefaultTestService implements TestService {
 
     @NotNull
     @Override
-    public PageData<TestData> getAll(Boolean showDeleted, @NotNull Pageable pageable) {
-        var content = testRepository.findTests(showDeleted, pageable)
+    public PageData<TestData> getAll(Boolean showOnlyDeleted, @NotNull Pageable pageable) {
+        var content = testRepository.findAllTests(showOnlyDeleted, pageable)
                 .stream()
                 .map(testMapper::toData)
                 .toList();
 
-        LongSupplier total = () -> testRepository.countTests(showDeleted);
+        LongSupplier total = () -> testRepository.countAllTests(showOnlyDeleted);
 
         Page<TestData> page = PageableExecutionUtils.getPage(content, pageable, total);
 

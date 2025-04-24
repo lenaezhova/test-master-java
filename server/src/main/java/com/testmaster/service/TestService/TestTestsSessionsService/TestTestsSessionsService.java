@@ -17,11 +17,12 @@ public interface TestTestsSessionsService {
     /**
      * Метод для получения всех сессий теста.
      *
+     * @param showUserDeleted Если <b>true</b> в результат будут включены сессии удаленных пользователей
      * @param testId Идентификатор теста
-     * @return Все сесии теста
+     * @return Страница списка всех сессий тестов
      */
     @NotNull
-    PageData<TestSessionData> getAllSessions(Long testId, Boolean showDeleted, @NotNull Pageable pageable);
+    PageData<TestSessionData> getAllSessions(Long testId, Boolean showUserDeleted, @NotNull Pageable pageable);
 
 
     /**

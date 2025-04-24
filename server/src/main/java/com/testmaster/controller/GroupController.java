@@ -33,13 +33,13 @@ public class GroupController implements GroupApi {
     }
 
     @Override
-    public PageData<UserGroupsData> allUsers(Long id, Boolean showDeleted, Pageable pageable) {
-        return groupService.getAllUsers(id, showDeleted, pageable);
+    public PageData<UserGroupsData> allUsers(Long id, Boolean showUserDeleted, Pageable pageable) {
+        return groupService.getAllUsers(id, showUserDeleted, pageable);
     }
 
     @Override
-    public PageData<TestGroupsData> allTests(Long id, Boolean showDeleted, Pageable pageable) {
-        return groupService.getAllTests(id, showDeleted, pageable);
+    public PageData<TestGroupsData> allTests(Long id, Boolean showTestDeleted, Pageable pageable) {
+        return groupService.getAllTests(id, showTestDeleted, pageable);
     }
 
     @Override

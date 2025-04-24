@@ -26,8 +26,8 @@ public class TestQuestionController implements TestQuestionApi {
     private final TestQuestionService testQuestionService;
 
     @Override
-    public QuestionsResponse allQuestions(Long id) {
-        return new QuestionsResponse(testQuestionService.getAllQuestions(id));
+    public QuestionsResponse allQuestions(Long testId, Boolean showQuestionSoftDeleted) {
+        return new QuestionsResponse(testQuestionService.getAllQuestions(testId, showQuestionSoftDeleted));
     }
 
     @Override

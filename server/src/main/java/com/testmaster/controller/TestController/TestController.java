@@ -24,13 +24,13 @@ public class TestController implements TestApi {
     private final TestService testService;
 
     @Override
-    public PageData<TestData> all(Boolean showDeleted, Pageable pageable) {
-        return testService.getAll(showDeleted, pageable);
+    public PageData<TestData> all(Boolean showOnlyDeleted, Pageable pageable) {
+        return testService.getAll(showOnlyDeleted, pageable);
     }
 
     @Override
-    public TestData one(@PathVariable Long id) {
-        return testService.getOne(id);
+    public TestData one(@PathVariable Long testId) {
+        return testService.getOne(testId);
     }
 
     @Override
@@ -42,33 +42,33 @@ public class TestController implements TestApi {
 
     @Override
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @CheckTest(testId = "id", checkOwner = true, status = TestStatus.OPENED)
-    public void update(Long id, TestUpdateRequest updateRequest) {
-        testService.update(id, updateRequest);
+    @CheckTest(testId = "testId", checkOwner = true, status = TestStatus.OPENED)
+    public void update(Long testId, TestUpdateRequest updateRequest) {
+        testService.update(testId, updateRequest);
     }
 
     @Override
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @CheckTest(testId = "id", checkOwner = true)
-    public void open(Long id) {
+    @CheckTest(testId = "testId", checkOwner = true)
+    public void open(Long testId) {
         var data = new TestUpdateRequest();
         data.setStatus(TestStatus.OPENED);
-        testService.update(id, data);
+        testService.update(testId, data);
     }
 
     @Override
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @CheckTest(testId = "id", checkOwner = true)
-    public void close(Long id) {
+    @CheckTest(testId = "testId", checkOwner = true)
+    public void close(Long testId) {
         var data = new TestUpdateRequest();
         data.setStatus(TestStatus.CLOSED);
-        testService.update(id, data);
+        testService.update(testId, data);
     }
 
     @Override
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @CheckTest(testId = "id", checkOwner = true, status = TestStatus.CLOSED)
-    public void delete(Long id) {
-        testService.delete(id);
+    @CheckTest(testId = "testId", checkOwner = true, status = TestStatus.CLOSED)
+    public void delete(Long testId) {
+        testService.delete(testId);
     }
 }

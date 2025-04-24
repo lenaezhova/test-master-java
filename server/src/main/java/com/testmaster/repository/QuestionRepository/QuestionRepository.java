@@ -18,24 +18,28 @@ public interface QuestionRepository extends JpaRepository<Question, Long>, Quest
     @NotNull
     @Query("""
         select q from Question q
-        where (:showDeleted is null or q.softDeleted = :showDeleted)
+        where (:showOnlySoftDeleted is null or q.softDeleted = :showOnlySoftDeleted)
     """)
     List<Question> findAllQuestions(
-            @Param("showDeleted") Boolean showDeleted,
+            @Param("showOnlySoftDeleted") Boolean showOnlySoftDeleted,
             Pageable pageable
     );
 
     @Query("""
         select count(q) from Question q
-        where (:showDeleted is null or q.softDeleted = :showDeleted)
+        where (:showOnlySoftDeleted is null or q.softDeleted = :showOnlySoftDeleted)
     """)
-    long countAllQuestions(@Param("showDeleted") Boolean showDeleted);
+    long countAllQuestions(@Param("showOnlySoftDeleted") Boolean showOnlySoftDeleted);
 
     @Query("""
         select q from Question q
-        where q.test.id = :testId and q.softDeleted = false
+        where q.test.id = :testId and
+              (:showQuestionSoftDeleted is true or q.softDeleted = false )
     """)
-    List<Question> findAllByTestId(@Param("testId") Long testId);
+    List<Question> findAllByTestId(
+            @Param("testId") Long testId,
+            @Param("showQuestionSoftDeleted") Boolean showQuestionSoftDeleted
+    );
 
     @NotNull
     @Query("""

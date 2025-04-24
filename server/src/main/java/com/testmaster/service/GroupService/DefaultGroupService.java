@@ -58,13 +58,13 @@ public class DefaultGroupService implements GroupService {
 
     @NotNull
     @Override
-    public PageData<UserGroupsData> getAllUsers(Long groupId, Boolean showDeleted, @NotNull Pageable pageable) {
-        var content = userGroupRepository.findAllByGroupId(groupId, showDeleted, pageable)
+    public PageData<UserGroupsData> getAllUsers(Long groupId, Boolean showUserDeleted, @NotNull Pageable pageable) {
+        var content = userGroupRepository.findAllByGroupId(groupId, showUserDeleted, pageable)
                 .stream()
                 .map(userMapper::toUserGroups)
                 .toList();
 
-        LongSupplier total = () -> userGroupRepository.countAllByGroupId(groupId, showDeleted);
+        LongSupplier total = () -> userGroupRepository.countAllByGroupId(groupId, showUserDeleted);
 
         Page<UserGroupsData> page = PageableExecutionUtils.getPage(content, pageable, total);
 
@@ -73,13 +73,13 @@ public class DefaultGroupService implements GroupService {
 
     @Override
     @NotNull
-    public PageData<TestGroupsData> getAllTests(Long groupId, Boolean showDeleted, @NotNull Pageable pageable) {
-        var content = testGroupRepository.findAllByGroupId(groupId, showDeleted, pageable)
+    public PageData<TestGroupsData> getAllTests(Long groupId, Boolean showTestDeleted, @NotNull Pageable pageable) {
+        var content = testGroupRepository.findAllByGroupId(groupId, showTestDeleted, pageable)
                 .stream()
                 .map(testMapper::toTestGroups)
                 .toList();
 
-        LongSupplier total = () -> testGroupRepository.countAllByGroupId(groupId, showDeleted);
+        LongSupplier total = () -> testGroupRepository.countAllByGroupId(groupId, showTestDeleted);
 
         Page<TestGroupsData> page = PageableExecutionUtils.getPage(content, pageable, total);
 

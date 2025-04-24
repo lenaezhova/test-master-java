@@ -28,54 +28,54 @@ public class TestSessionController implements TestSessionApi {
     private final TestSessionService testSessionService;
 
     @Override
-    public PageData<TestSessionData> all(Boolean showDeleted, Pageable pageable) {
-        return testSessionService.getAll(showDeleted, pageable);
+    public PageData<TestSessionData> all(Boolean showOnlyTestDeleted, Pageable pageable) {
+        return testSessionService.getAll(showOnlyTestDeleted, pageable);
     }
 
     @Override
-    public TestSessionData one(Long id) {
-        return testSessionService.getOne(id);
+    public TestSessionData one(Long testSessionId) {
+        return testSessionService.getOne(testSessionId);
     }
 
     @Override
-    @CheckTest(testSessionId = "id", status = TestStatus.OPENED)
-    public ResponseEntity<Void> createTestAnswer(Long id, TestSessionAddTestAnswerRequest request) {
-        testSessionService.createTestAnswer(id, request);
+    @CheckTest(testSessionId = "testSessionId", status = TestStatus.OPENED)
+    public ResponseEntity<Void> createTestAnswer(Long testSessionId, TestSessionAddTestAnswerRequest request) {
+        testSessionService.createTestAnswer(testSessionId, request);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @Override
-    @CheckTest(testSessionId = "id", skipCheckStatusForOwner = true, status = TestStatus.OPENED)
-    public void updateTestAnswer(Long id, TestSessionAddTestAnswerRequest request) {
-        testSessionService.updateTestAnswer(id, request);
+    @CheckTest(testSessionId = "testSessionId", skipCheckStatusForOwner = true, status = TestStatus.OPENED)
+    public void updateTestAnswer(Long testSessionId, TestSessionAddTestAnswerRequest request) {
+        testSessionService.updateTestAnswer(testSessionId, request);
     }
 
     @Override
     @CheckTest(questionId = "questionId", status = TestStatus.OPENED)
-    public ResponseEntity<Void> createQuestionAnswer(Long id, Long questionId, TestSessionAddAnswerRequest request) {
-        testSessionService.createQuestionAnswer(id, questionId, request);
+    public ResponseEntity<Void> createQuestionAnswer(Long testSessionId, Long questionId, TestSessionAddAnswerRequest request) {
+        testSessionService.createQuestionAnswer(testSessionId, questionId, request);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @Override
     @CheckTest(questionId = "questionId", skipCheckStatusForOwner = true, status = TestStatus.OPENED)
-    public void updateQuestionAnswer(Long id, Long questionId, TestSessionAddAnswerRequest request) {
-        testSessionService.updateQuestionAnswer(id, questionId, request);
+    public void updateQuestionAnswer(Long testSessionId, Long questionId, TestSessionAddAnswerRequest request) {
+        testSessionService.updateQuestionAnswer(testSessionId, questionId, request);
     }
 
     @Override
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @CheckTest(questionId = "questionId", checkOwner = true, status = TestStatus.OPENED)
-    public void update(Long id, TestSessionUpdateRequest request) {
-        testSessionService.update(id, request);
+    public void update(Long testSessionId, TestSessionUpdateRequest request) {
+        testSessionService.update(testSessionId, request);
     }
 
     @Override
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @CheckTest(questionId = "questionId", status = TestStatus.CLOSED)
-    public void delete(Long id) {
-        testSessionService.delete(id);
+    public void delete(Long testSessionId) {
+        testSessionService.delete(testSessionId);
     }
 }

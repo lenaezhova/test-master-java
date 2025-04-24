@@ -8,7 +8,9 @@ import com.testmasterapi.domain.page.data.PageData;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +25,13 @@ public interface UserGroupApi {
     @PreAuthorize("isAuthenticated()")
     @GetMapping
     @Operation(summary = "Получение списка всех групп пользователя")
-    PageData<GroupsUserData> allGroups(@PathVariable("userId") Long userId, Pageable pageable);
+    PageData<GroupsUserData> allGroups(
+            @PathVariable Long userId,
+
+            @ParameterObject
+            @PageableDefault(page = 0, size = 10)
+            Pageable pageable
+    );
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/{groupId}")
@@ -36,8 +44,8 @@ public interface UserGroupApi {
             }
     )
     ResponseEntity<Void> addGroup(
-            @PathVariable("userId") Long userId,
-            @PathVariable("groupId") Long groupId,
+            @PathVariable Long userId,
+            @PathVariable Long groupId,
             @RequestBody UserGroupsAddRequest request
     );
 
@@ -50,5 +58,8 @@ public interface UserGroupApi {
                     @ApiResponse(responseCode = "404", description = "Группа (пользователь) с таким идентификатором не найдена")
             }
     )
-    void deleteGroup(@PathVariable("userId") Long userId, @PathVariable("groupId") Long groupId);
+    void deleteGroup(
+            @PathVariable Long userId,
+            @PathVariable Long groupId
+    );
 }

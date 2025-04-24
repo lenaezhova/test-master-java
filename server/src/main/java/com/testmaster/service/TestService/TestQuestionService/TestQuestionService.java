@@ -17,9 +17,10 @@ public interface TestQuestionService {
     /**
      * Метод для получения всех вопросов теста.
      *
+     * @param showQuestionSoftDeleted Если <b>true</b> в результате показываются удаленные вопросы (удаленные не через тест)
      * @return Все вопросы теста
      */
-    List<QuestionData> getAllQuestions(Long testId);
+    List<QuestionData> getAllQuestions(Long testId, Boolean showQuestionSoftDeleted);
 
     /**
      * Метод для создания нового вопроса.

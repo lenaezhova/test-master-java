@@ -24,22 +24,22 @@ public interface UserGroupRepository extends JpaRepository<UserGroup, UserGroupI
     @Query("""
         select gu.user from UserGroup gu
         where gu.id.groupId = :groupId and
-             (:showDeleted is null or gu.user.deleted = :showDeleted)
+             (:showUserDeleted is true or gu.user.deleted = false)
     """)
     List<User> findAllByGroupId(
             @Param("groupId") Long groupId,
-            @Param("showDeleted") Boolean showDeleted,
+            @Param("showUserDeleted") Boolean showUserDeleted,
             Pageable pageable
     );
 
     @Query("""
         select count(gu.user) from UserGroup gu
         where gu.id.groupId = :groupId and
-             (:showDeleted is null or gu.user.deleted = :showDeleted)
+             (:showUserDeleted is true or gu.user.deleted = false)
     """)
     long countAllByGroupId(
             @Param("groupId") Long groupId,
-            @Param("showDeleted") Boolean showDeleted
+            @Param("showUserDeleted") Boolean showUserDeleted
     );
 
     @NotNull

@@ -5,9 +5,12 @@ import com.testmasterapi.domain.answer.data.AnswerData;
 import com.testmasterapi.domain.answer.response.AnswersResponse;
 import com.testmasterapi.domain.page.data.PageData;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +26,13 @@ public interface QuestionAnswersApi {
     @Operation(summary = "Получение всех ответов на вопрос")
     PageData<AnswerData> allAnswers(
             @PathVariable("questionId") Long questionId,
-            Boolean showDeletedQuestion,
+
+            @Parameter( description = "Показать ответы только на удаленные вопросы", example = "false")
+            @RequestParam(required = false)
+            Boolean showOnlyDeletedQuestion,
+
+            @ParameterObject
+            @PageableDefault(page = 0, size = 10)
             Pageable pageable
     );
 
