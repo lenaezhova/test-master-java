@@ -99,20 +99,26 @@ public class DefaultTestSessionService implements TestSessionService {
         var question = this.getQuestion(questionId);
         var testSession = this.getTestSession(testSessionId);
 
+        if (!question.getTest().getId().equals(testSession.getTest().getId())) {
+            throw new ClientException("Вопрос из другого теста", HttpStatus.CONFLICT.value());
+        }
+
         var answerEntity = new Answer();
         answerEntity.setTestSession(testSession);
         applicationEventPublisher.publishEvent(new AnswerEvent(answerEntity, AnswerEventsType.CREATE));
 
         Set<Long> answerIds = request.getAnswerIds();
 
+        boolean hasAnswerIds = answerIds != null && !answerIds.isEmpty();
+
+        this.checkAnswerTemplateInTestSession(testSession, question);
+
         // если тип вопроса текстовый, то ищем шаблон ответа,
         // у которого совпадает айди вопроса и тип вопроса текстовый.
-        if (question.getType() == QuestionTypes.TEXT && (answerIds == null || answerIds.isEmpty())) {
+        if (question.getType() == QuestionTypes.TEXT) {
             var answerTemplate = answerTemplateRepository
                     .findByQuestionIdAndQuestionType(questionId, QuestionTypes.TEXT)
                     .orElseThrow(() -> new NotFoundException(notFoundAnswerTemplateMessage));
-
-            this.checkAnswerTemplateInTestSession(testSession, question);
 
             var answer = answerMapper.toEntity(request, testSession, question, answerTemplate);
             answerRepository.save(answer);
@@ -120,7 +126,7 @@ public class DefaultTestSessionService implements TestSessionService {
         }
 
         // если тип вопроса с выбором, то ищем все шаблоны ответа с переданными answerIds
-        if (QuestionTypes.choiceTypes().contains(question.getType()) && !answerIds.isEmpty()) {
+        if (QuestionTypes.choiceTypes().contains(question.getType()) && hasAnswerIds) {
             Map<Long, AnswerTemplate> templateMap = answerTemplateRepository.findAllById(answerIds)
                     .stream()
                     .collect(Collectors.toMap(AnswerTemplate::getId, Function.identity()));
@@ -135,10 +141,11 @@ public class DefaultTestSessionService implements TestSessionService {
                     })
                     .collect(Collectors.toList());
 
-            this.checkAnswerTemplateInTestSession(testSession, question);
-
             answerRepository.saveAll(answers);
+            return;
         }
+
+        throw new NotFoundException("Шаблон ответа не найден");
     }
 
     @Override

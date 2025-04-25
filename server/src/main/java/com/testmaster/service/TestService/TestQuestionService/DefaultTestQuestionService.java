@@ -1,5 +1,6 @@
 package com.testmaster.service.TestService.TestQuestionService;
 
+import com.testmaster.exeption.ClientException;
 import com.testmaster.exeption.NotFoundException;
 import com.testmaster.mapper.AnswerTemplateMapper;
 import com.testmaster.mapper.QuestionMapper;
@@ -10,6 +11,7 @@ import com.testmaster.repository.AnswerRepository.AnswerRepository;
 import com.testmaster.repository.AnswerTemplateRepository.AnswerTemplateRepository;
 import com.testmaster.repository.QuestionRepository.QuestionRepository;
 import com.testmaster.repository.TestRepository.TestRepository;
+import com.testmasterapi.domain.question.QuestionTypes;
 import com.testmasterapi.domain.question.data.QuestionData;
 import com.testmasterapi.domain.question.data.QuestionWithTemplatesData;
 import com.testmasterapi.domain.question.event.QuestionEvent;
@@ -20,6 +22,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -91,6 +94,10 @@ public class DefaultTestQuestionService implements TestQuestionService {
 
         var question = questionMapper.toEntity(request, test);
         questionRepository.save(question);
+
+        if (question.getType() == QuestionTypes.TEXT && request.getAnswerTemplates().size() > 1) {
+            throw new ClientException("В текстовом вопросе не может быть больше 1 варианта ответа", HttpStatus.CONFLICT.value());
+        }
 
         List<AnswerTemplate> answerTemplates = request.getAnswerTemplates()
                 .stream()

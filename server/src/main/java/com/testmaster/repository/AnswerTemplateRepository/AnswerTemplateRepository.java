@@ -22,7 +22,7 @@ public interface AnswerTemplateRepository extends JpaRepository<AnswerTemplate, 
               at.question.softDeleted = false
     """)
     Optional<AnswerTemplate> findByQuestionIdAndQuestionType(@Param("questionId") Long questionId,
-                                                 @Param("questionType") QuestionTypes questionType);
+                                                             @Param("questionType") QuestionTypes questionType);
 
     @Query("""
         select at from AnswerTemplate at

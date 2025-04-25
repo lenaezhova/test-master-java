@@ -69,6 +69,7 @@ public interface QuestionAnswerTemplatesApi {
                     @ApiResponse(responseCode = "201", description = "Вопрос и шаблоны обновлены"),
                     @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста", content = @Content()),
                     @ApiResponse(responseCode = "404", description = "Вопрос с таким идентификатором не найден", content = @Content()),
+                    @ApiResponse(responseCode = "409", description = "В текстовом вопросе не может быть больше 1 варианта ответа", content = @Content()),
                     @ApiResponse(responseCode = "409", description = "Тест открыт для прохождения", content = @Content()),
             }
     )

@@ -1,0 +1,19 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="0.0.14_fixed_answer_foreign_key" author="elena">
+        <dropForeignKeyConstraint
+                baseTableName="answers"
+                constraintName="fk_answers_test_session"/>
+
+        <addForeignKeyConstraint
+                baseTableName="answers"
+                baseColumnNames="test_session_id"
+                constraintName="fk_answers_test_session"
+                referencedTableName="tests_sessions"
+                referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>

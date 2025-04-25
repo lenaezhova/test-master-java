@@ -70,6 +70,7 @@ public interface TestQuestionApi {
                     @ApiResponse(responseCode = "400", description = "Ошибка при создании вопроса", content = @Content()),
                     @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста", content = @Content()),
                     @ApiResponse(responseCode = "404", description = "Тест с таким идентификатором не найден", content = @Content()),
+                    @ApiResponse(responseCode = "409", description = "В текстовом вопросе не может быть больше 1 варианта ответа", content = @Content()),
                     @ApiResponse(responseCode = "409", description = "Тест открыт для прохождения", content = @Content()),
             }
     )

@@ -79,7 +79,8 @@ public interface TestSessionApi {
                     @ApiResponse(responseCode = "400", description = "Ошибка при сохранении ответа", content = @Content()),
                     @ApiResponse(responseCode = "404", description = "Сессия теста с таким идентификатором не найдена", content = @Content()),
                     @ApiResponse(responseCode = "404", description = "Вопрос с таким идентификатором не найден", content = @Content()),
-                    @ApiResponse(responseCode = "404", description = "Шаблона ответа с таким идентификатором не найден", content = @Content()),
+                    @ApiResponse(responseCode = "404", description = "Шаблона ответа не найден", content = @Content()),
+                    @ApiResponse(responseCode = "409", description = "Вопрос из другого теста", content = @Content()),
                     @ApiResponse(responseCode = "409", description = "Тест закрыт для прохождения", content = @Content()),
             }
     )

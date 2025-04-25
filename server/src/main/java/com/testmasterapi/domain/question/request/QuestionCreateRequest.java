@@ -7,5 +7,5 @@ import lombok.Data;
 public class QuestionCreateRequest {
     private String title;
     private String description;
-    private  QuestionTypes type;
+    private QuestionTypes type;
 }

@@ -1,5 +1,6 @@
 package com.testmaster.service.QuestionService.QuestionAnswerTemplate;
 
+import com.testmaster.exeption.ClientException;
 import com.testmaster.exeption.NotFoundException;
 import com.testmaster.mapper.AnswerTemplateMapper;
 import com.testmaster.mapper.QuestionMapper;
@@ -11,6 +12,7 @@ import com.testmasterapi.domain.answerTemplate.event.AnswerTemplateEvent;
 import com.testmasterapi.domain.answerTemplate.event.AnswerTemplateEventsType;
 import com.testmasterapi.domain.answerTemplate.request.AnswerTemplateQuestionUpdateRequest;
 import com.testmasterapi.domain.answerTemplate.request.AnswerTemplateUpdateRequest;
+import com.testmasterapi.domain.question.QuestionTypes;
 import com.testmasterapi.domain.question.data.QuestionWithTemplatesData;
 import com.testmasterapi.domain.question.event.QuestionEvent;
 import com.testmasterapi.domain.question.event.QuestionEventsType;
@@ -18,6 +20,7 @@ import com.testmasterapi.domain.question.request.QuestionUpdateWithAnswersTempla
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -73,6 +76,11 @@ public class DefaultQuestionAnswerTemplateService implements QuestionAnswerTempl
     @Transactional
     public void updateWithTemplates(Long questionId, @NotNull QuestionUpdateWithAnswersTemplatesRequest request) {
         var question = this.getQuestion(questionId);
+
+        if (question.getType() == QuestionTypes.TEXT && request.getAnswerTemplates().size() > 1) {
+            throw new ClientException("В текстовом вопросе не может быть больше 1 варианта ответа", HttpStatus.CONFLICT.value());
+        }
+
         applicationEventPublisher.publishEvent(new QuestionEvent(question, QuestionEventsType.UPDATE));
 
         int updated = questionRepository.update(questionId, request);
