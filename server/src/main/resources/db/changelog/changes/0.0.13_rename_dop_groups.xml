@@ -1,0 +1,16 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.6.xsd">
+
+    <changeSet id="rename-groups_tests-to-tests_groups" author="elena">
+        <renameTable
+                oldTableName="groups_tests"
+                newTableName="tests_groups"/>
+
+        <renameTable
+                oldTableName="groups_users"
+                newTableName="users_groups"/>
+    </changeSet>
+
+</databaseChangeLog>

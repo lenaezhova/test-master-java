@@ -6,6 +6,7 @@ export enum ITestStatus {
 export interface ITest {
     id: number;
     ownerId?: number;
+    deleted?: boolean;
     status: ITestStatus;
     title: string
     description: string

@@ -48,6 +48,7 @@ springdoc:
     path: /api-docs
   swagger-ui:
     path: /swagger
+    operations-sorter: method
 
 server:
   port: ${PORT:8080}

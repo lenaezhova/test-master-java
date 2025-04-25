@@ -1,16 +1,16 @@
 package com.testmaster.repository;
 
 import com.testmasterapi.domain.user.UserRoles;
-import com.testmaster.model.TokenModel;
-import com.testmaster.model.UserModel;
+import com.testmaster.model.Token;
+import com.testmaster.model.User.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -25,25 +25,25 @@ public class TokenRepositoryTest {
 
     @Test
     public void testSave() {
-        UserModel user = new UserModel(
+        User user = new User(
                 false,
                 "Иван Иванов",
                 "ivan@example.com",
                 "password123",
                 "abc123-activation",
                 false,
-                List.of(UserRoles.USER),
+                Set.of(UserRoles.USER),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
         entityManager.persist(user);
 
-        TokenModel token = new TokenModel(
+        Token token = new Token(
                 user,
                 "simple-token-123"
         );
 
-        TokenModel saved = tokenRepository.save(token);
+        Token saved = tokenRepository.save(token);
 
         assertNotNull(saved.getId());
         assertEquals("simple-token-123", saved.getRefreshToken());
@@ -54,31 +54,31 @@ public class TokenRepositoryTest {
 
     @Test
     public void testFindToken() {
-        UserModel user = new UserModel(
+        User user = new User(
                 false,
                 "Иван Иванов",
                 "ivan@example.com",
                 "password123",
                 "abc123-activation",
                 false,
-                List.of(UserRoles.USER),
+                Set.of(UserRoles.USER),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
         entityManager.persist(user);
 
-        TokenModel token = new TokenModel(
+        Token token = new Token(
                 user,
                 "simple-token-123"
         );
 
         entityManager.persist(token);
 
-        Optional<TokenModel> foundOpt = tokenRepository.findById(token.getId());
+        Optional<Token> foundOpt = tokenRepository.findById(token.getId());
 
         assertTrue(foundOpt.isPresent());
 
-        TokenModel found = foundOpt.get();
+        Token found = foundOpt.get();
         assertEquals("simple-token-123", found.getRefreshToken());
         assertNotNull(found.getUser());
         assertEquals("Иван Иванов", found.getUser().getName());

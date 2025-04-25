@@ -12,7 +12,7 @@ const TestsList = () => {
   return (
     <Spin spinning={isLoading || isFetching}>
       <div className={s.testWrapper}>
-        {data?.map(el => (
+        {data?.content?.map(el => (
           <div key={el.id} className={clsx("testBackground", s.test)}>
             <div className={s.testContent}>
               <div className={s.title}>
@@ -24,7 +24,7 @@ const TestsList = () => {
                 {el.description}
               </div>
             </div>
-            <TestAction id={el.id} />
+            {!el.deleted && <TestAction id={el.id} />}
           </div>
         ))}
       </div>

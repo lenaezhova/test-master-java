@@ -1,19 +1,19 @@
 package com.testmaster.repository;
 
+import com.testmaster.repository.QuestionRepository.QuestionRepository;
+import com.testmasterapi.domain.question.QuestionTypes;
 import com.testmasterapi.domain.user.UserRoles;
-import com.testmaster.model.TestModel;
+import com.testmaster.model.Test.Test;
 import com.testmasterapi.domain.test.TestStatus;
-import com.testmaster.model.TypeQuestionModel;
-import com.testmaster.model.QuestionModel;
-import com.testmaster.model.UserModel;
-import org.junit.jupiter.api.Test;
+import com.testmaster.model.Question;
+import com.testmaster.model.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,90 +26,75 @@ public class QuestionRepositoryTest {
     @Autowired
     private QuestionRepository questionRepository;
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testSaveQuestionModel() {
-        UserModel user = new UserModel(
+        User user = new User(
                 false,
                 "Пётр Петров",
                 "petr@example.com",
                 "securepass",
                 "activation-key",
                 false,
-                List.of(UserRoles.USER),
+                Set.of(UserRoles.USER),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
         entityManager.persist(user);
 
-        TestModel test = new TestModel(
-                user,
-                "Тест по истории",
-                TestStatus.CLOSED,
-                "Описание"
-        );
+        Test test = new Test();
+        test.setOwner(user);
+        test.setTitle("Тест по истории");
+        test.setStatus(TestStatus.CLOSED);
+        test.setDescription("Описание");
+
         entityManager.persist(test);
 
-        TypeQuestionModel type = new TypeQuestionModel(
-                "Открытый вопрос"
-        );
-        entityManager.persist(type);
+        Question question = new Question();
+        question.setType(QuestionTypes.TEXT);
+        question.setTest(test);
+        question.setCreatedAt(LocalDateTime.now());
+        entityManager.persist(question);
 
-        QuestionModel question = new QuestionModel(
-                test,
-                type,
-                LocalDateTime.now(),
-                LocalDateTime.now()
-        );
-
-        QuestionModel saved = questionRepository.save(question);
+        Question saved = questionRepository.save(question);
 
         assertNotNull(saved.getId());
-        assertEquals("Открытый вопрос", saved.getType().getTitle());
         assertEquals("Тест по истории", saved.getTest().getTitle());
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testFindQuestionModel() {
-        UserModel user = new UserModel(
+        User user = new User(
                 false,
                 "Пётр Петров",
                 "petr@example.com",
                 "securepass",
                 "activation-key",
                 false,
-                List.of(UserRoles.USER),
+                Set.of(UserRoles.USER),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
         entityManager.persist(user);
 
-        TestModel test = new TestModel(
-                user,
-                "Тест по географии",
-                TestStatus.CLOSED,
-                "Описание"
-        );
+        Test test = new Test();
+        test.setOwner(user);
+        test.setTitle("Тест по географии");
+        test.setStatus(TestStatus.CLOSED);
+        test.setDescription("Описание теста");
+
         entityManager.persist(test);
 
-        TypeQuestionModel type = new TypeQuestionModel(
-                "Множественный выбор"
-        );
-        entityManager.persist(type);
-
-        QuestionModel question = new QuestionModel(
-                test,
-                type,
-                LocalDateTime.now(),
-                LocalDateTime.now()
-        );
+        Question question = new Question();
+        question.setType(QuestionTypes.TEXT);
+        question.setTest(test);
+        question.setCreatedAt(LocalDateTime.now());
         entityManager.persist(question);
 
-        Optional<QuestionModel> foundOpt = questionRepository.findById(question.getId());
+        Optional<Question> foundOpt = questionRepository.findById(question.getId());
 
         assertTrue(foundOpt.isPresent());
-        QuestionModel found = foundOpt.get();
+        Question found = foundOpt.get();
 
-        assertEquals("Множественный выбор", found.getType().getTitle());
         assertEquals("Тест по географии", found.getTest().getTitle());
     }
 }

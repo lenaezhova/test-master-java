@@ -1,10 +1,10 @@
 package com.testmaster.repository;
 
+import com.testmaster.repository.TestRepository.TestRepository;
 import com.testmasterapi.domain.user.UserRoles;
-import com.testmaster.model.TestModel;
+import com.testmaster.model.Test.Test;
 import com.testmasterapi.domain.test.TestStatus;
-import com.testmaster.model.UserModel;
-import org.junit.jupiter.api.Test;
+import com.testmaster.model.User.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
@@ -12,8 +12,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,72 +28,69 @@ public class TestRepositoryTest {
     @Autowired
     private TestRepository testRepository;
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testSave() {
-        UserModel user = new UserModel(
+        User user = new User(
                 false,
                 "Иван Иванов",
                 "ivan@example.com",
                 "password123",
                 "abc123-activation",
                 false,
-                List.of(UserRoles.USER),
+                Set.of(UserRoles.USER),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
         entityManager.persist(user);
 
-        TestModel test = new TestModel(
-                user,
-                "Название теста",
-                TestStatus.CLOSED,
-                "Описание теста"
-        );
+        Test test = new Test();
         test.setOwner(user);
+        test.setTitle("Название теста");
         test.setStatus(TestStatus.CLOSED);
+        test.setDescription("Описание теста");
 
-        TestModel savedTest = testRepository.save(test);
+        Test savedTest = testRepository.save(test);
 
         assertNotNull(savedTest.getId());
         assertEquals("Иван Иванов", savedTest.getOwner().getName());
         assertEquals("ivan@example.com", savedTest.getOwner().getEmail());
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     public void testFindTest() {
-        UserModel user = new UserModel(
+        User user = new User(
                 false,
                 "Иван Иванов",
                 "ivan@example.com",
                 "password123",
                 "abc123-activation",
                 false,
-                List.of(UserRoles.USER),
+                Set.of(UserRoles.USER),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
 
         entityManager.persist(user);
 
-        TestModel test = new TestModel(
-                user,
-                "Название теста",
-                TestStatus.CLOSED,
-                "Описание теста"
-        );
+        Test test = new Test();
         test.setOwner(user);
-        test.setStatus(TestStatus.OPEN);
+        test.setTitle("Название теста");
+        test.setStatus(TestStatus.CLOSED);
+        test.setDescription("Описание теста");
 
-        TestModel persistedTest = entityManager.persist(test);
+        test.setOwner(user);
+        test.setStatus(TestStatus.OPENED);
 
-        Optional<TestModel> foundOpt = testRepository.findById(persistedTest.getId());
+        Test persistedTest = entityManager.persist(test);
+
+        Optional<Test> foundOpt = testRepository.findById(persistedTest.getId());
 
         assertTrue(foundOpt.isPresent());
 
-        TestModel found = foundOpt.get();
+        Test found = foundOpt.get();
         assertEquals("Название теста", found.getTitle());
         assertEquals("Описание теста", found.getDescription());
-        assertEquals(TestStatus.OPEN, found.getStatus());
+        assertEquals(TestStatus.OPENED, found.getStatus());
 
         assertNotNull(found.getOwner());
         assertEquals("Иван Иванов", found.getOwner().getName());

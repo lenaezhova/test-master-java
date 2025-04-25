@@ -1,25 +1,67 @@
 package com.testmaster.mapper;
 
-import com.testmaster.dto.TestDto;
-import com.testmaster.model.TestModel;
-import org.mapstruct.*;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
+import com.testmaster.model.Test.Test;
+import com.testmaster.model.User.User;
+import com.testmasterapi.domain.test.data.BaseTestData;
+import com.testmasterapi.domain.test.data.TestData;
+import com.testmasterapi.domain.test.data.TestForSessionData;
+import com.testmasterapi.domain.test.data.TestGroupsData;
+import com.testmasterapi.domain.test.request.TestCreateRequest;
+import org.mapstruct.Mapper;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.time.LocalDateTime;
 
 @Mapper(componentModel = "spring")
-public interface TestMapper {
-    TestDto toDto(TestModel test);
+public class TestMapper {
+    @Autowired
+    private UserMapper userMapper;
 
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void update(@MappingTarget TestModel target, TestModel source);
+    public TestData toData(Test test) {
+        var data = new TestData();
 
-    @AfterMapping
-    default void afterUpdate(@MappingTarget TestModel target, TestModel source) {
-        String title = source.getTitle();
-        if (title == null || title.trim().isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Поле title не может быть пустым");
-        }
+        fillTest(data, test);
 
-        target.setTitle(title);
+        data.setStatus(test.getStatus());
+        data.setCreatedAt(test.getCreatedAt());
+        data.setUpdatedAt(test.getUpdatedAt());
+        data.setOwner(userMapper.toOwner(test.getOwner()));
+
+        return data;
+    }
+
+    public TestGroupsData toTestGroups(Test test) {
+        var data = new TestGroupsData();
+
+        fillTest(data, test);
+
+        return data;
+    }
+
+    public TestForSessionData toSession(Test test) {
+        var data = new TestForSessionData();
+
+        fillTest(data, test);
+
+        return data;
+    }
+
+    public Test toEntity(TestCreateRequest request, User user) {
+        var entity = new Test();
+        LocalDateTime now = LocalDateTime.now();
+
+        entity.setDescription(request.description());
+        entity.setTitle(request.title());
+        entity.setOwner(user);
+        entity.setCreatedAt(now);
+
+        return entity;
+    }
+
+    private void fillTest(BaseTestData data, Test test) {
+        data.setId(test.getId());
+        data.setTitle(test.getTitle());
+        data.setDescription(test.getDescription());
+        data.setDeleted(test.getDeleted());
     }
 }

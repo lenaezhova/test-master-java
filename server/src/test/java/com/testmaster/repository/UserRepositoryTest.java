@@ -1,15 +1,16 @@
 package com.testmaster.repository;
 
+import com.testmaster.repository.UserRepository.UserRepository;
 import com.testmasterapi.domain.user.UserRoles;
-import com.testmaster.model.UserModel;
+import com.testmaster.model.User.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,19 +24,19 @@ public class UserRepositoryTest {
 
     @Test
     public void testSaveUser() {
-        UserModel user = new UserModel(
+        User user = new User(
                 false,
                 "Иван Иванов",
                 "ivan@example.com",
                 "password123",
                 "abc123-activation",
                 true,
-                List.of(UserRoles.USER),
+                Set.of(UserRoles.USER),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
 
-        UserModel savedUser = userRepository.save(user);
+        User savedUser = userRepository.save(user);
 
         assertNotNull(savedUser.getId());
         assertEquals("Иван Иванов", savedUser.getName());
@@ -45,25 +46,25 @@ public class UserRepositoryTest {
 
     @Test
     public void testFindUser() {
-        UserModel user = new UserModel(
+        User user = new User(
                 false,
                 "Иван Иванов",
                 "ivan@example.com",
                 "password123",
                 "abc123-activation",
                 false,
-                List.of(UserRoles.USER),
+                Set.of(UserRoles.USER),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
 
-        UserModel persisted = entityManager.persist(user);
+        User persisted = entityManager.persist(user);
 
-        Optional<UserModel> foundUserOpt = userRepository.findById(persisted.getId());
+        Optional<User> foundUserOpt = userRepository.findById(persisted.getId());
 
         assertTrue(foundUserOpt.isPresent());
 
-        UserModel foundUser = foundUserOpt.get();
+        User foundUser = foundUserOpt.get();
         assertEquals("Иван Иванов", foundUser.getName());
         assertEquals("ivan@example.com", foundUser.getEmail());
         assertFalse(foundUser.getIsActivate());
