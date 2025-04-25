@@ -1,5 +1,6 @@
 package com.testmaster.service.UserService.UserAuthService.TokenService;
 
+import com.testmaster.config.jwt.JwtAuthenticationFilter;
 import com.testmasterapi.domain.user.JwtClaimNames;
 import com.testmasterapi.domain.user.JwtTokenPair;
 import com.auth0.jwt.HeaderParams;
@@ -15,6 +16,8 @@ import com.testmaster.model.User.User;
 import com.testmaster.repository.TokenRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -29,6 +32,8 @@ public class DefaultTokenServiceService implements TokenService {
 
     private final TokenRepository tokenRepository;
 
+    private static final Logger LOG = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
+
     private Algorithm getHmacAlgorithm(String secret) {
         return Algorithm.HMAC256(secret);
     }
@@ -38,8 +43,9 @@ public class DefaultTokenServiceService implements TokenService {
             Algorithm algorithm = this.getHmacAlgorithm(secret);
             JWTVerifier verifier = JWT.require(algorithm).build();
             return verifier.verify(token);
-        }  catch (TokenExpiredException tokenExpiredException) {
-            throw AuthException.jwtExpired(tokenExpiredException);
+        }  catch (TokenExpiredException e) {
+            LOG.error("{}", e.getMessage());
+            throw AuthException.jwtExpired(e);
         }
     }
 

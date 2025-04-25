@@ -1,5 +1,6 @@
 package com.testmaster.config.jwt;
 
+import com.testmaster.exeption.handler.GlobalExceptionHandler;
 import com.testmaster.service.UserService.UserAuthService.TokenService.TokenService;
 import com.testmasterapi.domain.user.JwtClaimNames;
 import com.auth0.jwt.interfaces.DecodedJWT;
@@ -29,7 +30,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final UserDetailsService userDetailsService;
 
-    private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -64,8 +65,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
         } catch (Exception ex) {
-            logger.warn("Invalid token: {}", ex.getMessage());
-//            throw new AuthException("Invalid token");
+            LOG.warn("Invalid token: {}", ex.getMessage());
         }
 
         filterChain.doFilter(request, response);
