@@ -1,5 +1,6 @@
 package com.testmaster.service.TestSessionService;
 
+import com.testmaster.exeption.ClientException;
 import com.testmaster.exeption.NotFoundException;
 import com.testmaster.mapper.AnswerMapper;
 import com.testmaster.mapper.TestSessionMapper;
@@ -8,6 +9,8 @@ import com.testmaster.repository.AnswerRepository.AnswerRepository;
 import com.testmaster.repository.AnswerTemplateRepository.AnswerTemplateRepository;
 import com.testmaster.repository.QuestionRepository.QuestionRepository;
 import com.testmaster.repository.TestSessionRepository.TestSessionRepository;
+import com.testmasterapi.domain.answer.event.AnswerEvent;
+import com.testmasterapi.domain.answer.event.AnswerEventsType;
 import com.testmasterapi.domain.page.data.PageData;
 import com.testmasterapi.domain.question.QuestionTypes;
 import com.testmasterapi.domain.testSession.TestSessionStatus;
@@ -17,9 +20,11 @@ import com.testmasterapi.domain.testSession.request.TestSessionAddTestAnswerRequ
 import com.testmasterapi.domain.testSession.request.TestSessionUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,6 +48,7 @@ public class DefaultTestSessionService implements TestSessionService {
 
     private final String notFoundTestSessionMessage = "Сессия теста не найдена";
     private final String notFoundAnswerTemplateMessage = "Шаблон ответа не найден";
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Override
     public PageData<TestSessionData> getAll(Boolean showOnlyTestDeleted, @NotNull Pageable pageable) {
@@ -89,16 +95,24 @@ public class DefaultTestSessionService implements TestSessionService {
                              @NotNull Long questionId,
                              @NotNull TestSessionAddAnswerRequest request
     ) {
+
         var question = this.getQuestion(questionId);
         var testSession = this.getTestSession(testSessionId);
+
+        var answerEntity = new Answer();
+        answerEntity.setTestSession(testSession);
+        applicationEventPublisher.publishEvent(new AnswerEvent(answerEntity, AnswerEventsType.CREATE));
+
         Set<Long> answerIds = request.getAnswerIds();
 
         // если тип вопроса текстовый, то ищем шаблон ответа,
         // у которого совпадает айди вопроса и тип вопроса текстовый.
-        if (question.getType() == QuestionTypes.TEXT && answerIds.isEmpty()) {
+        if (question.getType() == QuestionTypes.TEXT && (answerIds == null || answerIds.isEmpty())) {
             var answerTemplate = answerTemplateRepository
                     .findByQuestionIdAndQuestionType(questionId, QuestionTypes.TEXT)
                     .orElseThrow(() -> new NotFoundException(notFoundAnswerTemplateMessage));
+
+            this.checkAnswerTemplateInTestSession(testSession, question);
 
             var answer = answerMapper.toEntity(request, testSession, question, answerTemplate);
             answerRepository.save(answer);
@@ -120,6 +134,8 @@ public class DefaultTestSessionService implements TestSessionService {
                         return answerMapper.toEntity(request, testSession, question, answerTemplate);
                     })
                     .collect(Collectors.toList());
+
+            this.checkAnswerTemplateInTestSession(testSession, question);
 
             answerRepository.saveAll(answers);
         }
@@ -178,6 +194,13 @@ public class DefaultTestSessionService implements TestSessionService {
         int deleted = testSessionRepository.delete(testSessionId);
         if (deleted == 0) {
             throw new NotFoundException(notFoundTestSessionMessage);
+        }
+    }
+
+    private void checkAnswerTemplateInTestSession(TestSession testSession, Question question) {
+        List<Answer> answer = answerRepository.findBySessionIdAndQuestionId(testSession.getId(), question.getId());
+        if (answer != null && !answer.isEmpty()) {
+            throw new ClientException("Ответ на вопрос уже создан", HttpStatus.CONFLICT.value());
         }
     }
 

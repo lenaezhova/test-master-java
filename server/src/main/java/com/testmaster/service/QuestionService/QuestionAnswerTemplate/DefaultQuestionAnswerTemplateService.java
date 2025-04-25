@@ -1,25 +1,23 @@
 package com.testmaster.service.QuestionService.QuestionAnswerTemplate;
 
 import com.testmaster.exeption.NotFoundException;
-import com.testmaster.mapper.AnswerMapper;
 import com.testmaster.mapper.AnswerTemplateMapper;
 import com.testmaster.mapper.QuestionMapper;
 import com.testmaster.model.AnswerTemplate;
 import com.testmaster.model.Question;
-import com.testmaster.repository.AnswerRepository.AnswerRepository;
 import com.testmaster.repository.AnswerTemplateRepository.AnswerTemplateRepository;
 import com.testmaster.repository.QuestionRepository.QuestionRepository;
-import com.testmaster.service.QuestionService.QuestionService;
-import com.testmasterapi.domain.answer.data.AnswerData;
-import com.testmasterapi.domain.answerTemplate.data.AnswerTemplateData;
-import com.testmasterapi.domain.answerTemplate.request.AnswerTemplateCreateRequest;
+import com.testmasterapi.domain.answerTemplate.event.AnswerTemplateEvent;
+import com.testmasterapi.domain.answerTemplate.event.AnswerTemplateEventsType;
 import com.testmasterapi.domain.answerTemplate.request.AnswerTemplateQuestionUpdateRequest;
-import com.testmasterapi.domain.question.data.QuestionData;
+import com.testmasterapi.domain.answerTemplate.request.AnswerTemplateUpdateRequest;
 import com.testmasterapi.domain.question.data.QuestionWithTemplatesData;
-import com.testmasterapi.domain.question.request.QuestionUpdateRequest;
+import com.testmasterapi.domain.question.event.QuestionEvent;
+import com.testmasterapi.domain.question.event.QuestionEventsType;
 import com.testmasterapi.domain.question.request.QuestionUpdateWithAnswersTemplatesRequest;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,7 +34,9 @@ public class DefaultQuestionAnswerTemplateService implements QuestionAnswerTempl
     private final QuestionRepository questionRepository;
     private final AnswerTemplateRepository answerTemplateRepository;
 
+    private final String notFoundAnswerTemplateMessage = "Шаблон ответа не найден";
     private final String notFoundQuestionMessage = "Вопрос не найден";
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     public QuestionWithTemplatesData getOneWithTemplates(Long questionId) {
         var question = this.getQuestion(questionId);
@@ -47,14 +47,38 @@ public class DefaultQuestionAnswerTemplateService implements QuestionAnswerTempl
 
     @Override
     @Transactional
+    public void updateAnswerTemplate(Long questionId, Long answerTemplateId, AnswerTemplateUpdateRequest request) {
+        var answerTemplate =  this.getAnswerTemplate(questionId);
+        applicationEventPublisher.publishEvent(new AnswerTemplateEvent(answerTemplate, AnswerTemplateEventsType.UPDATE));
+
+        int updated = answerTemplateRepository.update(answerTemplateId, request);
+        if (updated == 0) {
+            throw new NotFoundException(notFoundAnswerTemplateMessage);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void deleteAnswerTemplate(Long questionId, Long answerTemplateId) {
+        var answerTemplate =  this.getAnswerTemplate(questionId);
+        applicationEventPublisher.publishEvent(new AnswerTemplateEvent(answerTemplate, AnswerTemplateEventsType.DELETE));
+
+        int deleted = answerTemplateRepository.delete(answerTemplateId);
+        if (deleted == 0) {
+            throw new NotFoundException(notFoundAnswerTemplateMessage);
+        }
+    }
+
+    @Override
+    @Transactional
     public void updateWithTemplates(Long questionId, @NotNull QuestionUpdateWithAnswersTemplatesRequest request) {
+        var question = this.getQuestion(questionId);
+        applicationEventPublisher.publishEvent(new QuestionEvent(question, QuestionEventsType.UPDATE));
+
         int updated = questionRepository.update(questionId, request);
         if (updated == 0) {
             throw new NotFoundException(notFoundQuestionMessage);
         }
-
-        Question question = new Question();
-        question.setId(questionId);
 
         List<AnswerTemplateQuestionUpdateRequest> newTemplates = new ArrayList<>();
 
@@ -74,6 +98,11 @@ public class DefaultQuestionAnswerTemplateService implements QuestionAnswerTempl
 
             answerTemplateRepository.saveAll(answerTemplates);
         }
+    }
+
+    private AnswerTemplate getAnswerTemplate(Long answerTemplateId) {
+        return answerTemplateRepository.findById(answerTemplateId)
+                .orElseThrow(() -> new IllegalArgumentException("Шаблон ответа не найден"));
     }
 
     private Question getQuestion(Long questionId) {

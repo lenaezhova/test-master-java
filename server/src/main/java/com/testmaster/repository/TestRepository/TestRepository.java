@@ -34,5 +34,5 @@ public interface TestRepository extends JpaRepository<Test, Long>, TestRepositor
         select test from Test test
         where test.id = :id and test.deleted = false
     """)
-    Optional<Test> findById(Long id);
+    Optional<Test> findById(@NotNull Long id);
 }

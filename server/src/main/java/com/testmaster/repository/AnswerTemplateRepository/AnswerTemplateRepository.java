@@ -18,11 +18,11 @@ public interface AnswerTemplateRepository extends JpaRepository<AnswerTemplate, 
     @Query("""
         select at from AnswerTemplate at
         where at.question.id = :questionId and
-              at.question.type = :type and
+              at.question.type = :questionType and
               at.question.softDeleted = false
     """)
     Optional<AnswerTemplate> findByQuestionIdAndQuestionType(@Param("questionId") Long questionId,
-                                                 @Param("type") QuestionTypes questionTypes);
+                                                 @Param("questionType") QuestionTypes questionType);
 
     @Query("""
         select at from AnswerTemplate at
@@ -30,6 +30,13 @@ public interface AnswerTemplateRepository extends JpaRepository<AnswerTemplate, 
               at.question.softDeleted = false
     """)
     List<AnswerTemplate> findAllByQuestionId(@Param("questionId") Long questionId);
+
+    @Query("""
+        select at from AnswerTemplate at
+         where at.question.id in :questionIds and
+               at.question.softDeleted = false
+    """)
+    List<AnswerTemplate> findAllByQuestionIds(@Param("questionIds") List<Long> questionIds);
 
     @Modifying
     @Query("delete from AnswerTemplate at where at.id = :id")

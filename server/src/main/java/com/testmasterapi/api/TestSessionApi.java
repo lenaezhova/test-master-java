@@ -116,6 +116,7 @@ public interface TestSessionApi {
                     @ApiResponse(responseCode = "404", description = "Сессия теста с таким идентификатором не найдена"),
                     @ApiResponse(responseCode = "404", description = "Вопрос с таким идентификатором не найден"),
                     @ApiResponse(responseCode = "404", description = "Шаблона ответа с таким идентификатором не найден"),
+                    @ApiResponse(responseCode = "409", description = "Ответ на вопрос уже создан"),
                     @ApiResponse(responseCode = "409", description = "Тест закрыт для прохождения"),
             }
     )

@@ -1,11 +1,8 @@
 package com.testmasterapi.domain.test.data;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class TestForSessionData {
-    private Long id;
-    private String title;
-    private String description;
-    private Boolean deleted;
-}
+public class TestForSessionData extends BaseTestData { }

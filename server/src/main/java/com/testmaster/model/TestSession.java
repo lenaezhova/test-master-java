@@ -26,6 +26,7 @@ public class TestSession extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private TestSessionStatus status = TestSessionStatus.OPENED;
 

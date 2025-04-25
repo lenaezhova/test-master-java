@@ -6,17 +6,18 @@ import com.testmaster.model.Question;
 import com.testmaster.repository.QuestionRepository.QuestionRepository;
 import com.testmasterapi.domain.page.data.PageData;
 import com.testmasterapi.domain.question.data.QuestionData;
+import com.testmasterapi.domain.question.event.QuestionEvent;
+import com.testmasterapi.domain.question.event.QuestionEventsType;
 import com.testmasterapi.domain.question.request.QuestionUpdateRequest;
-import com.testmasterapi.domain.testSession.data.TestSessionData;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.function.LongSupplier;
 
 @Service
@@ -27,6 +28,7 @@ public class DefaultQuestionService implements QuestionService {
     private final QuestionRepository questionRepository;
 
     private final String notFoundQuestionMessage = "Вопрос не найден";
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @NotNull
     @Override
@@ -51,6 +53,9 @@ public class DefaultQuestionService implements QuestionService {
     @Override
     @Transactional
     public void update(Long questionId, QuestionUpdateRequest request) {
+        var question = this.getQuestion(questionId);
+        applicationEventPublisher.publishEvent(new QuestionEvent(question, QuestionEventsType.UPDATE));
+
         int updated = questionRepository.update(questionId, request);
         if (updated == 0) {
             throw new NotFoundException(notFoundQuestionMessage);

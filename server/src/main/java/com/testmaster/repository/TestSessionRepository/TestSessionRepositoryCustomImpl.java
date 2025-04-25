@@ -28,18 +28,14 @@ public class TestSessionRepositoryCustomImpl implements TestSessionRepositoryCus
 
         var params = new MapSqlParameterSource();
 
-        fillUpdateParams(params);
+        var status = request.getStatus();
 
-        params.addValue("status", request.getStatus())
+        params.addValue("status", status != null ? status.name() : null)
               .addValue("count_points", request.getCountPoints())
               .addValue("closed_at", request.getClosedAt())
+              .addValue("updated_at", now)
               .addValue("tsid", testSessionId);
 
         return jdbcTemplate.update(query, params);
-    }
-
-    private void fillUpdateParams(MapSqlParameterSource source) {
-        LocalDateTime now = LocalDateTime.now();
-        source.addValue("updated_at", now);
     }
 }

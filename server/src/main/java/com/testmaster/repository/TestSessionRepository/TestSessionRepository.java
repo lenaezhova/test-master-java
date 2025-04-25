@@ -78,6 +78,13 @@ public interface TestSessionRepository extends JpaRepository<TestSession, Long>,
     );
 
     @Modifying
+    @Query("""
+        delete from TestSession ts
+        where ts.test.id = :testId
+    """)
+    int deleteAllByTestId(@Param("testId") Long testId);
+
+    @Modifying
     @Query("delete from TestSession ts where ts.id = :id")
     int delete(@Param("id") Long id);
 

@@ -1,7 +1,5 @@
 package com.testmaster.repository.TestRepository;
 
-import com.testmasterapi.domain.test.TestStatus;
-import com.testmasterapi.domain.test.event.TestClosedEvent;
 import com.testmasterapi.domain.test.request.TestUpdateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -16,9 +14,6 @@ import java.time.LocalDateTime;
 public class TestRepositoryCustomImpl implements TestRepositoryCustom {
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
-
-    @Autowired
-    private ApplicationEventPublisher applicationEventPublisher;
 
     @Override
     @Transactional

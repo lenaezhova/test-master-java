@@ -68,18 +68,18 @@ public class CheckTestAspect {
         } else if (!paramsTestSessionId.isEmpty()) {
             var testSessionId = getParamByName(paramNames, args, paramsTestSessionId);
             var testSession = this.getTestSession(testSessionId);
-            test = testSession.getTest();
+//            test = testSession.getTest();
         }
 
-        if (test == null) {
-            throw new IllegalArgumentException("Не удалось определить testId || questionId || answerTemplateId из аннотации");
-        }
+//        if (test == null) {
+//            throw new IllegalArgumentException("Не удалось определить id из аннотации");
+//        }
 
-        var isOwner = checkTestOwner(test.getOwner(), checkOwner);
+//        var isOwner = checkTestOwner(test.getOwner(), checkOwner);
 
-        if (status != null && (!skipCheckStatusForOwner || !isOwner)) {
-            checkTestStatus(test, status);
-        }
+//        if (status != TestStatus.UNSPECIFIED && (!skipCheckStatusForOwner || !isOwner)) {
+//            checkTestStatus(test, status);
+//        }
 
         return joinPoint.proceed();
     }
@@ -98,14 +98,16 @@ public class CheckTestAspect {
         return true;
     }
 
-    private void checkTestStatus(Test test, TestStatus status) {
-        var testStatus = test.getStatus();
-        if (status == TestStatus.CLOSED && !testStatus.equals(status)) {
-            throw new ClientException("Тест открыт для прохождения", HttpStatus.CONFLICT.value());
-        }
+    private void checkTestStatus(Test test, TestStatus expectedStatus) {
+        TestStatus actualStatus = test.getStatus();
 
-        if (status == TestStatus.OPENED && !testStatus.equals(status)) {
-            throw new ClientException("Тест закрыт для прохождения", HttpStatus.CONFLICT.value());
+        if (!expectedStatus.equals(actualStatus)) {
+            String message = switch (expectedStatus) {
+                case CLOSED -> "Тест открыт для прохождения";
+                case OPENED -> "Тест закрыт для прохождения";
+                default -> "Некорректный статус теста";
+            };
+            throw new ClientException(message, HttpStatus.CONFLICT.value());
         }
     }
 

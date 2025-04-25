@@ -1,9 +1,11 @@
 package com.testmasterapi.api.TestApi;
 
+import com.testmaster.model.Answer;
 import com.testmasterapi.api.AnswerTemplateApi;
 import com.testmasterapi.api.QuestionApi.QuestionApi;
 import com.testmasterapi.domain.question.data.QuestionData;
 import com.testmasterapi.domain.question.reponse.QuestionsResponse;
+import com.testmasterapi.domain.question.reponse.QuestionsWithTemplatesResponse;
 import com.testmasterapi.domain.question.request.QuestionCreateRequest;
 import com.testmasterapi.domain.question.request.QuestionCreateWithAnswersTemplatesRequest;
 import com.testmasterapi.domain.question.request.QuestionUpdateWithAnswersTemplatesRequest;
@@ -27,6 +29,17 @@ public interface TestQuestionApi {
     @GetMapping
     @Operation(summary = "Получение всех вопросов теста")
     QuestionsResponse allQuestions(
+            @PathVariable Long testId,
+
+            @Parameter(description = "Показывать удаленные вопросы (удаленные не через тест)", example = "false")
+            @RequestParam(required = false)
+            Boolean showQuestionSoftDeleted
+    );
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping(AnswerTemplateApi.BASE_PATH)
+    @Operation(summary = "Получение всех вопросов с шаблонами теста")
+    QuestionsWithTemplatesResponse allQuestionsAnswerTemplates(
             @PathVariable Long testId,
 
             @Parameter(description = "Показывать удаленные вопросы (удаленные не через тест)", example = "false")

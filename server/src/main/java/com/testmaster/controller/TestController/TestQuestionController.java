@@ -4,7 +4,9 @@ import com.testmaster.annotations.CheckTest.CheckTest;
 import com.testmaster.service.TestService.TestQuestionService.TestQuestionService;
 import com.testmasterapi.api.TestApi.TestQuestionApi;
 import com.testmasterapi.domain.question.data.QuestionData;
+import com.testmasterapi.domain.question.data.QuestionWithTemplatesData;
 import com.testmasterapi.domain.question.reponse.QuestionsResponse;
+import com.testmasterapi.domain.question.reponse.QuestionsWithTemplatesResponse;
 import com.testmasterapi.domain.question.request.QuestionCreateRequest;
 import com.testmasterapi.domain.question.request.QuestionCreateWithAnswersTemplatesRequest;
 import com.testmasterapi.domain.question.request.QuestionUpdateWithAnswersTemplatesRequest;
@@ -28,6 +30,11 @@ public class TestQuestionController implements TestQuestionApi {
     @Override
     public QuestionsResponse allQuestions(Long testId, Boolean showQuestionSoftDeleted) {
         return new QuestionsResponse(testQuestionService.getAllQuestions(testId, showQuestionSoftDeleted));
+    }
+
+    @Override
+    public QuestionsWithTemplatesResponse allQuestionsAnswerTemplates(Long testId, Boolean showQuestionSoftDeleted) {
+        return new QuestionsWithTemplatesResponse(testQuestionService.getAllQuestionsWithTemplates(testId, showQuestionSoftDeleted));
     }
 
     @Override

@@ -11,14 +11,15 @@ import com.testmaster.repository.AnswerTemplateRepository.AnswerTemplateReposito
 import com.testmaster.repository.QuestionRepository.QuestionRepository;
 import com.testmaster.repository.TestRepository.TestRepository;
 import com.testmasterapi.domain.question.data.QuestionData;
+import com.testmasterapi.domain.question.data.QuestionWithTemplatesData;
+import com.testmasterapi.domain.question.event.QuestionEvent;
+import com.testmasterapi.domain.question.event.QuestionEventsType;
 import com.testmasterapi.domain.question.request.QuestionCreateRequest;
 import com.testmasterapi.domain.question.request.QuestionCreateWithAnswersTemplatesRequest;
-import com.testmasterapi.domain.question.request.QuestionUpdateWithAnswersTemplatesRequest;
-import com.testmasterapi.domain.test.event.TestDeletedEvent;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.context.event.EventListener;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,6 +37,7 @@ public class DefaultTestQuestionService implements TestQuestionService {
 
     private final String notFoundTestMessage = "Тест не найден";
     private final AnswerRepository answerRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Override
     public List<QuestionData> getAllQuestions(Long testId, Boolean showQuestionSoftDeleted) {
@@ -45,10 +47,32 @@ public class DefaultTestQuestionService implements TestQuestionService {
                 .toList();
     }
 
+    @Override
+    public List<QuestionWithTemplatesData> getAllQuestionsWithTemplates(Long testId, Boolean showQuestionSoftDeleted) {
+        var questions = questionRepository.findAllByTestId(testId, showQuestionSoftDeleted);
+        var questionIds = questions.stream()
+                .map(Question::getId)
+                .toList();
+
+        var allTemplates = answerTemplateRepository.findAllByQuestionIds(questionIds);
+
+        var templatesByQuestionId = allTemplates.stream()
+                .collect(Collectors.groupingBy(t -> t.getQuestion().getId()));
+
+        return questions.stream()
+                .map(question -> {
+                    var templates = templatesByQuestionId.getOrDefault(question.getId(), List.of());
+                    return questionMapper.toDataWithTemplate(question, templates);
+                })
+                .toList();
+    }
+
     @NotNull
     @Transactional
     @Override
     public QuestionData createQuestion(Long testId, @NotNull QuestionCreateRequest request) {
+        applicationEventPublisher.publishEvent(new QuestionEvent(this.getQuestion(testId), QuestionEventsType.CREATE));
+
         var test = this.getTest(testId);
 
         var question = questionMapper.toEntity(request, test);
@@ -61,6 +85,8 @@ public class DefaultTestQuestionService implements TestQuestionService {
     @Transactional
     @Override
     public QuestionData createQuestionWithTemplates(Long testId, @NotNull QuestionCreateWithAnswersTemplatesRequest request) {
+        applicationEventPublisher.publishEvent(new QuestionEvent(this.getQuestion(testId), QuestionEventsType.CREATE));
+
         var test = this.getTest(testId);
 
         var question = questionMapper.toEntity(request, test);
@@ -78,6 +104,8 @@ public class DefaultTestQuestionService implements TestQuestionService {
     @Override
     @Transactional
     public void deleteAllQuestions(Long testId) {
+        applicationEventPublisher.publishEvent(new QuestionEvent(this.getQuestion(testId), QuestionEventsType.DELETE));
+
         List<Long> questionIds = questionRepository.findAllByTestId(testId, true)
                 .stream()
                 .map(Question::getId)
@@ -88,6 +116,13 @@ public class DefaultTestQuestionService implements TestQuestionService {
             answerTemplateRepository.deleteAllByQuestionIds(questionIds);
             questionRepository.deleteByIds(questionIds);
         }
+    }
+
+    private Question getQuestion(Long testId) {
+        var test = this.getTest(testId);
+        var question = new Question();
+        question.setTest(test);
+        return question;
     }
 
     private Test getTest(Long testId) {

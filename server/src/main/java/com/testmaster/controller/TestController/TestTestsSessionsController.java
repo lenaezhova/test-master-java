@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,6 +35,13 @@ public class TestTestsSessionsController implements TestTestsSessionsApi {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void closeAllOpenedSessions(Long testId) {
         testTestsSessionsService.closeAllOpenedSessions(testId);
+    }
+
+    @Override
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @CheckTest(testId = "testId", status = TestStatus.CLOSED)
+    public void deleteAllSessions(Long testId) {
+        testTestsSessionsService.deleteAllSessions(testId);
     }
 
     @Override

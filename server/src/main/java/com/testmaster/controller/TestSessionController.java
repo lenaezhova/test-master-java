@@ -52,7 +52,7 @@ public class TestSessionController implements TestSessionApi {
     }
 
     @Override
-    @CheckTest(questionId = "questionId", status = TestStatus.OPENED)
+    @CheckTest(questionId = "questionId", skipCheckStatusForOwner = true, status = TestStatus.OPENED)
     public ResponseEntity<Void> createQuestionAnswer(Long testSessionId, Long questionId, TestSessionAddAnswerRequest request) {
         testSessionService.createQuestionAnswer(testSessionId, questionId, request);
 

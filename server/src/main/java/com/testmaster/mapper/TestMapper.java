@@ -2,6 +2,7 @@ package com.testmaster.mapper;
 
 import com.testmaster.model.Test.Test;
 import com.testmaster.model.User.User;
+import com.testmasterapi.domain.test.data.BaseTestData;
 import com.testmasterapi.domain.test.data.TestData;
 import com.testmasterapi.domain.test.data.TestForSessionData;
 import com.testmasterapi.domain.test.data.TestGroupsData;
@@ -19,9 +20,8 @@ public class TestMapper {
     public TestData toData(Test test) {
         var data = new TestData();
 
-        data.setId(test.getId());
-        data.setTitle(test.getTitle());
-        data.setDescription(test.getDescription());
+        fillTest(data, test);
+
         data.setStatus(test.getStatus());
         data.setCreatedAt(test.getCreatedAt());
         data.setUpdatedAt(test.getUpdatedAt());
@@ -33,8 +33,7 @@ public class TestMapper {
     public TestGroupsData toTestGroups(Test test) {
         var data = new TestGroupsData();
 
-        data.setId(test.getId());
-        data.setTitle(test.getTitle());
+        fillTest(data, test);
 
         return data;
     }
@@ -42,10 +41,7 @@ public class TestMapper {
     public TestForSessionData toSession(Test test) {
         var data = new TestForSessionData();
 
-        data.setId(test.getId());
-        data.setTitle(test.getTitle());
-        data.setDescription(test.getDescription());
-        data.setDeleted(test.getDeleted());
+        fillTest(data, test);
 
         return data;
     }
@@ -60,5 +56,12 @@ public class TestMapper {
         entity.setCreatedAt(now);
 
         return entity;
+    }
+
+    private void fillTest(BaseTestData data, Test test) {
+        data.setId(test.getId());
+        data.setTitle(test.getTitle());
+        data.setDescription(test.getDescription());
+        data.setDeleted(test.getDeleted());
     }
 }

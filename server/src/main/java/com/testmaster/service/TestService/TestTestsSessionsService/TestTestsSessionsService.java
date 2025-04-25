@@ -32,6 +32,13 @@ public interface TestTestsSessionsService {
     void closeAllOpenedSessions(Long testId);
 
     /**
+     * Метод для удаления всех сессий теста.
+     *
+     * @param testId Идентификатор теста
+     */
+    void deleteAllSessions(Long testId);
+
+    /**
      * Метод для создания новой сессии.
      *
      * @param testId Идентификатор теста

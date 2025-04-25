@@ -21,6 +21,8 @@ public class Question extends BaseEntity {
     @JoinColumn(name = "test_id")
     private Test test;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type")
     private QuestionTypes type;
 
     private String title;

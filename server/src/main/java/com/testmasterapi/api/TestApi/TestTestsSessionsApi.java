@@ -51,6 +51,19 @@ public interface TestTestsSessionsApi {
     )
     void closeAllOpenedSessions(@PathVariable Long testId);
 
+    @PreAuthorize("hasAnyRole('AUTHOR', 'ADMIN')")
+    @DeleteMapping
+    @Operation(
+            summary = "Удаление всех сессий теста",
+            responses = {
+                    @ApiResponse(responseCode = "204", description = "Сессии удалены"),
+                    @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста", content = @Content()),
+                    @ApiResponse(responseCode = "404", description = "Тест с таким идентификатором не найден", content = @Content()),
+                    @ApiResponse(responseCode = "409", description = "Тест отркыт для прохождения", content = @Content()),
+            }
+    )
+    void deleteAllSessions(@PathVariable Long testId);
+
     @PreAuthorize("isAuthenticated()")
     @PostMapping
     @Operation(

@@ -1,7 +1,9 @@
 import $api from "../index";
 import {ITest, ITestsCreateModelRequest, ITestsDeleteModelRequest, ITestsUpdateModelRequest} from "./type";
 
-export const getTests = async (): Promise<ITest[]> => {
+export const getTests = async (): Promise<{
+  content: ITest[]
+}> => {
   const {data} = await $api.get('/tests');
   return data;
 };

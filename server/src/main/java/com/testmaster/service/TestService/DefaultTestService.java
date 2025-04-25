@@ -1,27 +1,20 @@
 package com.testmaster.service.TestService;
 
 import com.testmaster.exeption.NotFoundException;
-import com.testmaster.mapper.AnswerMapper;
-import com.testmaster.mapper.QuestionMapper;
-import com.testmaster.mapper.TestMapper;
-import com.testmaster.mapper.TestSessionMapper;
-import com.testmaster.model.TestSession;
+import com.testmaster.mapper.*;
 import com.testmaster.model.User.User;
 import com.testmaster.repository.AnswerRepository.AnswerRepository;
 import com.testmaster.repository.QuestionRepository.QuestionRepository;
 import com.testmaster.repository.TestSessionRepository.TestSessionRepository;
 import com.testmaster.repository.UserRepository.UserRepository;
-import com.testmasterapi.domain.answer.data.AnswerResultData;
 import com.testmasterapi.domain.page.data.PageData;
-import com.testmasterapi.domain.question.data.QuestionResultData;
 import com.testmasterapi.domain.test.TestResultDetailLevel;
 import com.testmasterapi.domain.test.TestStatus;
 import com.testmasterapi.domain.test.data.TestData;
-import com.testmasterapi.domain.test.event.TestClosedEvent;
-import com.testmasterapi.domain.test.event.TestDeletedEvent;
+import com.testmasterapi.domain.test.event.TestEvent;
+import com.testmasterapi.domain.test.event.TestEventsType;
 import com.testmasterapi.domain.test.request.TestCreateRequest;
 import com.testmasterapi.domain.test.request.TestUpdateRequest;
-import com.testmasterapi.domain.testSession.data.TestSessionData;
 import com.testmasterapi.domain.testSession.data.TestSessionResultData;
 import com.testmasterapi.domain.user.CustomUserDetails;
 import jakarta.transaction.Transactional;
@@ -55,6 +48,7 @@ public class DefaultTestService implements TestService {
 
     private final String notFoundTestMessage = "Тест не найден";
     private final AnswerMapper answerMapper;
+    private final UserMapper userMapper;
 
     @NotNull
     @Override
@@ -81,6 +75,7 @@ public class DefaultTestService implements TestService {
         var content = testSessions.stream()
                 .map(session -> {
                     var data = testSessionMapper.toResult(session);
+                    data.setUser(userMapper.toTestSession(session.getUser()));
 
                     if (detailLevel == TestResultDetailLevel.FULL) {
                         var questions = questionRepository.findAllByTestId(testId, false).stream()
@@ -131,7 +126,8 @@ public class DefaultTestService implements TestService {
     @Transactional
     public void update(Long testId, TestUpdateRequest updateRequest) {
         if (updateRequest.getStatus() == TestStatus.CLOSED) {
-            applicationEventPublisher.publishEvent(new TestClosedEvent(testId));
+            var test = this.getTest(testId);
+            applicationEventPublisher.publishEvent(new TestEvent(test, TestEventsType.CLOSE));
         }
 
         int updated = testRepository.update(testId, updateRequest);
@@ -143,7 +139,8 @@ public class DefaultTestService implements TestService {
     @Override
     @Transactional
     public void delete(Long testId) {
-        applicationEventPublisher.publishEvent(new TestDeletedEvent(testId));
+        var test = this.getTest(testId);
+        applicationEventPublisher.publishEvent(new TestEvent(test, TestEventsType.DELETE));
 
         var updateRequest = new TestUpdateRequest();
         updateRequest.setDeleted(true);
@@ -154,7 +151,6 @@ public class DefaultTestService implements TestService {
             throw new NotFoundException(notFoundTestMessage);
         }
     }
-
 
     private Test getTest(Long testId) {
         return testRepository.findById(testId)

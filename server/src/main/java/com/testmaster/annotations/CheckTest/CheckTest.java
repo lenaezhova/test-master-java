@@ -17,5 +17,5 @@ public @interface CheckTest {
     String testSessionId() default "";
     boolean checkOwner() default false;
     boolean skipCheckStatusForOwner() default false;
-    TestStatus status() default TestStatus.OPENED;
+    TestStatus status() default TestStatus.UNSPECIFIED;
 }

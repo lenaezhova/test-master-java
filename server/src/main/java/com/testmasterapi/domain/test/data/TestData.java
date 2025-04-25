@@ -5,16 +5,15 @@ import com.testmasterapi.domain.user.data.UserData;
 import com.testmasterapi.domain.user.data.UserOwnerData;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-public class TestData {
-    private Long id;
+public class TestData extends BaseTestData {
     private UserOwnerData owner;
-    private String title;
     private TestStatus status;
-    private String description;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

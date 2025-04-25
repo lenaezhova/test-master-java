@@ -5,6 +5,7 @@ import com.testmaster.service.QuestionService.QuestionAnswerTemplate.QuestionAns
 import com.testmasterapi.api.QuestionApi.QuestionAnswerTemplatesApi;
 import com.testmasterapi.domain.answerTemplate.data.AnswerTemplateData;
 import com.testmasterapi.domain.answerTemplate.request.AnswerTemplateCreateRequest;
+import com.testmasterapi.domain.answerTemplate.request.AnswerTemplateUpdateRequest;
 import com.testmasterapi.domain.question.data.QuestionWithTemplatesData;
 import com.testmasterapi.domain.question.request.QuestionUpdateWithAnswersTemplatesRequest;
 import com.testmasterapi.domain.test.TestStatus;
@@ -26,6 +27,20 @@ public class QuestionAnswersTemplatesController implements QuestionAnswerTemplat
     @Override
     public QuestionWithTemplatesData oneWithTemplates(Long questionId) {
         return questionAnswerTemplatesService.getOneWithTemplates(questionId);
+    }
+
+    @Override
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @CheckTest(questionId = "questionId", checkOwner = true, status = TestStatus.CLOSED)
+    public void updateAnswerTemplate(Long questionId, Long answerTemplateId, AnswerTemplateUpdateRequest updateRequest) {
+        questionAnswerTemplatesService.updateAnswerTemplate(questionId, answerTemplateId, updateRequest);
+    }
+
+    @Override
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @CheckTest(questionId = "questionId", checkOwner = true, status = TestStatus.CLOSED)
+    public void deleteAnswerTemplate(Long questionId, Long answerTemplateId) {
+        questionAnswerTemplatesService.deleteAnswerTemplate(questionId, answerTemplateId);
     }
 
     @Override

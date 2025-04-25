@@ -5,6 +5,7 @@ import com.testmasterapi.domain.user.data.UserData;
 import com.testmasterapi.domain.user.UserRoles;
 import com.testmasterapi.domain.user.data.UserGroupsData;
 import com.testmasterapi.domain.user.data.UserOwnerData;
+import com.testmasterapi.domain.user.data.UserTestSessionData;
 import com.testmasterapi.domain.user.request.UserCreateRequest;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.testmaster.model.User.User;
@@ -31,6 +32,16 @@ public final class UserMapper {
 
     public UserOwnerData toOwner(User user) {
         var data = new UserOwnerData();
+        data.setId(user.getId());
+        data.setName(user.getName());
+        data.setEmail(user.getEmail());
+
+        return data;
+    }
+
+    public UserTestSessionData toTestSession(User user) {
+        var data = new UserTestSessionData();
+
         data.setId(user.getId());
         data.setName(user.getName());
         data.setEmail(user.getEmail());

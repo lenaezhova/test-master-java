@@ -1,6 +1,7 @@
 package com.testmaster.service.TestService.TestQuestionService;
 
 import com.testmasterapi.domain.question.data.QuestionData;
+import com.testmasterapi.domain.question.data.QuestionWithTemplatesData;
 import com.testmasterapi.domain.question.request.QuestionCreateRequest;
 import com.testmasterapi.domain.question.request.QuestionCreateWithAnswersTemplatesRequest;
 import com.testmasterapi.domain.question.request.QuestionUpdateWithAnswersTemplatesRequest;
@@ -21,6 +22,14 @@ public interface TestQuestionService {
      * @return Все вопросы теста
      */
     List<QuestionData> getAllQuestions(Long testId, Boolean showQuestionSoftDeleted);
+
+    /**
+     * Метод для получения всех вопросов с шаблонами теста.
+     *
+     * @param showQuestionSoftDeleted Если <b>true</b> в результате показываются удаленные вопросы (удаленные не через тест)
+     * @return Все вопросы с шаблонами теста
+     */
+    List<QuestionWithTemplatesData> getAllQuestionsWithTemplates(Long testId, Boolean showQuestionSoftDeleted);
 
     /**
      * Метод для создания нового вопроса.
