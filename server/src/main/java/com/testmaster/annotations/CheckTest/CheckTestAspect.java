@@ -75,7 +75,7 @@ public class CheckTestAspect {
             throw new IllegalArgumentException("Не удалось определить id из аннотации");
         }
 
-        var isOwner = checkTestOwner(test.getOwner(), checkOwner);
+        var isOwner = checkTestOwner(test, checkOwner);
 
         if (status != TestStatus.UNSPECIFIED && (!skipCheckStatusForOwner || !isOwner)) {
             checkTestStatus(test, status);
@@ -84,9 +84,9 @@ public class CheckTestAspect {
         return joinPoint.proceed();
     }
 
-    private boolean checkTestOwner(User user, boolean throwError) {
+    private boolean checkTestOwner(Test test, boolean throwError) {
         var currentUser = this.getCurrentUser();
-        Long ownerId = user.getId();
+        Long ownerId = test.getOwner().getId();
 
         if (!ownerId.equals(currentUser.getId()) && !currentUser.getRoles().contains(UserRoles.ADMIN)) {
             if (throwError) {
