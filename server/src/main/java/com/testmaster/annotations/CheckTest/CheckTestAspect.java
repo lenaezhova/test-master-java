@@ -68,18 +68,18 @@ public class CheckTestAspect {
         } else if (!paramsTestSessionId.isEmpty()) {
             var testSessionId = getParamByName(paramNames, args, paramsTestSessionId);
             var testSession = this.getTestSession(testSessionId);
-//            test = testSession.getTest();
+            test = testSession.getTest();
         }
 
-//        if (test == null) {
-//            throw new IllegalArgumentException("Не удалось определить id из аннотации");
-//        }
+        if (test == null) {
+            throw new IllegalArgumentException("Не удалось определить id из аннотации");
+        }
 
-//        var isOwner = checkTestOwner(test.getOwner(), checkOwner);
+        var isOwner = checkTestOwner(test.getOwner(), checkOwner);
 
-//        if (status != TestStatus.UNSPECIFIED && (!skipCheckStatusForOwner || !isOwner)) {
-//            checkTestStatus(test, status);
-//        }
+        if (status != TestStatus.UNSPECIFIED && (!skipCheckStatusForOwner || !isOwner)) {
+            checkTestStatus(test, status);
+        }
 
         return joinPoint.proceed();
     }
