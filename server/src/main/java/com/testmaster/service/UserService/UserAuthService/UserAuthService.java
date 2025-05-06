@@ -1,13 +1,8 @@
 package com.testmaster.service.UserService.UserAuthService;
 
-import com.testmasterapi.domain.testSession.data.TestSessionData;
 import com.testmasterapi.domain.user.JwtTokenPair;
-import com.testmasterapi.domain.user.data.UserData;
 import com.testmasterapi.domain.user.request.UserCreateRequest;
 import com.testmasterapi.domain.user.request.UserLoginRequest;
-import com.testmasterapi.domain.user.request.UserUpdateRequest;
-
-import java.util.List;
 
 /**
  * Интерфейс для работы с пользователями.

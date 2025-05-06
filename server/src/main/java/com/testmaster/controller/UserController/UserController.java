@@ -4,9 +4,9 @@ import com.testmasterapi.api.UserApi.UserApi;
 import com.testmasterapi.domain.page.data.PageData;
 import com.testmasterapi.domain.testSession.data.TestSessionData;
 import com.testmasterapi.domain.user.data.UserData;
-import com.testmasterapi.domain.user.request.UserUpdateRequest;
+import com.testmasterapi.domain.user.request.UserUpdateCurrentRequest;
 import com.testmaster.service.UserService.UserService;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import com.testmasterapi.domain.user.request.UserUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -43,15 +43,13 @@ public class UserController implements UserApi {
 
     @Override
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    public void update(Long userId, UserUpdateRequest updateRequest) {
-        userService.update(userId, updateRequest);
+    public void updateCurrent(UserUpdateCurrentRequest updateRequest) {
+        userService.updateCurrent(updateRequest);
     }
 
     @Override
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(Long userId) {
-        var updateRequest = new UserUpdateRequest();
-        updateRequest.setDeleted(true);
-        userService.update(userId, updateRequest);
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    public void update(Long userId, UserUpdateRequest request) {
+        userService.update(userId, request);
     }
 }

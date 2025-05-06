@@ -17,8 +17,8 @@ import java.util.Objects;
 public class AnswerTemplateMapper {
 
     public AnswerTemplateData toData(AnswerTemplate answerTemplate) {
-        var currentUser = this.getCurrentUser();
-        var isOwnerTest = Objects.equals(currentUser.getId(), answerTemplate.getQuestion().getTest().getOwner().getId());
+        var currentUserDetails = this.getCurrentUserDetails();
+        var isOwnerTest = Objects.equals(currentUserDetails.getId(), answerTemplate.getQuestion().getTest().getOwner().getId());
         return isOwnerTest
                 ? this.toPrivate(answerTemplate)
                 : this.toPublic(answerTemplate);
@@ -77,7 +77,7 @@ public class AnswerTemplateMapper {
         data.setDescription(answerTemplate.getDescription());
     }
 
-    private CustomUserDetails getCurrentUser() {
+    private CustomUserDetails getCurrentUserDetails() {
         return (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

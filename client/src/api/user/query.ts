@@ -1,6 +1,6 @@
 import {QueryKey, useMutation, useQuery, useQueryClient} from "react-query";
 import {message} from "antd";
-import {getUser, login, registration} from "./index";
+import {getCurrentUser, getUser, login, registration} from "./index";
 import {UserStore} from "../../stores/UserStore/UserStore";
 import {getErrorData} from "../../utils/error";
 
@@ -18,7 +18,7 @@ const useLogin = () => {
 
 const useGetUser = ($user: UserStore) => {
   return useMutation(
-    () => getUser({id: $user.item.id}),
+    () => getCurrentUser(),
   )
 }
 

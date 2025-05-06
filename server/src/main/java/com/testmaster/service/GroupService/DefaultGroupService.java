@@ -99,7 +99,7 @@ public class DefaultGroupService implements GroupService {
     @Transactional
     @Override
     public GroupData create(@NotNull GroupCreateRequest request) {
-        var userId = this.getUserId();
+        var userId = this.getCurrentUserDetails().getId();
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь с таким идентификатором не найден"));
@@ -127,8 +127,7 @@ public class DefaultGroupService implements GroupService {
         }
     }
 
-    private Long getUserId() {
-        CustomUserDetails customUserDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return customUserDetails.getId();
+    private CustomUserDetails getCurrentUserDetails() {
+        return (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

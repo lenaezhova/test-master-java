@@ -21,13 +21,13 @@ const MainLayout: FC<AllBaseStores> = injectBase(['$user'])(observer(props => {
     }
   }
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     if ($user.accessToken) {
       fetch();
     } else {
       setIsAuthLoading(false);
     }
-  }, []);
+  }, [$user.accessToken]);
 
   return (
     isAuthLoading || $user.fetchItemProgress

@@ -6,6 +6,7 @@ import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.testmaster.exeption.AuthException;
 import com.testmaster.exeption.ClientException;
 import com.testmaster.exeption.NotFoundException;
+import com.testmasterapi.domain.error.data.ErrorData;
 import kotlin.io.AccessDeniedException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -84,7 +85,9 @@ public class GlobalExceptionHandler {
 
     private ResponseEntity<?> returnResponse(ResponseEntity.BodyBuilder response, Exception ex) {
         if (StringUtils.isNotBlank(ex.getMessage())) {
-            return response.body(ex.getMessage());
+            var errorData = new ErrorData();
+            errorData.setMessage(ex.getMessage());
+            return response.body(errorData);
         }
 
         return response.build();

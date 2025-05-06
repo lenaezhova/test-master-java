@@ -74,11 +74,11 @@ public class DefaultTestTestsSessionsService implements TestTestsSessionsService
     @Transactional
     @Override
     public TestSessionData createSession(Long testId, @NotNull TestSessionCreateRequest request) {
-        User user = this.getCurrentUser();
+        var customUserDetails = this.getCurrentUserDetails();
 
         var test = this.getTest(testId);
 
-        TestSession entity = testSessionMapper.toEntity(request, test, user);
+        TestSession entity = testSessionMapper.toEntity(request, test, this.getUser(customUserDetails.getId()));
         testSessionRepository.save(entity);
 
         return testSessionMapper.toData(entity);
@@ -94,8 +94,7 @@ public class DefaultTestTestsSessionsService implements TestTestsSessionsService
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
     }
 
-    private User getCurrentUser() {
-        var customUserDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return this.getUser(customUserDetails.getId());
+    private CustomUserDetails getCurrentUserDetails() {
+        return (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

@@ -114,9 +114,9 @@ public class DefaultTestService implements TestService {
     @Transactional
     @Override
     public TestData create(@NotNull TestCreateRequest request) {
-        var currentUser = getCurrentUser();
+        var currentUserDetails = this.getCurrentUserDetails();
 
-        Test test = testMapper.toEntity(request, currentUser);
+        Test test = testMapper.toEntity(request, this.getUser(currentUserDetails.getId()));
         testRepository.save(test);
 
         return testMapper.toData(test);
@@ -162,9 +162,8 @@ public class DefaultTestService implements TestService {
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
     }
 
-    private User getCurrentUser() {
-        var customUserDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return this.getUser(customUserDetails.getId());
+    private CustomUserDetails getCurrentUserDetails() {
+        return (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
 }

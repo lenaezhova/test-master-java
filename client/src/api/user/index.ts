@@ -10,6 +10,11 @@ export const getUser = async (values: { id: string }): Promise<IUser> => {
   return data;
 };
 
+export const getCurrentUser = async (): Promise<IUser> => {
+  const {data} = await $api.get(userApiPrefix + `/current`);
+  return data;
+};
+
 export const updateRefreshToken = async (): Promise<TokenResponse> => {
   const {data} = await $api.post(userApiPrefix + `/auth/refresh`);
   return data;

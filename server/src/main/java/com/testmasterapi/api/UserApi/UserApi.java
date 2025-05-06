@@ -3,8 +3,8 @@ package com.testmasterapi.api.UserApi;
 import com.testmasterapi.api.TestSessionApi;
 import com.testmasterapi.domain.page.data.PageData;
 import com.testmasterapi.domain.testSession.data.TestSessionData;
-import com.testmasterapi.domain.testSession.response.TestsSessionsResponse;
 import com.testmasterapi.domain.user.data.UserData;
+import com.testmasterapi.domain.user.request.UserUpdateCurrentRequest;
 import com.testmasterapi.domain.user.request.UserUpdateRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -12,13 +12,10 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Tag(name = "Пользователи")
 public interface UserApi {
@@ -76,24 +73,24 @@ public interface UserApi {
     UserData current();
 
     @PreAuthorize("isAuthenticated()")
-    @PatchMapping("/{userId}")
+    @PatchMapping
     @Operation(
-            summary = "Обновить информацию о пользователе",
+            summary = "Обновить информацию текущего авторизованного пользователя",
             responses = {
                     @ApiResponse(responseCode = "204", description = "Информация о пользователе обновлена"),
                     @ApiResponse(responseCode = "404", description = "Пользователь с таким идентификатором не найден", content = @Content())
             }
     )
-    void update(@PathVariable Long userId, @RequestBody UserUpdateRequest userUpdateRequest);
+    void updateCurrent(@RequestBody UserUpdateCurrentRequest userUpdateRequest);
 
-    @PreAuthorize("isAuthenticated()")
-    @DeleteMapping("/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PatchMapping("/{userId}")
     @Operation(
-            summary = "Удалить пользователя",
+            summary = "Обновить информацию о пользователе",
             responses = {
-                    @ApiResponse(responseCode = "204", description = "Пользователь удален"),
+                    @ApiResponse(responseCode = "204", description = "Роль пользователя обновлена"),
                     @ApiResponse(responseCode = "404", description = "Пользователь с таким идентификатором не найден", content = @Content())
             }
     )
-    void delete(@PathVariable Long userId);
+    void update(@PathVariable Long userId, @RequestBody UserUpdateRequest userUpdateRoleRequest);
 }

@@ -10,6 +10,7 @@ import com.testmaster.repository.UserRepository.UserRepository;
 import com.testmasterapi.domain.testSession.data.TestSessionData;
 import com.testmasterapi.domain.user.CustomUserDetails;
 import com.testmasterapi.domain.user.data.UserData;
+import com.testmasterapi.domain.user.request.UserUpdateCurrentRequest;
 import com.testmasterapi.domain.user.request.UserUpdateRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +21,6 @@ import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.function.LongSupplier;
 
 @Service
@@ -69,24 +69,33 @@ public class DefaultUserService implements UserService {
 
     @Override
     public UserData getCurrent() {
-        return userMapper.toData(this.getCurrentUser());
+        return userMapper.toData(this.getUser(this.getCurrentUseDetails().getId()));
     }
 
     @Override
     @Transactional
-    public void update(Long userId, UserUpdateRequest updateRequest) {
-        int updated = userRepository.update(userId, updateRequest);
+    public void updateCurrent(UserUpdateCurrentRequest updateRequest) {
+        int updated = userRepository.update(this.getCurrentUseDetails().getId(), (UserUpdateRequest) updateRequest);
         if (updated == 0) {
             throw new NotFoundException("Пользователь не найден");
         }
     }
+
+    @Override
+    @Transactional
+    public void update(Long userId, UserUpdateRequest request) {
+        int updated = userRepository.update(userId, request);
+        if (updated == 0) {
+            throw new NotFoundException("Пользователь не найден");
+        }
+    }
+
     private User getUser(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
     }
 
-    private User getCurrentUser() {
-        var currentUser = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return this.getUser(currentUser.getId());
+    private CustomUserDetails getCurrentUseDetails() {
+        return (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }

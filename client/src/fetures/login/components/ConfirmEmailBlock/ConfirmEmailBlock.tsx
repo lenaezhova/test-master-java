@@ -21,6 +21,7 @@ const ConfirmEmailBlock = injectBase(['$user'])(observer((props: AllBaseStores) 
         message.info('Email не подтвержден, попробуйте еще раз');
       }
     } catch (e) {
+      message.info('Email не подтвержден, попробуйте еще раз');
       console.log(e);
     }
   }

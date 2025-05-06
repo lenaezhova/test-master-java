@@ -1,7 +1,5 @@
 export type ErrorResponseData = {
   message?: string;
-  code?: string;
-  timestamp?: string;
 }
 
 export interface ErrorResponse {

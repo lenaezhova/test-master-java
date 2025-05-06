@@ -2,32 +2,25 @@ package com.testmaster.service.UserService.UserAuthService;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.testmaster.exeption.AuthException;
-import com.testmaster.exeption.NotFoundException;
-import com.testmaster.mapper.TestSessionMapper;
 import com.testmaster.mapper.UserMapper;
 import com.testmaster.model.Token;
 import com.testmaster.model.User.User;
-import com.testmaster.repository.TestSessionRepository.TestSessionRepository;
 import com.testmaster.repository.UserRepository.UserRepository;
 import com.testmaster.service.MailService;
 import com.testmaster.service.UserService.UserAuthService.TokenService.TokenService;
 import com.testmaster.service.validation.PasswordValidationService;
 import com.testmaster.service.validation.UserValidationService;
-import com.testmasterapi.domain.testSession.data.TestSessionData;
-import com.testmasterapi.domain.user.CustomUserDetails;
 import com.testmasterapi.domain.user.JwtTokenPair;
-import com.testmasterapi.domain.user.data.UserData;
 import com.testmasterapi.domain.user.request.UserCreateRequest;
 import com.testmasterapi.domain.user.request.UserLoginRequest;
+import com.testmasterapi.domain.user.request.UserUpdateCurrentRequest;
 import com.testmasterapi.domain.user.request.UserUpdateRequest;
 import jakarta.annotation.Nonnull;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.UUID;
 
 import static com.testmaster.exeption.ClientException.UnprocessableEntity;
@@ -122,7 +115,7 @@ public class DefaultUserAuthService implements UserAuthService {
         User user = userRepository.findByActivationLink(link)
                 .orElseThrow(() -> new AuthException("Неккоректная ссылка активации"));
 
-        UserUpdateRequest userUpdate = new UserUpdateRequest();
+        var userUpdate = new UserUpdateRequest();
         userUpdate.setIsActivate(true);
         userRepository.update(user.getId(), userUpdate);
     }

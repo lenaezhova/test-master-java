@@ -85,10 +85,10 @@ public class CheckTestAspect {
     }
 
     private boolean checkTestOwner(Test test, boolean throwError) {
-        var currentUser = this.getCurrentUser();
+        var currentUserDetails = this.getCurrentUserDetails();
         Long ownerId = test.getOwner().getId();
 
-        if (!ownerId.equals(currentUser.getId()) && !currentUser.getRoles().contains(UserRoles.ADMIN)) {
+        if (!ownerId.equals(currentUserDetails.getId()) && !currentUserDetails.getRoles().contains(UserRoles.ADMIN)) {
             if (throwError) {
                 throw new IllegalArgumentException("Вы не являетесь владельцем теста");
             }
@@ -136,7 +136,7 @@ public class CheckTestAspect {
                 .orElseThrow(() -> new IllegalArgumentException("Ответ не найден"));
     }
 
-    private CustomUserDetails getCurrentUser() {
+    private CustomUserDetails getCurrentUserDetails() {
         return (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
