@@ -16,11 +16,11 @@ NEON
 
 login: admin@mail.ru
 
-password: admin
+password: 123
 
 ### author
 
 login: author@mail.ru
 
-password: author
+password: 123
 
