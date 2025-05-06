@@ -5,7 +5,7 @@ import {observer} from "mobx-react";
 import {Outlet} from "react-router";
 import {Layout, Row, Spin} from "antd";
 import Navbar from "../shared/ui/Navbar/Navbar";
-import {getAccessToken} from "../../src/utils/tokens";
+import {getAccessToken} from '../../src/utils/tokens';
 
 const MainLayout: FC<AllBaseStores> = injectBase(['$user'])(observer(props => {
   const { $user } = props;
