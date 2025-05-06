@@ -9,6 +9,8 @@ import com.testmasterapi.domain.user.data.UserTestSessionData;
 import com.testmasterapi.domain.user.request.UserCreateRequest;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.testmaster.model.User.User;
+import com.testmasterapi.domain.user.request.UserUpdateCurrentRequest;
+import com.testmasterapi.domain.user.request.UserUpdateRequest;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -54,6 +56,15 @@ public final class UserMapper {
         data.setId(user.getId());
         data.setName(user.getName());
         data.setEmail(user.getEmail());
+
+        return data;
+    }
+
+    public UserUpdateRequest currentToUserUpdateReq(UserUpdateCurrentRequest request) {
+        var data = new UserUpdateRequest();
+        data.setName(request.getName());
+        data.setPassword(request.getPassword());
+        data.setDeleted(request.getDeleted());
 
         return data;
     }

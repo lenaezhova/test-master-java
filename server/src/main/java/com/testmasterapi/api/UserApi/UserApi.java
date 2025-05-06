@@ -73,7 +73,7 @@ public interface UserApi {
     UserData current();
 
     @PreAuthorize("isAuthenticated()")
-    @PatchMapping
+    @PatchMapping("/current")
     @Operation(
             summary = "Обновить информацию текущего авторизованного пользователя",
             responses = {
@@ -84,7 +84,7 @@ public interface UserApi {
     void updateCurrent(@RequestBody UserUpdateCurrentRequest userUpdateRequest);
 
     @PreAuthorize("hasRole('ADMIN')")
-    @PatchMapping("/{userId}")
+    @PutMapping("/{userId}")
     @Operation(
             summary = "Обновить информацию о пользователе",
             responses = {

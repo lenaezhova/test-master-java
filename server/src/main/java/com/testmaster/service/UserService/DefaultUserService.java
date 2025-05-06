@@ -75,7 +75,7 @@ public class DefaultUserService implements UserService {
     @Override
     @Transactional
     public void updateCurrent(UserUpdateCurrentRequest updateRequest) {
-        int updated = userRepository.update(this.getCurrentUseDetails().getId(), (UserUpdateRequest) updateRequest);
+        int updated = userRepository.update(this.getCurrentUseDetails().getId(), userMapper.currentToUserUpdateReq(updateRequest));
         if (updated == 0) {
             throw new NotFoundException("Пользователь не найден");
         }
