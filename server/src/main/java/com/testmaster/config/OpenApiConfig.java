@@ -38,7 +38,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
                 @Tag(name = "Ответы на вопрос", description = "API для работы c ответами на вопрос"),
 
                 @Tag(name = "Ответы", description = "API для работы c ответами"),
-                @Tag(name = "Шаблоны ответов", description = "API для работы c шаблонами ответов")
         }
 )
 @SecurityScheme(
