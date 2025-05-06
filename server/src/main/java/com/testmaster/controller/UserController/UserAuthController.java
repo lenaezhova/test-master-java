@@ -70,7 +70,6 @@ public class UserAuthController implements UserAuthApi {
         JwtTokenPair jwtTokenPair = userAuthService.refresh(refreshToken);
 
         CookieUtil.setTokensInCookie(response, jwtTokenPair);
-
         return ResponseEntity
                 .ok()
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
