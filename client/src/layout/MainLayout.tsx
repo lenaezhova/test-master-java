@@ -5,6 +5,7 @@ import {observer} from "mobx-react";
 import {Outlet} from "react-router";
 import {Layout, Row, Spin} from "antd";
 import Navbar from "../shared/ui/Navbar/Navbar";
+import {getAccessToken} from "../../src/utils/tokens";
 
 const MainLayout: FC<AllBaseStores> = injectBase(['$user'])(observer(props => {
   const { $user } = props;
@@ -22,12 +23,12 @@ const MainLayout: FC<AllBaseStores> = injectBase(['$user'])(observer(props => {
   }
 
   useEffect(() => {
-    if ($user.accessToken) {
+    if (getAccessToken()) {
       fetch();
     } else {
       setIsAuthLoading(false);
     }
-  }, [$user.accessToken]);
+  }, []);
 
   return (
     isAuthLoading || $user.fetchItemProgress

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import {removeAccessToken} from "../utils/tokens";
+import {getAccessToken, removeAccessToken} from "../utils/tokens";
 import {UserStore} from "../stores/UserStore/UserStore";
 import {API_URL} from "../utils/const";
 type AuthResponse = any;
@@ -26,7 +26,7 @@ const $api = axios.create({
 export const axiosSetup = ($user: UserStore) => {
   $api.interceptors.request.use(
     (config) => {
-      const token = $user.accessToken;
+      const token = getAccessToken();
       const isLogoutRequest = config.url.endsWith('/logout');
 
       if (token && !isLogoutRequest) {
@@ -62,8 +62,8 @@ export const axiosSetup = ($user: UserStore) => {
 
           await $user.checkAuth();
 
-          originalRequest.headers.Authorization = `Bearer ${$user.accessToken}`;
-          processQueue(null, $user.accessToken);
+          originalRequest.headers.Authorization = `Bearer ${getAccessToken()}`;
+          processQueue(null, getAccessToken());
 
           return $api.request(originalRequest);
         } catch (refreshError) {

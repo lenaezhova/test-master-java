@@ -10,12 +10,9 @@ import {AccessToken, IUser} from "../../api/user/type";
 import {EMPTY_OBJECT} from "../../utils/const";
 
 class UserTokensStore extends BaseStore<IUser> {
-  @computed get accessToken() {
-    return getAccessToken();
-  }
-
   @computed get decodedAccessToken(): AccessToken {
-    return this.accessToken ? jwtDecode(this.accessToken) : EMPTY_OBJECT as any;
+    const accessToken = getAccessToken();
+    return accessToken ? jwtDecode(accessToken) : EMPTY_OBJECT;
   }
 
   @action removeAccessToken(){
