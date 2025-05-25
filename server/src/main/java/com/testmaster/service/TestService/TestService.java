@@ -10,6 +10,8 @@ import com.testmasterapi.domain.testSession.data.TestSessionResultData;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Pageable;
 
+import java.io.IOException;
+
 /**
  * Интерфейс для работы с тестами.
  *
@@ -33,7 +35,14 @@ public interface TestService {
      * @return Страница списка всех результатов теста
      */
     @NotNull
-    PageData<TestSessionResultData> getResults(Long testId, TestResultDetailLevel detailLevel, @NotNull Pageable pageable);
+    PageData<TestSessionResultData> getPageResults(Long testId, TestResultDetailLevel detailLevel, @NotNull Pageable pageable);
+
+    /**
+     * Метод для получения всех результатов теста в виде excel.
+     *
+     * @param testId Идентификатор теста
+     */
+    byte[] getResultsExcel(Long testId) throws IOException;
 
     /**
      * Метод для получения одного теста.

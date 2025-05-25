@@ -12,9 +12,10 @@ import com.testmasterapi.domain.test.request.TestCreateRequest;
 import com.testmasterapi.domain.test.request.TestUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,7 +30,26 @@ public class TestController implements TestApi {
 
     @Override
     public PageData<TestSessionResultData> results(@PathVariable Long testId, TestResultDetailLevel detailLevel, Pageable pageable) {
-        return testService.getResults(testId, detailLevel, pageable);
+        return testService.getPageResults(testId, detailLevel, pageable);
+    }
+
+    @Override
+    public ResponseEntity<byte[]> resultsExcel(@PathVariable Long testId) {
+        try {
+            byte[] fileContent = testService.getResultsExcel(testId);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.parseMediaType(
+                    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
+            headers.setContentDisposition(ContentDisposition.attachment()
+                    .filename("test_results_" + testId + ".xlsx").build());
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(fileContent);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @Override

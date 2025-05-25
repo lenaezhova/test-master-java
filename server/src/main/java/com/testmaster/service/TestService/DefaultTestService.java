@@ -7,7 +7,9 @@ import com.testmaster.repository.AnswerRepository.AnswerRepository;
 import com.testmaster.repository.QuestionRepository.QuestionRepository;
 import com.testmaster.repository.TestSessionRepository.TestSessionRepository;
 import com.testmaster.repository.UserRepository.UserRepository;
+import com.testmasterapi.domain.answer.data.AnswerResultData;
 import com.testmasterapi.domain.page.data.PageData;
+import com.testmasterapi.domain.question.data.QuestionResultData;
 import com.testmasterapi.domain.test.TestResultDetailLevel;
 import com.testmasterapi.domain.test.TestStatus;
 import com.testmasterapi.domain.test.data.TestData;
@@ -20,6 +22,10 @@ import com.testmasterapi.domain.user.CustomUserDetails;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import com.testmaster.model.Test.Test;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
@@ -29,7 +35,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import com.testmaster.repository.TestRepository.TestRepository;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.LongSupplier;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -65,9 +77,10 @@ public class DefaultTestService implements TestService {
         return PageData.fromPage(page);
     }
 
+
     @NotNull
     @Override
-    public PageData<TestSessionResultData> getResults(Long testId, TestResultDetailLevel detailLevel, @NotNull Pageable pageable) {
+    public PageData<TestSessionResultData> getPageResults(Long testId, TestResultDetailLevel detailLevel, @NotNull Pageable pageable) {
         var testSessions = testSessionRepository.findAllByTestId(testId, false, pageable);
 
         LongSupplier total = () -> testSessionRepository.countAllByTestId(testId, false);
@@ -105,6 +118,76 @@ public class DefaultTestService implements TestService {
         return PageData.fromPage(page);
     }
 
+    @Override
+    public byte[] getResultsExcel(Long testId) throws IOException {
+        try (Workbook workbook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
+            var test = this.getTest(testId);
+            var testSessions = testSessionRepository.findAllByTestId(testId, false, Pageable.unpaged());
+
+            var allQuestions = questionRepository.findAllByTestId(testId, false);
+            List<String> questionHeaders = allQuestions.stream()
+                    .map(q -> "Q" + q.getId() + ": " + q.getTitle())
+                    .collect(Collectors.toList());
+
+            Sheet sheet = workbook.createSheet("test_results_" + testId);
+
+            Row headerRow = sheet.createRow(0);
+            int colIndex = 0;
+            headerRow.createCell(colIndex++).setCellValue("User");
+
+            for (String questionHeader : questionHeaders) {
+                headerRow.createCell(colIndex++).setCellValue(questionHeader);
+            }
+            headerRow.createCell(colIndex).setCellValue("Result");
+
+            int rowIndex = 1;
+            for (var session : testSessions) {
+                var data = testSessionMapper.toResult(session);
+                data.setUser(userMapper.toTestSession(session.getUser()));
+
+                List<QuestionResultData> questions = questionRepository.findAllByTestId(testId, false).stream()
+                        .map(question -> {
+                            var qData = questionMapper.toResult(question);
+                            var answers = answerRepository
+                                    .findBySessionIdAndQuestionId(session.getId(), question.getId())
+                                    .stream()
+                                    .map(answerMapper::toResult)
+                                    .toList();
+                            qData.setUserAnswers(answers);
+                            return qData;
+                        }).toList();
+
+                data.setQuestions(questions);
+
+                Row row = sheet.createRow(rowIndex++);
+                int dataColIndex = 0;
+
+                row.createCell(dataColIndex++).setCellValue(data.getUser().getName());
+
+                Map<Long, String> answersByQuestionId = new HashMap<>();
+                for (QuestionResultData question : data.getQuestions()) {
+                    Long qId = question.getId();
+                    String userAnswer = question.getUserAnswers().stream()
+                            .map(AnswerResultData::getText)
+                            .collect(Collectors.joining(", "));
+                    answersByQuestionId.put(qId, userAnswer);
+                }
+
+                for (var question : allQuestions) {
+                    String answer = answersByQuestionId.getOrDefault(question.getId(), "");
+                    row.createCell(dataColIndex++).setCellValue(answer);
+                }
+
+                row.createCell(dataColIndex).setCellValue(data.getCountPoints());
+            }
+
+            workbook.write(out);
+            return out.toByteArray();
+
+        } catch (IOException e) {
+            throw new IOException("Error generating Excel report", e);
+        }
+    }
     @Override
     public TestData getOne(Long id) {
         return testMapper.toData(this.getTest(id));

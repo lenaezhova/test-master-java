@@ -64,6 +64,18 @@ public interface TestApi {
     );
 
     @PreAuthorize("isAuthenticated()")
+    @GetMapping("/{testId}/results/exel")
+    @Operation(
+            summary = "Получить результаты теста в виде exel",
+            responses = {
+                    @ApiResponse(responseCode = "200"),
+                    @ApiResponse(responseCode = "403", description = "Вы не являетесь владельцем теста", content = @Content()),
+                    @ApiResponse(responseCode = "404", description = "Тест с таким идентификатором не найден", content = @Content())
+            }
+    )
+    ResponseEntity<byte[]> resultsExcel(@PathVariable Long testId);
+
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{testId}")
     @Operation(
             summary = "Получить тест",
