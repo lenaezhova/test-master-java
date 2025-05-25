@@ -44,6 +44,9 @@ public class User extends BaseEntity {
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
+    @Column(name = "blocked_at")
+    private LocalDateTime blockedAt;
+
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 }

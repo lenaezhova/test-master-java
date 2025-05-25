@@ -37,6 +37,7 @@ public class QuestionRepositoryTest {
                 false,
                 Set.of(UserRoles.USER),
                 LocalDateTime.now(),
+                LocalDateTime.now(),
                 LocalDateTime.now()
         );
         entityManager.persist(user);
@@ -71,6 +72,7 @@ public class QuestionRepositoryTest {
                 "activation-key",
                 false,
                 Set.of(UserRoles.USER),
+                LocalDateTime.now(),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );

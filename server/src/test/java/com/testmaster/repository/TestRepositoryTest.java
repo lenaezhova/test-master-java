@@ -39,6 +39,7 @@ public class TestRepositoryTest {
                 false,
                 Set.of(UserRoles.USER),
                 LocalDateTime.now(),
+                LocalDateTime.now(),
                 LocalDateTime.now()
         );
         entityManager.persist(user);
@@ -66,6 +67,7 @@ public class TestRepositoryTest {
                 "abc123-activation",
                 false,
                 Set.of(UserRoles.USER),
+                LocalDateTime.now(),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );

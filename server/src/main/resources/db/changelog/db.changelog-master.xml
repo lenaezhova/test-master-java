@@ -20,5 +20,6 @@
     <include file="/db/changelog/changes/0.0.12_refactor_answers_logic.xml"/>
     <include file="/db/changelog/changes/0.0.13_rename_dop_groups.xml"/>
     <include file="/db/changelog/changes/0.0.14_fixed_answer_foreign_key.xml"/>
+    <include file="/db/changelog/changes/0.0.15_add_blocked_user_field.xml"/>
 
 </databaseChangeLog>

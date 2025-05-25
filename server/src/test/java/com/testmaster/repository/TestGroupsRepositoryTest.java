@@ -37,6 +37,7 @@ public class TestGroupsRepositoryTest {
                 false,
                 Set.of(UserRoles.USER),
                 LocalDateTime.now(),
+                LocalDateTime.now(),
                 LocalDateTime.now()
         );
         entityManager.persist(user);
@@ -84,6 +85,7 @@ public class TestGroupsRepositoryTest {
                 "activation-key",
                 false,
                 Set.of(UserRoles.USER),
+                LocalDateTime.now(),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );

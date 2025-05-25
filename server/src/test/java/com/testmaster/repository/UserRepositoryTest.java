@@ -33,6 +33,7 @@ public class UserRepositoryTest {
                 true,
                 Set.of(UserRoles.USER),
                 LocalDateTime.now(),
+                LocalDateTime.now(),
                 LocalDateTime.now()
         );
 
@@ -54,6 +55,7 @@ public class UserRepositoryTest {
                 "abc123-activation",
                 false,
                 Set.of(UserRoles.USER),
+                LocalDateTime.now(),
                 LocalDateTime.now(),
                 LocalDateTime.now()
         );
